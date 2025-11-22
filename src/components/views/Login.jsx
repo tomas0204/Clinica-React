@@ -89,7 +89,7 @@ const Login = () => {
           </Col>
           <Col>
             <img
-              src="https://images.pexels.com/photos/905847/pexels-photo-905847.jpeg"
+              src="/public/img/img-login.jpg"
               alt="Imagen comida"
               className="img-login rounded-3 w-100"
             />
