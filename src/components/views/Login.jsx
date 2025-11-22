@@ -1,7 +1,7 @@
 import { Card, Button, Row, Col, Form } from "react-bootstrap";
 import { Link, NavLink } from "react-router";
 import { useState } from "react";
-import { useForm } from "react-hook-form";  
+import { useForm } from "react-hook-form";
 
 
 const Login = () => {
@@ -10,7 +10,7 @@ const Login = () => {
   const [loginError, setLoginError] = useState("");
 
   const onSubmit = (data) => {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const users = JSON.parse(sessionStorage.getItem("users")) || [];
 
     const userFound = users.find(
       (u) => u.email === data.email && u.password === data.password
@@ -21,7 +21,7 @@ const Login = () => {
       return;
     }
 
-    localStorage.setItem("currentUser", JSON.stringify(userFound));
+    sessionStorage.setItem("currentUser", JSON.stringify(userFound));
     alert("Inicio de sesión exitoso");
   };
 
@@ -32,7 +32,7 @@ const Login = () => {
           <Col>
             <Card.Body>
               <h1 className="text-center mb-4">Login</h1>
-            
+
               <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Email:</Form.Label>
@@ -40,49 +40,47 @@ const Login = () => {
                     type="email"
                     placeholder="Ej: juanperez@mail.com"
                     {...register("email", {
-                        required: "El email es obligatorio",
-                        pattern: {
+                      required: "El email es obligatorio",
+                      pattern: {
                         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                         message: "Formato de email inválido"
-                        }
+                      }
                     })}
-                    />
-                  <Form.Text className="text-danger">
-                   {errors.email?.message}
-                   </Form.Text>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>Contraseña:</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Ingresa una contraseña"
-                    {...register("password", {
-                        required: "La contraseña es obligatoria",
-                        minLength: {
-                        value: 6,
-                        message: "Debe tener al menos 6 caracteres"
-                        }
-                    })}
-                     
                   />
                   <Form.Text className="text-danger">
-                    {errors.password?.message}
+                    {errors.email?.message}
                   </Form.Text>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicDNI">
+                  <Form.Label>DNI:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Ingresa tu DNI"
+                    {...register("dni", {
+                      required: "El DNI es obligatorio",
+                      pattern: {
+                        value: /^[0-9]{7,8}$/,
+                        message: "El DNI debe contener solo números (7 u 8 dígitos)"
+                      }
+                    })}
+                  />
+
                   <Form.Text className="text-danger">
-                    {loginError}
+                    {errors.dni?.message || loginError}
                   </Form.Text>
                 </Form.Group>
                 <Button variant="warning" type="submit">
-                    Iniciar sesión
+                  Iniciar sesión
                 </Button>
+                
                 <Button
                   variant="secondary"
                   className="m-3"
                   as={NavLink}
                   to="/register"
                 >
-                    Registrarse
+                  Registrarse
                 </Button>
               </Form>
             </Card.Body>
