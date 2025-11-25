@@ -1,9 +1,56 @@
-function Footer () {
+import { Container, Row, Col} from 'react-bootstrap';
+import Nav from 'react-bootstrap/Nav';
+
+function Footer() {
     return (
         <footer>
-            <p>Holaa</p>
+            <Container>
+                <Row>
+                 <Col>
+                    <h4>Logo de la clínica</h4>
+                    <p>Slogan</p>
+                </Col>
+                
+                <Col>
+                    <Nav className="flex-column">
+                    <Nav.Item>
+                        <strong>Pacientes</strong>
+                    </Nav.Item>
+                    <Nav.Link href="#">Turnos</Nav.Link>
+                    <Nav.Link href="#">Mis turnos</Nav.Link>
+                    <Nav.Link href="#">Login</Nav.Link>
+                    <Nav.Link href="#">Registro</Nav.Link>
+                </Nav>
+            </Col>
+
+            <Col>
+                <Nav className="flex-column">
+                    <Nav.Item>
+                    <strong>Profesionales</strong>
+                    </Nav.Item>
+                    <Nav.Link href="#">Panel</Nav.Link>
+                    <Nav.Link href="#">Login</Nav.Link>
+                    <Nav.Link href="#">Registro</Nav.Link>
+                </Nav>   
+            </Col>
+            
+            <Col>
+                <Nav className="flex-column">
+                    <Nav.Item>
+                    <strong>Sobre la clínica</strong>
+                    </Nav.Item>
+                <Nav.Link href="#">Nosotros</Nav.Link>
+                <Nav.Link href="#">Especialides</Nav.Link>
+                <Nav.Link href="#">Contacto</Nav.Link>
+                </Nav> 
+            </Col>
+
+                </Row>
+            </Container>
         </footer>
     );
 }
 
 export default Footer;
+
+
