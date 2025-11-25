@@ -80,7 +80,7 @@ const Login = () => {
                   variant="secondary"
                   className="m-3"
                   as={NavLink}
-                  to="/register"
+                  to="/registrarPaciente"
                 >
                     Registrarse
                 </Button>
