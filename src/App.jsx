@@ -1,28 +1,26 @@
 import './App.css'
-import Footer from "./components/Footer";
+import Footer from "./components/shared/Footer.jsx";
 import { Route, Routes, BrowserRouter } from 'react-router'
 import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'  
 import Login from './components/views/Login.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from './components/views/Navbar/Navbar.jsx';
-import RegistrarPaciente from './components/views/RegistrarPaciente.jsx';
+import Navbar from './components/shared/Navbar.jsx';
+
+
 function App() {
 
   return (
     <>
-
-     <main>
       <BrowserRouter>
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={<h1>Bienvenido a la Clínica</h1>} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
-          </Routes>
-        </main>
-        <Footer />
+      <Navbar />
+      <Routes>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/registrarPaciente'element={<RegistrarPaciente />} />
+      </Routes>
+      <Footer />
       </BrowserRouter>
+
+      
 
     </>
   )
