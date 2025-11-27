@@ -6,8 +6,8 @@ export default function NavbarClinica() {
     <Navbar bg="light" expand="lg" className="shadow-sm">
       <Container>
         {/* LOGO */}
-        <Navbar.Brand as={Link} to="/">
-          Clínica SaludPlus
+        <Navbar.Brand as={Link} to="/inicio">
+          Bienestar360 Clínica
         </Navbar.Brand>
 
         {/* BOTÓN MOBILE */}
@@ -16,7 +16,7 @@ export default function NavbarClinica() {
         {/* CONTENIDO */}
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={Link} to="/inicio">
               Inicio
             </Nav.Link>
             <Nav.Link as={Link} to="/servicios">
