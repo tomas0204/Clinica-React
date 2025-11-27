@@ -1,6 +1,7 @@
 import './App.css'
 import Footer from "./components/Footer";
 import { Route, Routes, BrowserRouter } from 'react-router'
+import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'  
 import Login from './components/views/Login.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from './components/views/Navbar/Navbar.jsx';
@@ -9,6 +10,8 @@ function App() {
 
   return (
     <>
+
+     <main>
       <BrowserRouter>
         <Navbar />
         <main>
