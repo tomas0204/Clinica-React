@@ -28,6 +28,7 @@ function Error404() {
                                 >
                                     Contactar soporte
                                 </Button>
+                                
                             </div>
                         </Card.Body>
                     </Card>
