@@ -6,7 +6,7 @@ export default function NavbarClinica() {
     <Navbar bg="light" expand="lg" className="shadow-sm">
       <Container>
         {/* LOGO */}
-        <Navbar.Brand as={Link} to="/inicio">
+        <Navbar.Brand as={Link} to="">
           Bienestar360 Clínica
         </Navbar.Brand>
 
@@ -16,25 +16,25 @@ export default function NavbarClinica() {
         {/* CONTENIDO */}
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/inicio">
+            <Nav.Link as={Link} to="">
               Inicio
             </Nav.Link>
-            <Nav.Link as={Link} to="/servicios">
+            <Nav.Link as={Link} to="*">
               Servicios
             </Nav.Link>
-            <Nav.Link as={Link} to="/contacto">
+            <Nav.Link as={Link} to="*">
               Contacto
             </Nav.Link>
 
             {/* DROPDOWN INICIAR SESIÓN */}
             <NavDropdown title="Iniciar Sesión" id="login-dropdown">
-              <NavDropdown.Item as={Link} to="/login/paciente">
+              <NavDropdown.Item as={Link} to="/login">
                 Paciente
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/login/doctor">
+              <NavDropdown.Item as={Link} to="/login">
                 Doctor
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/login/admin">
+              <NavDropdown.Item as={Link} to="/login">
                 Administrador
               </NavDropdown.Item>
             </NavDropdown>
