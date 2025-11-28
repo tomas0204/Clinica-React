@@ -6,6 +6,7 @@ import Footer from "./components/shared/Footer.jsx";
 import Navbar from './components/shared/Navbar.jsx';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Error404 from './components/views/Error404.jsx';
 
 
 
@@ -17,9 +18,10 @@ function App() {
       <Navbar />
       <main className='my-5'>
       <Routes>
-        <Route path='/inicio' element={<Home/>} />
+        <Route path='' element={<Home/>} />
         <Route path='/login' element={<Login/>}/>
         <Route path='/registrarPaciente'element={<RegistrarPaciente />} />
+        <Route path='*' element={<Error404 />} />
       </Routes>
       </main>
       <Footer />
