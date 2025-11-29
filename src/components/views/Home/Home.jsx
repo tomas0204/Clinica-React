@@ -9,11 +9,10 @@ const Home = () => {
   return (
     <>
     <img src={Img} alt="Imagen Clinica" className='clinica-img '/>
-    <h1 className='display-4 my-4'>Bienestar360</h1>
+    <h1 className='display-4 my-4 fw-bold horarios-titulo'>Bienestar360</h1>
 
     <Row className="g-4 my-4">
 
-      {/* ----- TARJETA 1 ----- */}
       <Col md={4}>
         <Card className="op-card shadow-sm border-0 p-4">
           <div className="op-icon icon-blue">
@@ -28,13 +27,12 @@ const Home = () => {
         </Card>
       </Col>
 
-      {/* ----- TARJETA 2 ----- */}
       <Col md={4}>
         <Card className="op-card shadow-sm border-0 p-4">
           <div className="op-icon icon-green">
             <i className="bi bi-clipboard-check"></i>
           </div>
-          <h4 className="mt-3 text-success fw-bold">Acceso Profesionales</h4>
+          <h4 className="mt-3 fw-bold text-success">Acceso Profesionales</h4>
           <p className="my-4">Acceso a profesionales a su cartilla de pacientes</p>
 
           <Button variant="success" as={Link} to="/login">Ingresar</Button>
@@ -42,7 +40,6 @@ const Home = () => {
         </Card>
       </Col>
 
-      {/* ----- TARJETA 3 ----- */}
       <Col md={4}>
         <Card className="op-card shadow-sm border-0 p-4">
           <div className="op-icon icon-orange">
