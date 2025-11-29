@@ -65,6 +65,21 @@ const CrearTurno = ({ onSave, pacientesMock, medicosMock }) => {
                             ))}
 
                         </select>
+
+                        <h5>Médico</h5>
+                        <select
+                            value={form.medicoNombre}
+                            onChange={e => setForm({ ...form, medicoNombre: e.target.value })}
+                            className='form-select'
+                            required
+                        >
+                            <option value="">Seleccionar médico</option>
+                            {medicosMock.map(p => (
+                                <option key={p.id} value={p.nombre}>{p.nombre}</option>
+                            ))}
+
+                        </select>
+                        
                     </Modal.Body>
 
 
