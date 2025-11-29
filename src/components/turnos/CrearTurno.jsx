@@ -86,7 +86,22 @@ const CrearTurno = ({ onSave, pacientesMock, medicosMock }) => {
                             onChange={(e) => setForm({ ...form, fecha: e.target.value })}
                             required
                         />
-                        
+                        <h5>Hora</h5>
+                        <Form.Control
+                            type="time"
+                            value={form.hora}
+                            onChange={(e) => setForm({ ...form, hora: e.target.value })}
+                            required
+                        />
+                        <h5>Motivo de Consulta</h5>
+                        <Form.Control
+                            as="textarea"
+                            rows={3}
+                            value={form.motivoConsulta}
+                            onChange={(e) => setForm({ ...form, motivoConsulta: e.target.value })}
+
+                            required
+                        />
                     </Modal.Body>
 
 
