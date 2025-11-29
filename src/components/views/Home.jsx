@@ -1,10 +1,12 @@
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router";
+import  Img  from "../../assets/clinica.jpg"
 
 const Home = () => {
   return (
     <>
+    <img src={Img} alt="Imagen Clinica" className='clinica-img ' style={{width: "100%", height: "550px" ,  objectFit: "cover", objectPosition: "top" }}/>
     <h1 className='display-4 my-4'>Bienestar360</h1>
 
     <div className='d-flex flex-column flex-md-row justify-content-between'>
