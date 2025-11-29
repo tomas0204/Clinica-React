@@ -90,7 +90,7 @@ const Login = () => {
           <Col>
             <img
               src="/public/img/img-login.jpg"
-              alt="Imagen comida"
+              alt="Imagen clinica login"
               className="img-login rounded-3 w-100"
             />
           </Col>
