@@ -1,6 +1,7 @@
 import { Route, Routes, BrowserRouter } from 'react-router'
 import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'  
 import Login from './components/views/Login.jsx'
+import Home from "./components/views/Home/Home.jsx"
 import Home from "./components/views/Home.jsx"
 import TurnosList from './components/views/TurnosList.jsx'
 import Footer from "./components/shared/Footer.jsx";
@@ -19,6 +20,9 @@ function App() {
       <Navbar />
       <main className='my-5'>
       <Routes>
+        <Route path='/inicio' element={<Home/>} />
+
+        <Route  path='/login' element={<Login/>} />
         <Route path='' element={<Home/>} />
         <Route path='/login' element={<Login/>}/>
         <Route path='/registrarPaciente'element={<RegistrarPaciente />} />
