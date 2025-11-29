@@ -79,6 +79,13 @@ const CrearTurno = ({ onSave, pacientesMock, medicosMock }) => {
                             ))}
 
                         </select>
+                        <h5>Fecha</h5>
+                        <Form.Control
+                            type="date"
+                            value={form.fecha}
+                            onChange={(e) => setForm({ ...form, fecha: e.target.value })}
+                            required
+                        />
                         
                     </Modal.Body>
 
