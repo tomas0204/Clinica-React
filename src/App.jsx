@@ -1,7 +1,7 @@
 import { Route, Routes, BrowserRouter } from 'react-router'
 import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'  
 import Login from './components/views/Login.jsx'
-import Home from "./components/views/Home.jsx"
+import Home from "./components/views/Home/Home.jsx"
 import Footer from "./components/shared/Footer.jsx";
 import Navbar from './components/shared/Navbar.jsx';
 import './App.css'
