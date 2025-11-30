@@ -8,6 +8,8 @@ import Navbar from './components/shared/Navbar.jsx';
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Error404 from './components/views/Error404.jsx';
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 
 
 
@@ -17,6 +19,7 @@ function App() {
     <>
       <BrowserRouter>
       <Navbar />
+
       <main className='my-5'>
       <Routes>
         <Route path='/inicio' element={<Home/>} />
