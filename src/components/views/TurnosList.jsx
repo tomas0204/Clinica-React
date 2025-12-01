@@ -1,16 +1,25 @@
 import { useState } from 'react'
+import { useEffect } from 'react'
+import { crearTurno, editarTurno, borrarTurno } from "../../helpers/apiTurnos.js";
 import { Button } from 'react-bootstrap'
 import CrearTurno from '../turnos/CrearTurno.jsx';
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
 
-
 const TurnosList = () => {
 
-    const [turnos, setTurnos] = useState([])
+    const [turnos, setTurnos] = useState(() => {
+        const turnosGuardados = localStorage.getItem("turnos");
+        return turnosGuardados ? JSON.parse(turnosGuardados) : [];
+    });
+    // Función para guardar en localStorage
+    const guardarEnLocalStorage = (turnosActualizados) => {
+        localStorage.setItem("turnos", JSON.stringify(turnosActualizados));
+    }
     const [mode, setMode] = useState("crear");
     const [show, setShow] = useState(false);
     const [turnoEdit, setTurnoEdit] = useState(null);
+
 
     const pacientes = [
         { id: 1, nombre: "Juan Perez" },
@@ -26,31 +35,44 @@ const TurnosList = () => {
     ];
 
 
-    const handleDelete = (id) => {
-    Swal.fire({
-        title: "¿Eliminar turno?",
-        text: "Esta acción no se puede deshacer",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar"
-    }).then((result) => {
+    const handleDelete = async (turno) => {
+        const result = await Swal.fire({
+            title: "¿Eliminar turno?",
+            text: "Esta acción no se puede deshacer",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        });
+
         if (result.isConfirmed) {
+            // Primero borramos en el backend (json-server)
+            const exito = await borrarTurno(turno); // tu función async que hace DELETE
+            if (exito) {
+                // Actualizamos React state y localStorage
+                const nuevosTurnos = turnos.filter(t => t.id !== turno.id);
+                setTurnos(nuevosTurnos);
+                localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
 
-            setTurnos(turnos.filter(t => t.id !== id));
-
-            Swal.fire({
-                title: "Eliminado",
-                text: "El turno ha sido eliminado",
-                icon: "success",
-                timer: 2000,
-                showConfirmButton: false
-            });
+                Swal.fire({
+                    title: "Eliminado",
+                    text: "El turno ha sido eliminado",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo eliminar el turno",
+                    icon: "error"
+                });
+            }
         }
-    });
-};
+    };
+
 
 
     return (
@@ -61,15 +83,14 @@ const TurnosList = () => {
                 onClose={() => setShow(false)}
                 mode={mode}
                 turnoEdit={turnoEdit}
-                onSave={(nuevoTurno) => {
+                onSave={async (nuevoTurno) => {
                     if (mode === "crear") {
-                        const nuevoTurnoConId = { ...nuevoTurno, id: Date.now() };
-                        setTurnos([...turnos, nuevoTurnoConId]);
-                    } else {
-                        setTurnos(turnos.map(t =>
-                            t.id === turnoEdit.id ? nuevoTurno : t
-                        ));
-                    }
+                        const turnoGuardado = await crearTurno(nuevoTurno);
+                        setTurnos([...turnos, turnoGuardado]);
+                        guardarEnLocalStorage([...turnos, turnoGuardado]);
+                        console.log("Turno creado:", turnoGuardado);
+
+                    } 
                 }}
                 pacientesMock={pacientes}
                 medicosMock={medicos}
@@ -125,14 +146,17 @@ const TurnosList = () => {
                                                 setShow(true);
                                             }}
                                         >
-                                            <i class="bi bi-pen-fill"></i>
+                                            <i className="bi bi-pen-fill"></i>
                                         </Button>
                                         <Button
                                             variant="danger"
-                                            onClick={() => (handleDelete(t.id))}
-
+                                            onClick={() => {
+                                                setMode("eliminar");
+                                                setTurnoEdit(t);
+                                                handleDelete(t);
+                                            }}
                                         >
-                                            <i class="bi bi-person-x"></i>
+                                            <i className="bi bi-person-x"></i>
                                         </Button>
                                     </td>
 
