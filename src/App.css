@@ -54,3 +54,10 @@
   align-items: center;
 }
 
+
+
+#registroMedico .containerLabelControl {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}

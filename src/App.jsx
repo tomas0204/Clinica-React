@@ -9,6 +9,7 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Error404 from './components/views/Error404.jsx';
 import "bootstrap-icons/font/bootstrap-icons.css";
+import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
 
 
 
@@ -23,11 +24,11 @@ function App() {
       <main className='my-5'>
       <Routes>
         <Route path='/inicio' element={<Home/>} />
-
         <Route  path='/login' element={<Login/>} />
         <Route path='' element={<Home/>} />
         <Route path='/login' element={<Login/>}/>
         <Route path='/registrarPaciente'element={<RegistrarPaciente />} />
+        <Route path='/registroMedico' element={<RegistroMedico />} />
         <Route path='*' element={<Error404 />} />
         <Route path='/turnos' element={<TurnosList />} />
       </Routes>
