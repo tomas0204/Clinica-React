@@ -42,7 +42,7 @@
 }
 
 
-#registroPacientes {
+#registroPacientes , #registroMedico {
   background-color: #aad69d;
   padding: 1rem;
   border-radius: 5%;
