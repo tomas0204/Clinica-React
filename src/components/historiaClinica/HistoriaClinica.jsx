@@ -154,3 +154,4 @@ const agregarConsulta = (nuevaConsulta) => {
 }
 
 export default HistoriaClinica;
+
