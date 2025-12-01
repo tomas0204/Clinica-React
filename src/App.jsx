@@ -10,6 +10,8 @@ import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Error404 from './components/views/Error404.jsx'
 import "bootstrap-icons/font/bootstrap-icons.css"
+import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
+
 
 
 
@@ -21,6 +23,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+
         <Navbar />
 
         <main className='my-5'>
