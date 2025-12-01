@@ -1,13 +1,16 @@
 import { Container, Row, Col} from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
+import "./Footer.css";
+import "./p"
 
 function Footer() {
     return (
-        <footer>
+        <footer className="footer">
             <Container>
                 <Row>
-                 <Col>
-                    <h4>Logo de la clínica</h4>
+                    <Col>
+                    <img src={}
+                        <h4>Logo de la clínica</h4>
                     <p>Slogan</p>
                 </Col>
                 
