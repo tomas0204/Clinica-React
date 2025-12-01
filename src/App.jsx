@@ -19,7 +19,13 @@ import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
+  if (currentUser?.role === "admin") {
+    console.log("El usuario es un admin");
+    
+  } else if (currentUser?.role === "user") {
+    console.log("El usuario es un paciente");
+  }
+  
   return (
     <>
       <BrowserRouter>

@@ -2,6 +2,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';    
 
+
 function Footer() {
     return (
         <footer>
