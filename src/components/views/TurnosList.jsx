@@ -12,7 +12,6 @@ const TurnosList = () => {
         const turnosGuardados = localStorage.getItem("turnos");
         return turnosGuardados ? JSON.parse(turnosGuardados) : [];
     });
-    // Función para guardar en localStorage
     const guardarEnLocalStorage = (turnosActualizados) => {
         localStorage.setItem("turnos", JSON.stringify(turnosActualizados));
     }
@@ -48,10 +47,9 @@ const TurnosList = () => {
         });
 
         if (result.isConfirmed) {
-            // Primero borramos en el backend (json-server)
-            const exito = await borrarTurno(turno); // tu función async que hace DELETE
+            const exito = await borrarTurno(turno); 
             if (exito) {
-                // Actualizamos React state y localStorage
+                
                 const nuevosTurnos = turnos.filter(t => t.id !== turno.id);
                 setTurnos(nuevosTurnos);
                 localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
