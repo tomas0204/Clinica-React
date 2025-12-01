@@ -37,7 +37,11 @@ const RegistroMedico = () => {
 
   }, [medicos])
 
-
+  const borrarMedico = (idMedico) {
+    const listadoMedicoActual = medicos.filter((itemMedico) => itemMedico !== idMedico)
+    
+    setMedicos(listadoMedicoActual)
+  }
 
   return (
     <>
