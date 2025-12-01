@@ -18,13 +18,13 @@ const Login = ({ onLogin }) => {
         "currentUser",
         JSON.stringify({ email: data.email, role: "admin" })
       );
-      onLogin(true); // acceso admin
+      onLogin(true); 
       navigate("/turnos");
       alert("Inicio de sesión como admin exitoso");
       return;
     }
 
-    // 🔹 Si querés mostrar algo en consola, hacelo aparte
+    
     console.log("Usuario logueado, admin?", data.email === adminEmail);
 
 
