@@ -42,3 +42,15 @@
 }
 
 
+#registroPacientes {
+  background-color: #aad69d;
+  padding: 1rem;
+  border-radius: 5%;
+}
+
+#registroPacientes .containerLabelControl {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+

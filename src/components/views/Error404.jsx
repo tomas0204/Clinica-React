@@ -13,7 +13,9 @@ function Error404() {
                                 src={errorImage}
                                 alt="Error 404"
                                 className="img-fluid mb-5 mx-auto d-block"
-                                style={{ maxWidth: "500px" }}
+                                style={{ maxWidth: "500px" }
+
+                            }
                             />
 
                             <div className="d-flex gap-2 justify-content-center">
