@@ -90,7 +90,20 @@ const TurnosList = () => {
                         guardarEnLocalStorage([...turnos, turnoGuardado]);
                         console.log("Turno creado:", turnoGuardado);
 
-                    } 
+                    } else if (mode === "editar" && turnoEdit) {
+                        const turnoActualizado = await editarTurno({
+                            ...nuevoTurno,
+                            id: turnoEdit.id
+                        });
+                        setTurnos(turnos.map(t =>
+                            t.id === turnoEdit.id ? turnoActualizado : t
+                        ));
+                        guardarEnLocalStorage(turnos.map(t =>
+                            t.id === turnoEdit.id ? turnoActualizado : t
+                        ));
+                        console.log("Turno actualizado:", turnoActualizado);
+
+                    }
                 }}
                 pacientesMock={pacientes}
                 medicosMock={medicos}
