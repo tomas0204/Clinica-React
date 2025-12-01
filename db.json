@@ -1,13 +1,3 @@
 {
-  "turnos": [
-    {
-      "id": "9eaf",
-      "pacienteNombre": "Maria Gomez",
-      "medicoNombre": "Dr. Smith",
-      "fecha": "2025-11-11",
-      "hora": "23:37",
-      "motivoConsulta": "asd",
-      "estado": "Pendiente"
-    }
-  ]
+  "turnos": []
 }
