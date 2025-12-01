@@ -1,5 +1,5 @@
 import { Card, Button, Row, Col, Form } from "react-bootstrap";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 const { VITE_ADMIN_USER, VITE_ADMIN_PASS } = import.meta.env;
@@ -11,7 +11,7 @@ const adminPass = VITE_ADMIN_PASS;
 const Login = ({ onLogin }) => {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const [loginError, setLoginError] = useState("");
-
+  const navigate = useNavigate();
   const onSubmit = (data) => {
     if (data.email === adminEmail && data.password === adminPass) {
       localStorage.setItem(
@@ -19,10 +19,9 @@ const Login = ({ onLogin }) => {
         JSON.stringify({ email: data.email, role: "admin" })
       );
       onLogin(true); // acceso admin
+      navigate("/turnos");
       alert("Inicio de sesión como admin exitoso");
       return;
-    } else {
-      onLogin(false); // no es admin
     }
 
     // 🔹 Si querés mostrar algo en consola, hacelo aparte
@@ -34,22 +33,24 @@ const Login = ({ onLogin }) => {
     console.log(adminEmail)
     console.log(adminPass);
 
-
-
-
-    // Verificar usuarios normales
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const users = JSON.parse(localStorage.getItem("pacientesKey")) || [];
     const userFound = users.find(
-      (u) => u.email === data.email && u.password === data.password
+      (u) => u.email === data.email && u.contraseña === data.password
     );
 
-    if (!userFound % onLogin() === true) {
-      setLoginError("Email o contraseña incorrectos");
+
+    if (!userFound) {
+      console.log("Email o contraseña incorrectos");
       return;
     }
 
-    // Guardar usuario normal
-    localStorage.setItem("currentUser", JSON.stringify(userFound));
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({ ...userFound, role: "user" })
+    );
+    onLogin(false); 
+    alert("Inicio de sesión exitoso");
+    navigate("/inicio"); 
   };
 
   return (
@@ -92,9 +93,9 @@ const Login = ({ onLogin }) => {
                 <Form.Text className="text-danger">{loginError}</Form.Text>
               </Form.Group>
 
-              <Button variant="warning" type="submit"
-                className="m-3">
-
+              <Button
+                variant="warning"
+                type="submit">
                 Iniciar sesión
               </Button>
               <Button

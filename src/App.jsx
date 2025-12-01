@@ -1,4 +1,4 @@
-import { Route, Routes, BrowserRouter } from 'react-router'
+import { Route, Routes, BrowserRouter, Navigate } from 'react-router'
 import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'
 import Login from './components/views/Login.jsx'
 import Home from "./components/views/Home/Home.jsx"
@@ -16,7 +16,7 @@ import "bootstrap-icons/font/bootstrap-icons.css"
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   return (
     <>
@@ -30,11 +30,16 @@ function App() {
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
             <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
             <Route path='*' element={<Error404 />} />
-            <Route path='/turnos' element={
-             
-                <TurnosList />
-            
-            } />
+            <Route
+              path='/turnos'
+              element={
+                currentUser?.role === "admin" ? (
+                  <TurnosList />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
           </Routes>
         </main>
         <Footer />
