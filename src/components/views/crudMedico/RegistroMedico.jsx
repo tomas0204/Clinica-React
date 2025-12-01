@@ -3,6 +3,8 @@ import Form from 'react-bootstrap/Form';
 import ListadoMedico from './ListadoMedico'
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
+import Swal from "sweetalert2";
+import { FaUserMd } from 'react-icons/fa';
 
 
 const RegistroMedico = () => {
@@ -37,8 +39,8 @@ const RegistroMedico = () => {
 
   }, [medicos])
 
-  const borrarMedico = (idMedico) {
-    const listadoMedicoActual = medicos.filter((itemMedico) => itemMedico !== idMedico)
+  const borrarMedico = (nombreMedico) => {
+    const listadoMedicoActual = medicos.filter((itemMedico) => itemMedico !== nombreMedico)
     
     setMedicos(listadoMedicoActual)
   }
@@ -176,7 +178,7 @@ const RegistroMedico = () => {
           </Button>
       </Form>
        </div>
-       <ListadoMedico></ListadoMedico>
+       <ListadoMedico medicos={medicos} borrarMedico={borrarMedico} ></ListadoMedico>
    </>
   )
 }
