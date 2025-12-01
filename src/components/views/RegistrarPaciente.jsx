@@ -44,13 +44,14 @@ const RegistrarPaciente = () => {
 
   return (
     <>
-       <div className="container col-12 col-md-6 ">
+       <div className="container col-12 col-md-8 col-lg-6" id="registroPacientes">
         <div>
         <h1> <FaUserMd /> Registro de Pacientes</h1>
         </div> 
-      <Form onSubmit={handleSubmit(registrarPaciente)} id="registroPacientes">
+      <Form onSubmit={handleSubmit(registrarPaciente)}  className="mt-5">
           <Form.Group className="mb-3">
-            <Form.Label>Nombre y Apellido</Form.Label>
+            <div className="containerLabelControl">
+              <Form.Label className="col-5 col-md-4">Nombre y Apellido</Form.Label>
             <Form.Control
               type="text"
               placeholder="Ej: Juan Perez"
@@ -66,13 +67,15 @@ const RegistrarPaciente = () => {
                 },
               })}
             />
-            <Form.Text className="text-muted">
+            </div>
+            <Form.Text className="text-danger">
               {errors.nombre_y_apellido?.message}
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Celular</Form.Label>
+            <div className="containerLabelControl">
+            <Form.Label className="col-5 col-md-4">Celular</Form.Label>
             <Form.Control
               type="tel"
               placeholder="Ej: 03816001122"
@@ -88,13 +91,15 @@ const RegistrarPaciente = () => {
                 },
               })}
             />
-            <Form.Text className="text-muted">
+            </div>
+            <Form.Text className="text-danger">
               {errors.celular?.message}
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>E-mail</Form.Label>
+            <div className="containerLabelControl">
+            <Form.Label className="col-5 col-md-4">E-mail</Form.Label>
             <Form.Control
               type="email"
               placeholder="Ej: juanperez@gmail.com"
@@ -108,13 +113,36 @@ const RegistrarPaciente = () => {
                 },
               })}
             />
-            <Form.Text className="text-muted">
+            </div>
+            <Form.Text className="text-danger">
               {errors.email?.message}
             </Form.Text>
+
           </Form.Group>
+              
+          <Form.Group className="mb-3">
+            <div className="containerLabelControl">
+            <Form.Label className="col-5 col-md-4">Obra Social</Form.Label>
+              <Form.Select {...register("obraSocial", {
+                required:"Tienes que ingresar una opción"
+              })}>
+                <option value="">Seleccione una opción</option>
+                <option value="Prensa">Prensa</option>
+                <option value="Red de Seguro Medico">Red de Seguro Medico</option>
+                <option value="Pami">Pami</option>
+                <option value="Prensa">Osecac</option>
+                <option value="Prensa">Particular</option>
+              </Form.Select>
+              </div>
+              <Form.Text className="text-danger">
+              {errors.obraSocial?.message}
+            </Form.Text>
+          </Form.Group>    
+
 
           <Form.Group className="mb-3">
-            <Form.Label>Contraseña</Form.Label>
+            <div className="containerLabelControl">
+            <Form.Label className="col-5 col-md-4">Contraseña</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Ingresa la contraseña"
@@ -128,13 +156,15 @@ const RegistrarPaciente = () => {
                   },
                 })}
               />
-            <Form.Text className="text-muted">
+              </div>
+            <Form.Text className="text-danger">
               {errors.contraseña?.message}
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Confirmar Contraseña</Form.Label>
+            <div className="containerLabelControl">
+            <Form.Label className="col-5 col-md-4">Confirmar Contraseña</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Repetir contraseña"
@@ -144,12 +174,13 @@ const RegistrarPaciente = () => {
                   
                 })}
               />
-            <Form.Text className="text-muted">
+              </div>
+            <Form.Text className="text-danger">
               {errors.contraseña_confirmar?.message}
             </Form.Text>
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button variant="success"  type="submit" >
             Registrar
           </Button>
       </Form>
