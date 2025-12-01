@@ -1,21 +1,19 @@
 import { Container, Row, Col} from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 import "./Footer.css";
-import "./p"
 
 function Footer() {
     return (
         <footer className="footer">
             <Container>
                 <Row>
-                    <Col>
-                    <img src={}
-                        <h4>Logo de la clínica</h4>
-                    <p>Slogan</p>
-                </Col>
+                    <Col className="footer-logo">
+                    <img src="/img/Photoroom_20251201_040109.png" alt="Logo" />
+                    <p>Salud que te envuelve</p>
+                    </Col>
                 
-                <Col>
-                    <Nav className="flex-column">
+                <Col className="footer-column">
+                    <Nav className="flex-column footer-nav">
                     <Nav.Item>
                         <strong>Pacientes</strong>
                     </Nav.Item>
@@ -26,8 +24,8 @@ function Footer() {
                 </Nav>
             </Col>
 
-            <Col>
-                <Nav className="flex-column">
+            <Col className="footer-column">
+                <Nav className="flex-column footer-nav">
                     <Nav.Item>
                     <strong>Profesionales</strong>
                     </Nav.Item>
@@ -37,8 +35,8 @@ function Footer() {
                 </Nav>   
             </Col>
             
-            <Col>
-                <Nav className="flex-column">
+            <Col className="footer-column">
+                <Nav className="flex-column footer-nav">
                     <Nav.Item>
                     <strong>Sobre la clínica</strong>
                     </Nav.Item>
