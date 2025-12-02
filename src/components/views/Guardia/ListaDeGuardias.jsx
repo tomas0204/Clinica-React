@@ -13,13 +13,16 @@ const ListaDeGuardias = ({ medicos, borrarMedico, seleccionarMedicoParaEditar, i
           
           <li key={index} className="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-md-center ">
 
-            <div className="mb-2 d-flex flex-row-md"> 
-              <span className="ms-1"><strong>Medico/a:</strong> {medico.nombre}</span>
-              <span className="ms-3"><strong>Horario:</strong> {medico.entrada} - {medico.salida}</span>
+            <div className=" d-flex flex-column-sm"> 
+              <span className="ms-1 my-1"><strong>Medico/a:</strong> {medico.nombre}</span>
             </div>
 
-            <div className="d-flex justify-content-center">
-              <Button variant="danger" className="btn-sm me-2"  onClick={() => borrarMedico(index)} disabled={indiceEditando !== null}>
+            <div>
+              <span className=" mb-1"><strong>Horario:</strong> {medico.entrada} - {medico.salida}</span>
+            </div>
+
+            <div className="d-flex justify-content-center mt-1">
+              <Button variant="danger" className="btn-sm me-2 "  onClick={() => borrarMedico(index)} disabled={indiceEditando !== null}>
               Borrar
             </Button>
 

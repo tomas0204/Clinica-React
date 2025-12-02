@@ -26,7 +26,7 @@ useEffect(() => {
 
     Swal.fire({
           icon: "success",
-          title: "Guardia Borrada",
+          title: "Guardia Eliminada",
           text: "La lista de Guardias fue actualizada correctamente",
           timer: 2000,
           showConfirmButton: false
