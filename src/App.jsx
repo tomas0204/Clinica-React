@@ -28,63 +28,30 @@ function App() {
 
   return (
     <div className='div-principal'>
-    <BrowserRouter>
+      <BrowserRouter>
 
-      <Navbar />
+        <Navbar />
 
-      <main className='my-5'>
-      <Routes>
-        <Route path='/inicio' element={<Home/>} />
+        <main className='my-5'>
+          <Routes>
+            <Route path='/inicio' element={<Home />} />
+            <Route path='' element={<Home />} />
+            <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
+            <Route path='/guardia-medica' element={<GuardiaMedica />} />
+            <Route path='/turnos' element={<TurnosList />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
+            <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
+            <Route path='/historiaClinica' element={<HistoriaClinica />} />
+            <Route path='/registroMedico' element={<RegistroMedico />} />
+            <Route path='/turnos' element={<TurnosList />} />
 
-        <Route  path='/login' element={<Login/>} />
-        <Route path='' element={<Home/>} />
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/registrarPaciente'element={<RegistrarPaciente />} />
-        <Route path='/guardia-medica' element={<GuardiaMedica/>} />
-        {/* <Route path='*' element={<Error404 />} /> */}
-        <Route path='/turnos' element={<TurnosList />} />
+            <Route path='*' element={<Error404 />} />
 
-        <Route path='/' element={<Home />} />
+          </Routes>
+        </main>
 
-        <Route
-          path='/login'
-          element={<Login onLogin={setIsAdmin} />}
-        />
-
-        <Route
-          path='/registrarPaciente'
-          element={<RegistrarPaciente />}
-        />
-
-        <Route
-          path='/historiaClinica'
-          element={<HistoriaClinica />}
-        />
-
-        <Route
-          path='/registroMedico'
-          element={<RegistroMedico />}
-        />
-
-        {/* Ruta protegida */}
-        <Route
-          path='/turnos'
-          element={
-            currentUser?.role === "admin"
-              ? <TurnosList />
-              : <Navigate to="/login" />
-            }
-          />
-
-          <Route
-            path='*'
-            element={<Error404 />}
-          />
-
-        </Routes>
-      </main>
-
-      <Footer />
+        <Footer />
       </BrowserRouter>
     </div>
 

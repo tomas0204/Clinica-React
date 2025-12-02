@@ -55,3 +55,27 @@ export const borrarTurno = async (turno) => {
     return false;
   }
 };
+
+export const cancelarTurno = async (turno) => {
+  try {
+    const respuesta = await fetch(`${turnosBackend}/${turno.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        ...turno,
+        estado: "cancelado"
+      })
+    });
+
+    if (!respuesta.ok) {
+      throw new Error("Error al cancelar turno");
+    }
+
+    return await respuesta.json();
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};

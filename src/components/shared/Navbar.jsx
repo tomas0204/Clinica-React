@@ -8,7 +8,7 @@ export default function NavbarClinica() {
 
   const cerrarSesion = () => {
     localStorage.removeItem("currentUser");
-    setUser(null); 
+    setUser(null);
     window.location.reload();
   };
 
@@ -41,10 +41,21 @@ export default function NavbarClinica() {
                 <Nav.Link onClick={cerrarSesion}>
                   Cerrar sesión
                 </Nav.Link>
+                {role === "admin" ? (
+                  <NavDropdown title="Gestión" id="login-dropdown">
+                    <NavDropdown.Item as={Link} to="/turnos">
+                      Turnos
+                    </NavDropdown.Item>
 
-                <Nav.Link as={Link} to="/perfil">
-                  Ir a perfil
-                </Nav.Link>
+                    <NavDropdown.Item as={Link} to="/guardia-medica">
+                      Guardia Médica
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                ) : <NavDropdown title="Perfil" id="login-dropdown">
+                    <NavDropdown.Item as={Link} to="/turnos">
+                      Turnos
+                    </NavDropdown.Item>
+                  </NavDropdown>}
               </>
             ) : (
               <NavDropdown title="Iniciar Sesión" id="login-dropdown">

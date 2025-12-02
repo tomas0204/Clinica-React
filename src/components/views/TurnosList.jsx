@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { crearTurno, editarTurno, borrarTurno } from "../../helpers/apiTurnos.js";
+import { crearTurno, editarTurno, borrarTurno, cancelarTurno } from "../../helpers/apiTurnos.js";
 import { Button } from 'react-bootstrap'
 import CrearTurno from '../turnos/CrearTurno.jsx';
 import Table from 'react-bootstrap/Table'
@@ -18,6 +18,10 @@ const TurnosList = () => {
     const [mode, setMode] = useState("crear");
     const [show, setShow] = useState(false);
     const [turnoEdit, setTurnoEdit] = useState(null);
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    const isAdmin = currentUser?.role === "admin";
+    const isUser = currentUser?.role === "user";
+    const isMyTurn = currentUser?.id === turnoEdit?.pacienteId;
 
 
     const pacientes = [
@@ -47,9 +51,9 @@ const TurnosList = () => {
         });
 
         if (result.isConfirmed) {
-            const exito = await borrarTurno(turno); 
+            const exito = await borrarTurno(turno);
             if (exito) {
-                
+
                 const nuevosTurnos = turnos.filter(t => t.id !== turno.id);
                 setTurnos(nuevosTurnos);
                 localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
@@ -71,6 +75,47 @@ const TurnosList = () => {
         }
     };
 
+    const handleCancel = async (turno) => {
+        const result = await Swal.fire({
+            title: " ¿Deseas cancelar el turno?",
+            text: "Si quieres deshacer esta accion, contacta con la clínica.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, cancelar",
+            cancelButtonText: "Volver atrás"
+        });
+
+        if (result.isConfirmed) {
+            const exito = await cancelarTurno(turno);
+            if (exito) {
+
+                const nuevosTurnos = turnos.map(t =>
+                    t.id === turno.id ? { ...t, estado: "cancelado" } : t
+                );
+
+                setTurnos(nuevosTurnos);
+                localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
+
+
+
+                Swal.fire({
+                    title: "Cancelado",
+                    text: "El turno ha sido cancelado",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo cancelar el turno",
+                    icon: "error"
+                });
+            }
+        }
+    };
 
 
     return (
@@ -148,27 +193,46 @@ const TurnosList = () => {
                                     <td>{t.motivoConsulta}</td>
                                     <td>{t.estado}</td>
                                     <td>
-                                        <Button
-                                            variant="dark"
-                                            className='me-2'
-                                            onClick={() => {
-                                                setMode("editar");
-                                                setTurnoEdit(t);
-                                                setShow(true);
-                                            }}
-                                        >
-                                            <i className="bi bi-pen-fill"></i>
-                                        </Button>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => {
-                                                setMode("eliminar");
-                                                setTurnoEdit(t);
-                                                handleDelete(t);
-                                            }}
-                                        >
-                                            <i className="bi bi-person-x"></i>
-                                        </Button>
+                                        {isAdmin && (
+                                            <>
+                                                <Button
+                                                    variant="dark"
+                                                    className="me-2"
+                                                    onClick={() => {
+                                                        setMode("editar");
+                                                        setTurnoEdit(t);
+                                                        setShow(true);
+                                                    }}
+                                                >
+                                                    <i className="bi bi-pen-fill"></i>
+                                                </Button>
+
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={() => {
+                                                        setMode("eliminar");
+                                                        setTurnoEdit(t);
+                                                        handleDelete(t);
+                                                    }}
+                                                >
+                                                    <i className="bi bi-person-x"></i>
+                                                </Button>
+                                            </>
+                                        )}
+                                        {isUser && isMyTurn && (
+                                            <Button
+                                                variant="warning"
+                                                disabled={t.estado === "cancelado"}
+                                                onClick={() => {
+                                                    setMode("cancelar");
+                                                    setTurnoEdit(t);
+                                                    handleCancel(t); 
+                                                }}
+                                            >
+                                                <i className="bi bi-x-circle-fill"></i> Cancelar
+                                            </Button>
+                                        )}
+
                                     </td>
 
                                 </tr>
