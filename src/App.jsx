@@ -26,6 +26,33 @@ function App() {
   }
 
   return (
+    <>
+      <BrowserRouter>
+
+        <Navbar />
+
+        <main className='my-5'>
+          <Routes>
+            <Route path='' element={<Home />} />
+            <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
+            <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
+            <Route path='/RegistroMedico' element={<RegistroMedico />} />
+            <Route path='*' element={<Error404 />} />
+            <Route
+              path='/turnos'
+              element={
+                currentUser?.role === "admin" ? (
+                  <TurnosList />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+          </Routes>
+        </main>
+        <Footer />
+      </BrowserRouter>
+    </>
     <BrowserRouter>
 
       <Navbar />

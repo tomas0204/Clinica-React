@@ -39,8 +39,8 @@ const RegistroMedico = () => {
 
   }, [medicos])
 
-  const borrarMedico = (nombreMedico) => {
-    const listadoMedicoActual = medicos.filter((itemMedico) => itemMedico !== nombreMedico)
+  const borrarMedico = (emailMedico) => {
+    const listadoMedicoActual = medicos.filter((itemMedico) => itemMedico.email_medico !== emailMedico)
     
     setMedicos(listadoMedicoActual)
   }
@@ -178,7 +178,7 @@ const RegistroMedico = () => {
           </Button>
       </Form>
        </div>
-       <ListadoMedico medicos={medicos} borrarMedico={borrarMedico} ></ListadoMedico>
+       <ListadoMedico medicos={medicos} borrarMedico={borrarMedico}></ListadoMedico>
    </>
   )
 }
