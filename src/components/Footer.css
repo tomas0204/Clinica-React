@@ -1,18 +1,21 @@
 footer {
-    background-color: #ebedef;
+    background-color: #ebedef92;
     color: black;
     padding: 20px 0;
     margin-top: 60px;
+
 }
 
 .footer-column {
     text-align: left;
+    margin: 0;
+    font-style: Roboto;
     
 }
 
 .footer-nav {
     gap: 1px;
-    color: #1f4f7b;
+    color: #aad69d;
     text-decoration: none;
 }
 
@@ -26,7 +29,7 @@ footer {
 
 footer h4 {
     font-size: 20px;
-    font-style: Montserrat;
+    font-style: Roboto;
     margin-bottom: 10px;
     
 }
@@ -34,6 +37,10 @@ footer h4 {
 footer p {
     margin: 0;
     opacity: 0.8;
+    font-style: Roboto;
+    color: rgb(67, 64, 64);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-style: italic;
 }
 
 footer strong {
@@ -42,9 +49,12 @@ footer strong {
 }
 
 .footer a {
-    color: #1d1daa;
+    color: #6ec8bd;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 15px;
+    margin: 4px 0;
+    padding: 0;
+    font-style: Roboto;
 
 }
 
@@ -55,10 +65,16 @@ footer a:hover {
 }
 
 img {
-    width: 120px;
-    height: 120px;;
+    width: 180px;
+    height: 180px;;
 }
 
 .footer-nav .nav-link {
     margin: 1px;
+}
+
+.footer-container {
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
 }
