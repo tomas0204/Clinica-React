@@ -5,7 +5,7 @@ import "./Footer.css";
 function Footer() {
     return (
         <footer className="footer">
-            <Container>
+            <Container className= "footer-container">
                 <Row>
                     <Col className="footer-logo">
                     <img src="/img/Photoroom_20251201_040109.png" alt="Logo" />
