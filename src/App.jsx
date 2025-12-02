@@ -34,7 +34,6 @@ function App() {
 
         <main className='my-5'>
           <Routes>
-            <Route path='/inicio' element={<Home />} />
             <Route path='' element={<Home />} />
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
             <Route path='/registrarPaciente' element={<RegistrarPaciente />} />

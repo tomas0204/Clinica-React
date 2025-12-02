@@ -1,12 +1,15 @@
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function NavbarClinica() {
   const role = JSON.parse(localStorage.getItem("currentUser"))?.role;
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("currentUser")));
 
   const cerrarSesion = () => {
-    localStorage.setItem("currentUser", null);
-    window.location.href = ""; 
+    localStorage.removeItem("currentUser");
+    setUser(null); 
+    window.location.reload();
   };
 
   return (
