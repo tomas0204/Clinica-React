@@ -2,6 +2,7 @@ import { Card, Button, Row, Col, Form } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+
 const { VITE_ADMIN_USER, VITE_ADMIN_PASS } = import.meta.env;
 
 const adminEmail = VITE_ADMIN_USER;
@@ -20,18 +21,11 @@ const Login = ({ onLogin }) => {
       );
       onLogin(true); 
       navigate("/turnos");
-      alert("Inicio de sesión como admin exitoso");
       return;
     }
 
     
     console.log("Usuario logueado, admin?", data.email === adminEmail);
-
-
-    console.log(data.email);
-    console.log(data.password);
-    console.log(adminEmail)
-    console.log(adminPass);
 
     const users = JSON.parse(localStorage.getItem("pacientesKey")) || [];
     const userFound = users.find(
@@ -49,8 +43,8 @@ const Login = ({ onLogin }) => {
       JSON.stringify({ ...userFound, role: "user" })
     );
     onLogin(false); 
-    alert("Inicio de sesión exitoso");
-    navigate("/inicio"); 
+    navigate('/'); 
+    window.location.reload();
   };
 
   return (
