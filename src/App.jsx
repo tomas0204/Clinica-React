@@ -1,6 +1,5 @@
 import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom'
 import { useState } from "react"
-import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "bootstrap-icons/font/bootstrap-icons.css"
 import Login from './components/views/Login.jsx'
@@ -12,14 +11,10 @@ import Navbar from './components/shared/Navbar.jsx';
 import GuardiaMedica from "./components/views/Guardia/GuardiaMedica.jsx"
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Error404 from './components/views/Error404.jsx';
 
 import Error404 from './components/views/Error404.jsx'
 import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
 import HistoriaClinica from './components/historiaClinica/HistoriaClinica.jsx'
-
-import Navbar from './components/shared/Navbar.jsx'
-import Footer from "./components/shared/Footer.jsx"
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -33,7 +28,6 @@ function App() {
 
   return (
     <div className='div-principal'>
-      <BrowserRouter>
     <BrowserRouter>
 
       <Navbar />
@@ -96,7 +90,6 @@ function App() {
       </BrowserRouter>
     </div>
 
-    </BrowserRouter>
   )
 }
 
