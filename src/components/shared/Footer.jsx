@@ -2,6 +2,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';    
 
+
 function Footer() {
     return (
         <footer>
@@ -17,8 +18,8 @@ function Footer() {
                             <Nav.Item>
                                 <strong>Pacientes</strong>
                             </Nav.Item>
-                            <Nav.Link as={Link} to="">Turnos</Nav.Link>
-                            <Nav.Link as={Link} to="">Mis turnos</Nav.Link>
+                            <Nav.Link as={Link} to="/turnos">Turnos</Nav.Link>
+                            <Nav.Link as={Link} to="/turnos">Mis turnos</Nav.Link>
                             <Nav.Link as={Link} to="/login">Login</Nav.Link>
                             <Nav.Link as={Link} to="/registrarPaciente">Registro</Nav.Link>
                         </Nav>
@@ -29,9 +30,9 @@ function Footer() {
                             <Nav.Item>
                                 <strong>Profesionales</strong>
                             </Nav.Item>
-                            <Nav.Link href="#">Panel</Nav.Link>
-                            <Nav.Link href="#">Login</Nav.Link>
-                            <Nav.Link href="#">Registro</Nav.Link>
+                            <Nav.Link href="/*">Panel</Nav.Link>
+                            <Nav.Link href="/login">Login</Nav.Link>
+                            <Nav.Link href="">Registro</Nav.Link>
                         </Nav>
                     </Col>
 
@@ -40,9 +41,9 @@ function Footer() {
                             <Nav.Item>
                                 <strong>Sobre la clínica</strong>
                             </Nav.Item>
-                            <Nav.Link href="#">Nosotros</Nav.Link>
+                            <Nav.Link href="*">Nosotros</Nav.Link>
                             <Nav.Link as={Link} to="*">Especialides</Nav.Link>
-                            <Nav.Link href="#">Contacto</Nav.Link>
+                            <Nav.Link href="*">Contacto</Nav.Link>
                         </Nav>
                     </Col>
 

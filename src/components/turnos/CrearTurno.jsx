@@ -1,9 +1,44 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 
-const CrearTurno = ({ onSave, pacientesMock, medicosMock }) => {
+const CrearTurno = ({
+    show,
+    onClose,
+    onSave,
+    mode,
+    turnoEdit,
+    pacientesMock,
+    medicosMock
+}) => {
+
+
+    useEffect(() => {
+        if (mode === "editar" && turnoEdit) {
+            setForm(turnoEdit);
+        } else if (mode === "crear") {
+            reset();
+        }
+    }, [mode, turnoEdit]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave(form);
+        onClose();
+        if (mode === "crear") reset();
+    };
+
+    const estado = () => {
+        if (mode === "crear") {
+            return "Pendiente";
+        } else if (mode === "editar" && turnoEdit) {
+
+            return turnoEdit.estado;
+        }
+    };
+
+    const today = new Date().toISOString().split("T")[0];
 
     const [form, setForm] = useState({
         pacienteNombre: "",
@@ -11,112 +46,109 @@ const CrearTurno = ({ onSave, pacientesMock, medicosMock }) => {
         fecha: "",
         hora: "",
         motivoConsulta: "",
-        estado: "pendiente"
+        estado: estado()
     });
-
     const reset = () => {
-    setForm({
-        pacienteId: "",
-        medicoId: "",
-        fecha: "",
-        hora: "",
-        motivoConsulta: "",
-        estado: "pendiente"
-    });
-};
-
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+        setForm({
+            pacienteNombre: "",
+            medicoNombre: "",
+            fecha: "",
+            hora: "",
+            motivoConsulta: "",
+            estado: estado()
+        });
+    };
 
     return (
-        <>
+        <Modal show={show} onHide={onClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    {mode === "crear" ? "Crear Turno" : "Editar Turno"}
+                </Modal.Title>
+            </Modal.Header>
 
-            <Button variant="primary" onClick={handleShow}>
-                Nuevo Turno
-            </Button>
+            <form onSubmit={handleSubmit}>
+                <Modal.Body>
 
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Crear un nuevo turno</Modal.Title>
-                </Modal.Header>
+                    <h5>Paciente</h5>
+                    <select
+                        value={form.pacienteNombre}
+                        onChange={e => setForm({ ...form, pacienteNombre: e.target.value })}
+                        className='form-select'
+                        required
+                    >
+                        <option value="">Seleccionar paciente</option>
+                        {pacientesMock.map(p => (
+                            <option key={p.id} value={p.nombre}>{p.nombre}</option>
+                        ))}
+                    </select>
 
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        onSave(form);
-                        handleClose();
-                        reset()
-                    }}
+                    <h5>Médico</h5>
+                    <select
+                        value={form.medicoNombre}
+                        onChange={e => setForm({ ...form, medicoNombre: e.target.value })}
+                        className='form-select'
+                        required
+                    >
+                        <option value="">Seleccionar médico</option>
+                        {medicosMock.map(m => (
+                            <option key={m.id} value={m.nombre}>{m.nombre}</option>
+                        ))}
+                    </select>
 
-                >
-                    <Modal.Body>
-                        <h5>Paciente</h5>
-                        <select
-                            value={form.pacienteNombre}
-                            onChange={e => setForm({ ...form, pacienteNombre: e.target.value })}
-                            className='form-select'
-                            required
-                        >
-                            <option value="">Seleccionar paciente</option>
-                            {pacientesMock.map(p => (
-                                <option key={p.id} value={p.nombre}>{p.nombre}</option>
-                            ))}
+                    <h5>Fecha</h5>
+                    <Form.Control
+                        type="date"
+                        value={form.fecha}
+                        min={today}
+                        onChange={(e) => setForm({ ...form, fecha: e.target.value })}
+                        required
+                    />
 
-                        </select>
+                    <h5>Hora</h5>
+                    <Form.Control
+                        type="time"
+                        value={form.hora}
+                        onChange={(e) => setForm({ ...form, hora: e.target.value })}
+                        required
+                    />
 
-                        <h5>Médico</h5>
-                        <select
-                            value={form.medicoNombre}
-                            onChange={e => setForm({ ...form, medicoNombre: e.target.value })}
-                            className='form-select'
-                            required
-                        >
-                            <option value="">Seleccionar médico</option>
-                            {medicosMock.map(p => (
-                                <option key={p.id} value={p.nombre}>{p.nombre}</option>
-                            ))}
+                    <h5>Motivo de Consulta</h5>
+                    <Form.Control
+                        as="textarea"
+                        rows={3}
+                        value={form.motivoConsulta}
+                        onChange={(e) => setForm({ ...form, motivoConsulta: e.target.value })}
+                        required
+                    />
 
-                        </select>
-                        <h5>Fecha</h5>
-                        <Form.Control
-                            type="date"
-                            value={form.fecha}
-                            onChange={(e) => setForm({ ...form, fecha: e.target.value })}
-                            required
-                        />
-                        <h5>Hora</h5>
-                        <Form.Control
-                            type="time"
-                            value={form.hora}
-                            onChange={(e) => setForm({ ...form, hora: e.target.value })}
-                            required
-                        />
-                        <h5>Motivo de Consulta</h5>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            value={form.motivoConsulta}
-                            onChange={(e) => setForm({ ...form, motivoConsulta: e.target.value })}
+                    <h5>Estado</h5>
+                    <select
+                        value={form.estado}
+                        onChange={e => setForm({ ...form, estado: e.target.value })}
+                        className="form-select"
+                        required
+                    >
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Confirmado">Confirmado</option>
+                        <option value="Cancelado">Cancelado</option>
+                        <option value="Atendido">Atendido</option>
+                        <option value="Reprogramado">Reprogramado</option>
+                    </select>
 
-                            required
-                        />
-                    </Modal.Body>
+                </Modal.Body>
 
-
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Cancelar
-                        </Button>
-                        <Button variant="primary" type="submit">
-                            Guardar
-                        </Button>
-                    </Modal.Footer>
-                </form>
-            </Modal >
-        </>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={onClose}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" type="submit">
+                        {mode === "crear" ? "Crear" : "Guardar cambios"}
+                    </Button>
+                </Modal.Footer>
+            </form>
+        </Modal>
     );
-}
+};
 
 export default CrearTurno;

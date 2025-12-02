@@ -22,9 +22,14 @@ const RegistrarPaciente = () => {
   const [pacientes, setPacientes] = useState(pacientesLocalStorage);
 
   const registrarPaciente = (data) => {
-    setPacientes([...pacientes, data]);
 
-   
+    const nuevoPaciente = {
+      ...data,
+      role: "user" // el rol
+    };
+    setPacientes([...pacientes, nuevoPaciente]);
+
+
 
     reset();
 
@@ -44,77 +49,105 @@ const RegistrarPaciente = () => {
 
   return (
     <>
-       <div className="container col-12 col-md-6 ">
+      <div className="container col-12 col-md-8 col-lg-6" id="registroPacientes">
         <div>
-        <h1> <FaUserMd /> Registro de Pacientes</h1>
-        </div> 
-      <Form onSubmit={handleSubmit(registrarPaciente)} id="registroPacientes">
+          <h1> <FaUserMd /> Registro de Pacientes</h1>
+        </div>
+        <Form onSubmit={handleSubmit(registrarPaciente)} className="mt-5">
           <Form.Group className="mb-3">
-            <Form.Label>Nombre y Apellido</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Ej: Juan Perez"
-              {...register("nombre_y_apellido", {
-                required: "Este campo es obligatorio",
-                minLength: {
-                  value: 5,
-                  message: "Tienes que ingresar al menos cinco caracteres",
-                },
-                maxLength: {
-                  value: 40,
-                  message: "No debes superar los treinta caracteres",
-                },
-              })}
-            />
-            <Form.Text className="text-muted">
+            <div className="containerLabelControl">
+              <Form.Label className="col-5 col-md-4">Nombre y Apellido</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ej: Juan Perez"
+                {...register("nombre_y_apellido", {
+                  required: "Este campo es obligatorio",
+                  minLength: {
+                    value: 5,
+                    message: "Tienes que ingresar al menos cinco caracteres",
+                  },
+                  maxLength: {
+                    value: 40,
+                    message: "No debes superar los treinta caracteres",
+                  },
+                })}
+              />
+            </div>
+            <Form.Text className="text-danger">
               {errors.nombre_y_apellido?.message}
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Celular</Form.Label>
-            <Form.Control
-              type="tel"
-              placeholder="Ej: 03816001122"
-              {...register("celular", {
-                required: "Este es un campo obligatorio",
-                minLength: {
-                  value: 9,
-                  message: "Debes ingresar al menos nueve digitos",
-                },
-                pattern: {
-                  value: /^[0-9]+$/,
-                  message: "Solo se permiten números",
-                },
-              })}
-            />
-            <Form.Text className="text-muted">
+            <div className="containerLabelControl">
+              <Form.Label className="col-5 col-md-4">Celular</Form.Label>
+              <Form.Control
+                type="tel"
+                placeholder="Ej: 03816001122"
+                {...register("celular", {
+                  required: "Este es un campo obligatorio",
+                  minLength: {
+                    value: 9,
+                    message: "Debes ingresar al menos nueve digitos",
+                  },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Solo se permiten números",
+                  },
+                })}
+              />
+            </div>
+            <Form.Text className="text-danger">
               {errors.celular?.message}
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>E-mail</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Ej: juanperez@gmail.com"
-              {...register("email", {
-                required: "Este campo es obligatorio",
-                pattern: {
-                  value:
-                    /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
-                  message:
-                    "El email debe ser un correo valido por ej: juanperez@gmail.com",
-                },
-              })}
-            />
-            <Form.Text className="text-muted">
+            <div className="containerLabelControl">
+              <Form.Label className="col-5 col-md-4">E-mail</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Ej: juanperez@gmail.com"
+                {...register("email", {
+                  required: "Este campo es obligatorio",
+                  pattern: {
+                    value:
+                      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
+                    message:
+                      "El email debe ser un correo valido por ej: juanperez@gmail.com",
+                  },
+                })}
+              />
+            </div>
+            <Form.Text className="text-danger">
               {errors.email?.message}
             </Form.Text>
+
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Contraseña</Form.Label>
+            <div className="containerLabelControl">
+              <Form.Label className="col-5 col-md-4">Obra Social</Form.Label>
+              <Form.Select {...register("obraSocial", {
+                required: "Tienes que ingresar una opción"
+              })}>
+                <option value="">Seleccione una opción</option>
+                <option value="Prensa">Prensa</option>
+                <option value="Red de Seguro Medico">Red de Seguro Medico</option>
+                <option value="Pami">Pami</option>
+                <option value="Prensa">Osecac</option>
+                <option value="Prensa">Particular</option>
+              </Form.Select>
+            </div>
+            <Form.Text className="text-danger">
+              {errors.obraSocial?.message}
+            </Form.Text>
+          </Form.Group>
+
+
+          <Form.Group className="mb-3">
+            <div className="containerLabelControl">
+              <Form.Label className="col-5 col-md-4">Contraseña</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Ingresa la contraseña"
@@ -128,32 +161,35 @@ const RegistrarPaciente = () => {
                   },
                 })}
               />
-            <Form.Text className="text-muted">
+            </div>
+            <Form.Text className="text-danger">
               {errors.contraseña?.message}
             </Form.Text>
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>Confirmar Contraseña</Form.Label>
+            <div className="containerLabelControl">
+              <Form.Label className="col-5 col-md-4">Confirmar Contraseña</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Repetir contraseña"
                 {...register("contraseña_confirmar", {
                   required: "Tienes que repetir la contraseña",
                   validate: (value) => value === getValues('contraseña') || `❌ Las contraseñas no coinciden`
-                  
+
                 })}
               />
-            <Form.Text className="text-muted">
+            </div>
+            <Form.Text className="text-danger">
               {errors.contraseña_confirmar?.message}
             </Form.Text>
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button variant="success" type="submit" >
             Registrar
           </Button>
-      </Form>
-       </div>
+        </Form>
+      </div>
     </>
   );
 };

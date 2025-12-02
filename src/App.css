@@ -5,6 +5,11 @@
   text-align: center;
 }
 
+body{
+  font-family: 'Roboto', sans-serif !important;
+}
+
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -58,3 +63,25 @@ grid-template-rows: auto 1fr auto;
 min-height: 100vh;
 } 
 
+
+
+
+#registroPacientes , #registroMedico {
+  background-color: #aad69d;
+  padding: 1rem;
+  border-radius: 5%;
+}
+
+#registroPacientes .containerLabelControl {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+
+
+#registroMedico .containerLabelControl {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
