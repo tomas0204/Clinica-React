@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 
-const ListaDeGuardias = ({ medicos, borrarMedico, seleccionarMedicoParaEditar }) => {
+const ListaDeGuardias = ({ medicos, borrarMedico, seleccionarMedicoParaEditar, indiceEditando }) => {
   return (
     <div className="mt-4 pt-3 d-flex flex-column align-items-center" style={{backgroundColor: "#65c4a4ff", borderRadius: "10px"}}>
       <h2 >Médicos de Guardia</h2>
@@ -19,11 +19,11 @@ const ListaDeGuardias = ({ medicos, borrarMedico, seleccionarMedicoParaEditar })
             </div>
 
             <div className="d-flex justify-content-center">
-              <Button variant="danger" className="btn-sm me-2"  onClick={() => borrarMedico(index)}>
+              <Button variant="danger" className="btn-sm me-2"  onClick={() => borrarMedico(index)} disabled={indiceEditando !== null}>
               Borrar
             </Button>
 
-            <Button variant="warning" className="btn-sm" onClick={() => seleccionarMedicoParaEditar(medico, index)}>
+            <Button variant="warning" className="btn-sm" onClick={() => seleccionarMedicoParaEditar(index)}>
               Editar
             </Button>
             </div>

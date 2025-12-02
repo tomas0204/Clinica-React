@@ -7,26 +7,23 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
 
 
   useEffect(() => {
-    if (medicoEditando) {
+    if (medicoEditando !== null) {
       setValue("nombre", medicoEditando.nombre);
       setValue("entrada", medicoEditando.entrada);
       setValue("salida", medicoEditando.salida);
+    } else {
+      reset();
     }
   }, [medicoEditando, setValue]);
 
 
   const onSubmit = (data) => {
 
-    if (medicoEditando) {
+    if (medicoEditando !== null) {
       editarMedico(data); // editamos
     } else {
       agregarMedico(data); // agregamos
     }
-    /* const medico = {
-      nombre: data.nombre,
-      entrada: data.entrada,
-      salida: data.salida
-    }; */
 
     reset();
   };

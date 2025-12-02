@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormGuardia from "./FormGuardia";
 import ListaDeGuardias from "./ListaDeGuardias";
 
 function GuardiaMedica() {
   const [medicos, setMedicos] = useState([]);
-  const [medicoEditando, setMedicoEditando] = useState(null);
+  const [indiceEditando, setIndiceEditando] = useState(null);
   //const [indexEditando, setIndexEditando] = useState(null);
+
+  useEffect(() => {
+    const medicosGuardados = JSON.parse(localStorage.getItem("medicos")) || [];
+    setMedicos(medicosGuardados);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("medicos", JSON.stringify(medicos));
+  }, [medicos]);
+
 
   const agregarMedico = (medico) => {
     setMedicos([...medicos, medico]);
@@ -16,15 +26,15 @@ function GuardiaMedica() {
     setMedicos(nuevosMedicos);
   };
 
-   const seleccionarMedicoParaEditar = (medico, index) => {
-    setMedicoEditando(index);
+   const seleccionarMedicoParaEditar = (index) => {
+    setIndiceEditando(index);
   };
 
   const editarMedico = (medicoActualizado) => {
     const copia = [...medicos];
-    copia[medicoEditando] = medicoActualizado;
+    copia[indiceEditando] = medicoActualizado;
     setMedicos(copia);
-    setMedicoEditando(null);
+    setIndiceEditando(null);
   };
 
   return (
@@ -32,12 +42,14 @@ function GuardiaMedica() {
       <FormGuardia 
       agregarMedico={agregarMedico} 
       editarMedico={editarMedico} 
-       medicoEditando={medicoEditando !== null ? medicos[medicoEditando] : null} />
+      medicoEditando={indiceEditando !== null ? medicos [indiceEditando] : null} 
+      />
 
       <ListaDeGuardias 
       medicos={medicos} 
       borrarMedico={borrarMedico} 
-      seleccionarMedicoParaEditar={seleccionarMedicoParaEditar}/>
+      seleccionarMedicoParaEditar={seleccionarMedicoParaEditar}
+      indiceEditando={indiceEditando}/>
     </div>
   );
 }
