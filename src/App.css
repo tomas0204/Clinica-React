@@ -40,3 +40,24 @@
 .read-the-docs {
   color: #888;
 }
+
+
+#registroPacientes , #registroMedico {
+  background-color: #aad69d;
+  padding: 1rem;
+  border-radius: 5%;
+}
+
+#registroPacientes .containerLabelControl {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+
+
+#registroMedico .containerLabelControl {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}

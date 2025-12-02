@@ -9,14 +9,14 @@ function FormularioEvolucion({ onAdd }) {
         indicaciones: ""
     });
 
-    const handleChange = (e) => {
+    const handleChange = (event) => {
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [e.target.name]: event.target.value
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (event) => {
         e.preventDefault();
         onAdd(formData);
 
