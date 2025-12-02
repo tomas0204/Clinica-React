@@ -14,7 +14,7 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
     } else {
       reset();
     }
-  }, [medicoEditando, setValue]);
+  }, [medicoEditando, setValue, reset]);
 
 
   const onSubmit = (data) => {

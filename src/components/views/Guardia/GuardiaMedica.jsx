@@ -3,18 +3,16 @@ import FormGuardia from "./FormGuardia";
 import ListaDeGuardias from "./ListaDeGuardias";
 
 function GuardiaMedica() {
-  const [medicos, setMedicos] = useState([]);
-  const [indiceEditando, setIndiceEditando] = useState(null);
-  //const [indexEditando, setIndexEditando] = useState(null);
+const [indiceEditando, setIndiceEditando] = useState(null);
 
-  useEffect(() => {
-    const medicosGuardados = JSON.parse(localStorage.getItem("medicos")) || [];
-    setMedicos(medicosGuardados);
-  }, []);
+const [medicos, setMedicos] = useState(() => {
+  const data = localStorage.getItem("medicos");
+  return data ? JSON.parse(data) : [];
+});
 
-  useEffect(() => {
-    localStorage.setItem("medicos", JSON.stringify(medicos));
-  }, [medicos]);
+useEffect(() => {
+  localStorage.setItem("medicos", JSON.stringify(medicos));
+}, [medicos]);
 
 
   const agregarMedico = (medico) => {
