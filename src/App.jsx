@@ -3,7 +3,6 @@ import { useState } from "react"
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "bootstrap-icons/font/bootstrap-icons.css"
-
 import Login from './components/views/Login.jsx'
 import Home from "./components/views/Home/Home.jsx"
 import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'
