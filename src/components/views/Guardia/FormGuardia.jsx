@@ -37,11 +37,11 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
       <h2 className="my-4">{medicoEditando ? "Editar Guardia" : "Agregar Guardia"}</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4 d-flex flex-column align-items-center ">
-          <label className="form-label">Nombre del Médico</label>
+        <div className="mb-3 d-flex flex-column align-items-center ">
+          <label className="form-label fs-4">Nombre del Médico</label>
           <input
             type="text"
-            className="form-control w-50"
+            className="form-control w-50 text-center"
             placeholder="Ej: Dr. Gómez"
             {...register("nombre", { required: "Este campo no puede quedar vacío.",
               pattern: {
@@ -54,38 +54,37 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
               }
              })}
           />
+          <FormText className="text-danger w-50 d-flex  fs-6 ">
+            <strong>{errors.nombre?.message}</strong>
+          </FormText>
         </div>
 
-        <FormText className="text-danger d-flex justify-content-start">
-          {errors.nombre?.message}
-        </FormText>
+        
 
         <div className="mb-4 d-flex flex-column align-items-center">
-          <label className="form-label">Horario de Entrada</label>
+          <label className="form-label fs-4">Horario de Entrada</label>
           <input
             type="time"
-            className="form-control w-50 "
+            className="form-control w-50 text-center "
             placeholder="Ej: 08:00"
             {...register("entrada", { required:"Este campo no puede quedar vacío"})}
           />
+          <FormText className="text-danger w-50 d-flex  fs-6 ">
+            <strong>{errors.entrada?.message} </strong> 
+          </FormText>
         </div>
-
-        <FormText className="text-danger d-flex justify-content-start">
-          {errors.entrada?.message}
-        </FormText>
 
         <div className="mb-4 d-flex flex-column align-items-center">
-          <label className="form-label">Horario de Salida</label>
+          <label className="form-label fs-4">Horario de Salida</label>
           <input
             type="time"
-            className="form-control w-50"
+            className="form-control w-50 text-center"
             {...register("salida", { required: "Este campo no puede quedar vacío" })}
           />
+          <FormText className="text-danger w-50 d-flex  fs-6 ">
+            <strong>{errors.salida?.message} </strong> 
+          </FormText>
         </div>
-
-        <FormText className="text-danger d-flex justify-content-start">
-          {errors.salida?.message}
-        </FormText>
 
         <button className="btn btn-success my-3" type="submit">
           {medicoEditando ? "Guardar Cambios" : "Agregar"}
