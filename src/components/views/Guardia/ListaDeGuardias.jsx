@@ -1,23 +1,30 @@
 import { Button } from "react-bootstrap";
 
-const ListaDeGuardias = ({ medicos, borrarMedico }) => {
+const ListaDeGuardias = ({ medicos, borrarMedico, seleccionarMedicoParaEditar }) => {
   return (
     <div className="mt-4">
       <h2>Médicos de Guardia</h2>
 
-      {medicos.length === 0 && <p>No hay médicos disponibles.</p>} {/*!!!!!!*/}
+      {medicos.length === 0 && <p>No hay médicos disponibles.</p>}
 
       <ul className="list-group my-4">
         {medicos.map((medico, index) => (
           <li key={index} className="list-group-item d-flex justify-content-between">
             <div>
-              <span><strong>Medico:</strong> {medico.nombre}</span>
+              <span className="ms-5"><strong>Medico:</strong> {medico.nombre}</span>
               <span className="ms-5"><strong>Horario:</strong> {medico.entrada} - {medico.salida}</span>
             </div>
 
-            <Button className="btn btn-danger btn-sm" onClick={() => borrarMedico(index)}>
+            <div>
+              <Button variant="danger" className="btn-sm "  onClick={() => borrarMedico(index)}>
               Borrar
             </Button>
+
+            <Button variant="warning" className="btn-sm mx-2" onClick={() => seleccionarMedicoParaEditar(medico, index)}>
+              Editar
+            </Button>
+            </div>
+            
             
           </li>
         ))}

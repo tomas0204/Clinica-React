@@ -1,25 +1,39 @@
+import { useEffect } from "react";
 import { FormText } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
-const FormGuardia = ({ agregarMedico }) => {
-  const { register, handleSubmit, formState: { errors } , reset } = useForm();
+const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
+  const { register, handleSubmit, formState: { errors } , reset, setValue } = useForm();
+
+
+  useEffect(() => {
+    if (medicoEditando) {
+      setValue("nombre", medicoEditando.nombre);
+      setValue("entrada", medicoEditando.entrada);
+      setValue("salida", medicoEditando.salida);
+    }
+  }, [medicoEditando, setValue]);
+
 
   const onSubmit = (data) => {
 
-    const medico = {
+    if (medicoEditando) {
+      editarMedico(data); // editamos
+    } else {
+      agregarMedico(data); // agregamos
+    }
+    /* const medico = {
       nombre: data.nombre,
       entrada: data.entrada,
       salida: data.salida
-    };
+    }; */
 
-
-    agregarMedico(medico);
     reset();
   };
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-5">Agregar Guardia Médica</h2>
+      <h2 className="mb-5">{medicoEditando ? "Editar Guardia" : "Agregar Guardia"}</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3">
@@ -73,7 +87,7 @@ const FormGuardia = ({ agregarMedico }) => {
         </FormText>
 
         <button className="btn btn-success" type="submit">
-          Agregar Médico
+          {medicoEditando ? "Guardar Cambios" : "Agregar"}
         </button>
       </form>
     </div>

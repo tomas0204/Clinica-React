@@ -4,6 +4,8 @@ import ListaDeGuardias from "./ListaDeGuardias";
 
 function GuardiaMedica() {
   const [medicos, setMedicos] = useState([]);
+  const [medicoEditando, setMedicoEditando] = useState(null);
+  //const [indexEditando, setIndexEditando] = useState(null);
 
   const agregarMedico = (medico) => {
     setMedicos([...medicos, medico]);
@@ -14,10 +16,28 @@ function GuardiaMedica() {
     setMedicos(nuevosMedicos);
   };
 
+   const seleccionarMedicoParaEditar = (medico, index) => {
+    setMedicoEditando(index);
+  };
+
+  const editarMedico = (medicoActualizado) => {
+    const copia = [...medicos];
+    copia[medicoEditando] = medicoActualizado;
+    setMedicos(copia);
+    setMedicoEditando(null);
+  };
+
   return (
     <div>
-      <FormGuardia agregarMedico={agregarMedico} />
-      <ListaDeGuardias medicos={medicos} borrarMedico={borrarMedico}/>
+      <FormGuardia 
+      agregarMedico={agregarMedico} 
+      editarMedico={editarMedico} 
+       medicoEditando={medicoEditando !== null ? medicos[medicoEditando] : null} />
+
+      <ListaDeGuardias 
+      medicos={medicos} 
+      borrarMedico={borrarMedico} 
+      seleccionarMedicoParaEditar={seleccionarMedicoParaEditar}/>
     </div>
   );
 }
