@@ -32,15 +32,16 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-5">{medicoEditando ? "Editar Guardia" : "Agregar Guardia"}</h2>
+    <div className="container mt-4 pt-1" style={{backgroundColor: "#65c4a4ff", borderRadius: "10px"}}>
+
+      <h2 className="my-4">{medicoEditando ? "Editar Guardia" : "Agregar Guardia"}</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-3">
+        <div className="mb-4 d-flex flex-column align-items-center ">
           <label className="form-label">Nombre del Médico</label>
           <input
             type="text"
-            className="form-control"
+            className="form-control w-50"
             placeholder="Ej: Dr. Gómez"
             {...register("nombre", { required: "Este campo no puede quedar vacío.",
               pattern: {
@@ -59,11 +60,11 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
           {errors.nombre?.message}
         </FormText>
 
-        <div className="mb-3">
+        <div className="mb-4 d-flex flex-column align-items-center">
           <label className="form-label">Horario de Entrada</label>
           <input
             type="time"
-            className="form-control"
+            className="form-control w-50 "
             placeholder="Ej: 08:00"
             {...register("entrada", { required:"Este campo no puede quedar vacío"})}
           />
@@ -73,11 +74,11 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
           {errors.entrada?.message}
         </FormText>
 
-        <div className="mb-3">
+        <div className="mb-4 d-flex flex-column align-items-center">
           <label className="form-label">Horario de Salida</label>
           <input
             type="time"
-            className="form-control"
+            className="form-control w-50"
             {...register("salida", { required: "Este campo no puede quedar vacío" })}
           />
         </div>
@@ -86,7 +87,7 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
           {errors.salida?.message}
         </FormText>
 
-        <button className="btn btn-success" type="submit">
+        <button className="btn btn-success my-3" type="submit">
           {medicoEditando ? "Guardar Cambios" : "Agregar"}
         </button>
       </form>

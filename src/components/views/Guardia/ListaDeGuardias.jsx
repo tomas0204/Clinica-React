@@ -2,8 +2,8 @@ import { Button } from "react-bootstrap";
 
 const ListaDeGuardias = ({ medicos, borrarMedico, seleccionarMedicoParaEditar }) => {
   return (
-    <div className="mt-4">
-      <h2>Médicos de Guardia</h2>
+    <div className="mt-4 pt-3" style={{backgroundColor: "#65c4a4ff", borderRadius: "10px"}}>
+      <h2 className="" >Médicos de Guardia</h2>
 
       {medicos.length === 0 && <p>No hay médicos disponibles.</p>}
 
