@@ -2,10 +2,10 @@ import { Button } from "react-bootstrap";
 
 const ListaDeGuardias = ({ medicos, borrarMedico, seleccionarMedicoParaEditar, indiceEditando }) => {
   return (
-    <div className="mt-4 pt-3 d-flex flex-column align-items-center" style={{backgroundColor: "#65c4a4ff", borderRadius: "10px"}}>
+    <div className="lista-div mt-4 pt-3 d-flex flex-column align-items-center" >
       <h2 >Médicos de Guardia</h2>
 
-      {medicos.length === 0 && <p>No hay médicos disponibles.</p>}
+      {medicos.length === 0 && <p className="my-3 fs-5">No hay médicos/as disponibles.</p>}
 
       <ul className="list-group my-4 w-50">
 
@@ -14,7 +14,7 @@ const ListaDeGuardias = ({ medicos, borrarMedico, seleccionarMedicoParaEditar, i
           <li key={index} className="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-md-center ">
 
             <div className="mb-2 d-flex flex-row-md"> 
-              <span className="ms-1"><strong>Medico:</strong> {medico.nombre}</span>
+              <span className="ms-1"><strong>Medico/a:</strong> {medico.nombre}</span>
               <span className="ms-3"><strong>Horario:</strong> {medico.entrada} - {medico.salida}</span>
             </div>
 

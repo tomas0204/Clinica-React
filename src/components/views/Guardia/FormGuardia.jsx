@@ -29,7 +29,7 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
   };
 
   return (
-    <div className="container mt-4 pt-1" style={{backgroundColor: "#65c4a4ff", borderRadius: "10px"}}>
+    <div className="lista-div container mt-4 pt-1">
 
       <h2 className="my-4">{medicoEditando ? "Editar Guardia" : "Agregar Guardia"}</h2>
 
@@ -38,8 +38,8 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
           <label className="form-label fs-4">Nombre del Médico</label>
           <input
             type="text"
-            className="form-control w-50 text-center"
-            placeholder="Ej: Dr. Gómez"
+            className={`form-control w-50 text-center ${medicoEditando ? "input-editando" : ""}`}
+            placeholder="Ej: Dr Pablo"
             {...register("nombre", { required: "Este campo no puede quedar vacío.",
               pattern: {
                 value: /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
@@ -62,7 +62,7 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
           <label className="form-label fs-4">Horario de Entrada</label>
           <input
             type="time"
-            className="form-control w-50 text-center "
+            className={`form-control w-50 text-center ${medicoEditando ? "input-editando" : ""}`}
             placeholder="Ej: 08:00"
             {...register("entrada", { required:"Este campo no puede quedar vacío"})}
           />
@@ -75,7 +75,7 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
           <label className="form-label fs-4">Horario de Salida</label>
           <input
             type="time"
-            className="form-control w-50 text-center"
+            className={`form-control w-50 text-center ${medicoEditando ? "input-editando" : ""}`}
             {...register("salida", { required: "Este campo no puede quedar vacío" })}
           />
           <FormText className="text-danger w-50 d-flex  fs-6 ">
