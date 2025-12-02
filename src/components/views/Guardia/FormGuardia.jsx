@@ -20,9 +20,9 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
   const onSubmit = (data) => {
 
     if (medicoEditando !== null) {
-      editarMedico(data); // editamos
+      editarMedico(data);
     } else {
-      agregarMedico(data); // agregamos
+      agregarMedico(data); 
     }
 
     reset();
