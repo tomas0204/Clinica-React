@@ -43,38 +43,36 @@ function App() {
         <Route path='/guardia-medica' element={<GuardiaMedica/>} />
         {/* <Route path='*' element={<Error404 />} /> */}
         <Route path='/turnos' element={<TurnosList />} />
-      </Routes>
-        <Routes>
 
-          <Route path='/' element={<Home />} />
+        <Route path='/' element={<Home />} />
 
-          <Route
-            path='/login'
-            element={<Login onLogin={setIsAdmin} />}
-          />
+        <Route
+          path='/login'
+          element={<Login onLogin={setIsAdmin} />}
+        />
 
-          <Route
-            path='/registrarPaciente'
-            element={<RegistrarPaciente />}
-          />
+        <Route
+          path='/registrarPaciente'
+          element={<RegistrarPaciente />}
+        />
 
-          <Route
-            path='/historiaClinica'
-            element={<HistoriaClinica />}
-          />
+        <Route
+          path='/historiaClinica'
+          element={<HistoriaClinica />}
+        />
 
-          <Route
-            path='/registroMedico'
-            element={<RegistroMedico />}
-          />
+        <Route
+          path='/registroMedico'
+          element={<RegistroMedico />}
+        />
 
-          {/* Ruta protegida */}
-          <Route
-            path='/turnos'
-            element={
-              currentUser?.role === "admin"
-                ? <TurnosList />
-                : <Navigate to="/login" />
+        {/* Ruta protegida */}
+        <Route
+          path='/turnos'
+          element={
+            currentUser?.role === "admin"
+              ? <TurnosList />
+              : <Navigate to="/login" />
             }
           />
 
