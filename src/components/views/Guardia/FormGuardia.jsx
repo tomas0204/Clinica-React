@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import { FormText } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+
+
 
 const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
   const { register, handleSubmit, formState: { errors } , reset, setValue } = useForm();
@@ -21,9 +24,26 @@ const FormGuardia = ({ agregarMedico, editarMedico, medicoEditando }) => {
 
     if (medicoEditando !== null) {
       editarMedico(data);
+
+      Swal.fire({
+      icon: "success",
+      title: "Guardia editada",
+      text: "Los datos fueron actualizados correctamente",
+      timer: 2000,
+      showConfirmButton: false
+    });
+
     } else {
-      agregarMedico(data); 
-    }
+      agregarMedico(data);
+
+      Swal.fire({
+      icon: "success",
+      title: "Guardia agregada",
+      text: "La guardia fue registrada correctamente",
+      timer: 2000,
+      showConfirmButton: false
+    });
+  }
 
     reset();
   };

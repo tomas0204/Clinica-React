@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import FormGuardia from "./FormGuardia";
 import ListaDeGuardias from "./ListaDeGuardias";
+import Swal from "sweetalert2";
+
 
 function GuardiaMedica() {
 const [indiceEditando, setIndiceEditando] = useState(null);
@@ -21,6 +23,15 @@ useEffect(() => {
 
   const borrarMedico = (index) => {
     const nuevosMedicos = medicos.filter(( _ , i) => i !== index);
+
+    Swal.fire({
+          icon: "success",
+          title: "Guardia Borrada",
+          text: "La lista de Guardias fue actualizada correctamente",
+          timer: 2000,
+          showConfirmButton: false
+        });
+
     setMedicos(nuevosMedicos);
   };
 
