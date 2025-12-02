@@ -41,7 +41,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/registrarPaciente'element={<RegistrarPaciente />} />
         <Route path='/guardia-medica' element={<GuardiaMedica/>} />
-        {/* <Route path='*' element={<Error404 />} /> */}
+     
         <Route path='/turnos' element={<TurnosList />} />
 
         <Route path='/' element={<Home />} />
@@ -66,7 +66,6 @@ function App() {
           element={<RegistroMedico />}
         />
 
-        {/* Ruta protegida */}
         <Route
           path='/turnos'
           element={

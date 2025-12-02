@@ -28,13 +28,17 @@ export default function NavbarClinica() {
             <Nav.Link as={Link} to="">
               Inicio
             </Nav.Link>
+            {role === "user" && (
+              <Nav.Link as={Link} to="/turnos">
+                Mis Turnos
+              </Nav.Link>
+            )}
             <Nav.Link as={Link} to="*">
               Servicios
             </Nav.Link>
             <Nav.Link as={Link} to="*">
               Contacto
             </Nav.Link>
-
 
             {role === "user" || role === "admin" ? (
               <>
