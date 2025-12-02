@@ -12,12 +12,12 @@ function FormularioEvolucion({ onAdd }) {
     const handleChange = (event) => {
         setFormData({
             ...formData,
-            [e.target.name]: event.target.value
+            [event.target.name]: event.target.value
         });
     };
 
     const handleSubmit = (event) => {
-        e.preventDefault();
+        event.preventDefault();
         onAdd(formData);
 
         setFormData({
