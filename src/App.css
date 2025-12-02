@@ -51,3 +51,10 @@
   background-color: #65c4a4ff ;
   border-radius: 10px;
 }
+
+.div-principal{
+display: grid;
+grid-template-rows: auto 1fr auto;
+min-height: 100vh;
+} 
+

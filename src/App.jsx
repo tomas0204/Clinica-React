@@ -15,7 +15,7 @@ import Error404 from './components/views/Error404.jsx';
 function App() {
 
   return (
-    <>
+    <div className='div-principal'>
       <BrowserRouter>
       <Navbar />
       <main className='my-5'>
@@ -33,7 +33,7 @@ function App() {
       </main>
       <Footer />
       </BrowserRouter>
-    </>
+    </div>
   )
 }
 
