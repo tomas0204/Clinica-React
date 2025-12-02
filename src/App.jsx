@@ -37,6 +37,7 @@ function App() {
             <Route path='' element={<Home />} />
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
             <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
+            <Route path='/RegistroMedico' element={<RegistroMedico />} />
             <Route path='*' element={<Error404 />} />
             <Route
               path='/turnos'

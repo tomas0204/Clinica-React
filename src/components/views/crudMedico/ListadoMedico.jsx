@@ -1,5 +1,5 @@
 import ListGroup from 'react-bootstrap/ListGroup';
-
+import ItemMedico from './ItemMedico';
 
 const ListadoMedico = ({medicos, borrarMedico}) => {
   return (
