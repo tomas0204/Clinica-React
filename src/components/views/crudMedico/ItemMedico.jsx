@@ -4,8 +4,7 @@ import { FaEye } from 'react-icons/fa';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaTrash } from 'react-icons/fa';
 
-const ItemMedico = ({medico, index, borrarMedico, modificarMedico}) => {
-
+const ItemMedico = ({medico, index, borrarMedico, modificarMedico, verDetalleMedico}) => {
 
 
     return (
@@ -21,7 +20,7 @@ const ItemMedico = ({medico, index, borrarMedico, modificarMedico}) => {
           Email: {medico.email_medico}
         </Card.Text>
         <div className='d-flex justify-content-center align-item-center gap-2'>
-        <Button variant="primary"><FaEye/></Button>
+        <Button variant="primary" onClick={() => verDetalleMedico(medico)} ><FaEye/></Button>
         <Button variant="warning" onClick={() => modificarMedico(medico.email_medico)} ><FaPencilAlt/></Button>
         <Button variant="danger" onClick={() => borrarMedico(medico.email_medico)} ><FaTrash/></Button>
         </div>

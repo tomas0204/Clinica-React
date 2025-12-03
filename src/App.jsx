@@ -24,66 +24,30 @@ function App() {
     console.log("El usuario es un admin")
   } else if (currentUser?.role === "user") {
     console.log("El usuario es un paciente")
+  } else if (currentUser?.role === "medico") {
+    console.log("El usuario es un médico")
   }
 
   return (
     <div className='div-principal'>
-    <BrowserRouter>
+      <BrowserRouter>
 
-      <Navbar />
+        <Navbar />
 
-      <main className='my-5'>
-      <Routes>
-        <Route path='/inicio' element={<Home/>} />
-
-        <Route  path='/login' element={<Login/>} />
-        <Route path='' element={<Home/>} />
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/registrarPaciente'element={<RegistrarPaciente />} />
-        <Route path='/guardia-medica' element={<GuardiaMedica/>} />
-     
-        <Route path='/turnos' element={<TurnosList />} />
-
-        <Route path='/' element={<Home />} />
-
-        <Route
-          path='/login'
-          element={<Login onLogin={setIsAdmin} />}
-        />
-
-        <Route
-          path='/registrarPaciente'
-          element={<RegistrarPaciente />}
-        />
-
-        <Route
-          path='/historiaClinica'
-          element={<HistoriaClinica />}
-        />
-
-        <Route
-          path='/registroMedico'
-          element={<RegistroMedico />}
-        />
-
-        <Route
-          path='/turnos'
-          element={
-            currentUser?.role === "admin"
-              ? <TurnosList />
-              : <Navigate to="/login" />
-            }
-          />
-
-          <Route
-            path='*'
-            element={<Error404 />}
-          />
-
-        </Routes>
-      </main>
-
-      <Footer />
+        <main className='my-5'>
+          <Routes>
+            <Route path='/inicio' element={<Home />} />
+            <Route path='' element={<Home />} />
+            <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
+            <Route path='/guardia-medica' element={<GuardiaMedica />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
+            <Route path='/historiaClinica' element={<HistoriaClinica />} />
+            <Route path='/registroMedico' element={<RegistroMedico />} />
+            <Route path='/turnos' element={<TurnosList />} />
+            <Route path='*' element={<Error404 />} />
+          </Routes>
+        </main>
       </BrowserRouter>
     </div>
 
