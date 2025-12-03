@@ -40,7 +40,7 @@ function App() {
             <Route path='' element={<Home />} />
             <Route path='/' element={<Home />} />
             <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
-            <Route path='/guardia-medica' element={<GuardiaMedica />} />
+            <Route path='/guardia-medica' element={currentUser?.role === "medico" || currentUser?.role === "admin" ? <GuardiaMedica /> : <Navigate to="/login" />} />
             <Route path='/turnos' element={<TurnosList />} />
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
             <Route path='/historiaClinica' element={<HistoriaClinica />} />
