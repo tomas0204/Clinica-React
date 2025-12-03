@@ -14,6 +14,8 @@ import { FaTrash } from 'react-icons/fa';
 
   return (
     <div className='d-flex flex-row'>
+      <Card style={{ width: '18rem' }}>
+      <Card.Img variant="top" src="https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg" />
       <Card  className="shadow-lg patient-card col-md-12">
       <Card.Img variant="top" src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcSuEBa1zuFIvWpp5uaXrimbkTCnDJ2lbzz7tQBdZvFabvT4xLC2ikF9y7qvhdoijiWKdXlqQzVThT6sqxlhJBkxvjFpa3e2qksd_FK1TMu_ONvju_o" />
       <Card.Body>

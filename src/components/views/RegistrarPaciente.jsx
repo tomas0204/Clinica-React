@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { FaUserMd } from 'react-icons/fa';
 import ListaPacientes from "./Pacientes/ListaPacientes";
+import ModalDetallePaciente from "./Pacientes/ModalDetallePaciente";
 
 
 
@@ -161,9 +162,6 @@ const RegistrarPaciente = () => {
     });
   };
 
-
-
-
 return (
   <>
     <div className="container col-12 col-md-8 col-lg-6" id="registroPacientes">
@@ -318,9 +316,16 @@ return (
       
     </div>
     <ListaPacientes pacientes={pacientes} borrarPaciente={borrarPaciente} modificarPaciente={modificarPaciente} verDetallePaciente={verDetallePaciente} />
+    <ModalDetallePaciente show={mostrarModal} handleClose={handleCloseModal} paciente={pacienteSeleccionado} />      
   </>
 );
+
+
 };
+
+
+
+
 
 export default RegistrarPaciente;
 
