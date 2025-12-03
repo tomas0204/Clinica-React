@@ -11,12 +11,6 @@ export default function NavbarClinica() {
     setUser(null);
     window.location.reload();
   };
-
-  const diferenciarLogin = (name) => {
-    console.log(name);
-    
-  }
-  console.log(diferenciarLogin());
   
 
   return (
@@ -56,6 +50,9 @@ export default function NavbarClinica() {
 
                     <NavDropdown.Item as={Link} to="/guardia-medica">
                       Guardia Médica
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/registroMedico">
+                      Gestion de Medicos
                     </NavDropdown.Item>
                   </NavDropdown>
                 ) : <NavDropdown title="Perfil" id="login-dropdown">

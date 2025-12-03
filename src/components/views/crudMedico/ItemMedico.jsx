@@ -12,7 +12,7 @@ const ItemMedico = ({ medico, index, borrarMedico, modificarMedico }) => {
 
   return (
     <div className='d-flex flex-row'>
-      {isAdmin || isMedico ? (
+      {isAdmin ? (
         <Card style={{ width: '18rem' }}>
           <Card.Img variant="top" src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcSuEBa1zuFIvWpp5uaXrimbkTCnDJ2lbzz7tQBdZvFabvT4xLC2ikF9y7qvhdoijiWKdXlqQzVThT6sqxlhJBkxvjFpa3e2qksd_FK1TMu_ONvju_o" />
           <Card.Body>

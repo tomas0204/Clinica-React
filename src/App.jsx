@@ -15,6 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Error404 from './components/views/Error404.jsx'
 import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
 import HistoriaClinica from './components/historiaClinica/HistoriaClinica.jsx'
+import ItemMedico from './components/views/crudMedico/ItemMedico.jsx'
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -36,17 +37,14 @@ function App() {
 
         <main className='my-5'>
           <Routes>
-            <Route path='/inicio' element={<Home />} />
             <Route path='' element={<Home />} />
+            <Route path='/' element={<Home />} />
             <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
             <Route path='/guardia-medica' element={<GuardiaMedica />} />
             <Route path='/turnos' element={<TurnosList />} />
-            <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
             <Route path='/historiaClinica' element={<HistoriaClinica />} />
             <Route path='/registroMedico' element={<RegistroMedico />} />
-            <Route path='/turnos' element={<TurnosList />} />
-
             <Route path='*' element={<Error404 />} />
 
           </Routes>
