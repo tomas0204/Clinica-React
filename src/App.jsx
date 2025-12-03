@@ -43,7 +43,6 @@ function App() {
             <Route path='/turnos' element={<TurnosList />} />
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
-            <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
             <Route path='/historiaClinica' element={<HistoriaClinica />} />
             <Route path='/registroMedico' element={<RegistroMedico />} />
             <Route path='/turnos' element={<TurnosList />} />

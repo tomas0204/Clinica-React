@@ -12,6 +12,13 @@ export default function NavbarClinica() {
     window.location.reload();
   };
 
+  const diferenciarLogin = (name) => {
+    console.log(name);
+    
+  }
+  console.log(diferenciarLogin());
+  
+
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm">
       <Container>
@@ -59,11 +66,11 @@ export default function NavbarClinica() {
               </>
             ) : (
               <NavDropdown title="Iniciar Sesión" id="login-dropdown">
-                <NavDropdown.Item as={Link} to="/login">
+                <NavDropdown.Item as={Link} to="/login" state={{ tipoDeRegistro: "Paciente" }}>
                   Paciente
                 </NavDropdown.Item>
 
-                <NavDropdown.Item as={Link} to="/login">
+                <NavDropdown.Item as={Link} to="/login" state={{ tipoDeRegistro: "Medico" }}>
                   Doctor
                 </NavDropdown.Item>
               </NavDropdown>
