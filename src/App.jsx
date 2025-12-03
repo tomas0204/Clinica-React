@@ -1,18 +1,24 @@
-import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom'
-import { useState } from "react"
 import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useState } from 'react'
+
 import 'bootstrap/dist/css/bootstrap.min.css'
-import "bootstrap-icons/font/bootstrap-icons.css"
-import Login from './components/views/Login.jsx'
-import Home from "./components/views/Home/Home.jsx"
-import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'
-import TurnosList from './components/views/TurnosList.jsx'
-import Error404 from './components/views/Error404.jsx'
-import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
-import HistoriaClinica from './components/historiaClinica/HistoriaClinica.jsx'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import Navbar from './components/shared/Navbar.jsx'
-import Footer from "./components/shared/Footer.jsx"
+import Footer from './components/shared/Footer.jsx'
+
+import Home from './components/views/Home/Home.jsx'
+import Login from './components/views/Login.jsx'
+import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'
+import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
+import TurnosList from './components/views/TurnosList.jsx'
+import GuardiaMedica from './components/views/Guardia/GuardiaMedica.jsx'
+import HistoriaClinica from './components/historiaClinica/HistoriaClinica.jsx'
+import ItemMedico from './components/views/crudMedico/ItemMedico.jsx'
+import Error404 from './components/views/Error404.jsx'
+
+
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -22,59 +28,35 @@ function App() {
     console.log("El usuario es un admin")
   } else if (currentUser?.role === "user") {
     console.log("El usuario es un paciente")
+  } else if (currentUser?.role === "medico") {
+    console.log("El usuario es un médico")
   }
-
   return (
-    <BrowserRouter>
+    <div className='div-principal'>
+      <BrowserRouter>
 
-      <Navbar />
+        <Navbar />
 
-      <main className='my-5'>
-        <Routes>
+        <main className='my-5'>
+          <Routes>
+            <Route path='' element={<Home />} />
+            <Route path='/' element={<Home />} />
+            <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
+            <Route path='/guardia-medica' element={<GuardiaMedica />} />
 
-          <Route path='/' element={<Home />} />
+            <Route path='/turnos' element={<TurnosList />} />
+            <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
+            <Route path='/historiaClinica' element={<HistoriaClinica />} />
+            <Route path='/registroMedico' element={<RegistroMedico />} />
 
-          <Route
-            path='/login'
-            element={<Login onLogin={setIsAdmin} />}
-          />
+            <Route path='*' element={<Error404 />} />
+          </Routes>
+        </main>
+        <Footer />
+      </BrowserRouter>
+      
+    </div>
 
-          <Route
-            path='/registrarPaciente'
-            element={<RegistrarPaciente />}
-          />
-
-          <Route
-            path='/historiaClinica'
-            element={<HistoriaClinica />}
-          />
-
-          <Route
-            path='/registroMedico'
-            element={<RegistroMedico />}
-          />
-
-          {/* Ruta protegida */}
-          <Route
-            path='/turnos'
-            element={
-              currentUser?.role === "admin"
-                ? <TurnosList />
-                : <Navigate to="/login" />
-            }
-          />
-
-          <Route
-            path='*'
-            element={<Error404 />}
-          />
-
-        </Routes>
-      </main>
-
-      <Footer />
-
-    </BrowserRouter>
   )
 }
 

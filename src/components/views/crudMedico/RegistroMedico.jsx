@@ -16,8 +16,7 @@ const RegistroMedico = () => {
   /* EDITAR */
   
   const [estoyEditando, setEstoyEditando] = useState(false)
-  const [medicoEditar, setMedicoEditar] = useState(null)
-
+  const [medicoEditar, setMedicoEditar] = useState(null)  
 
   /* VER */
 

@@ -38,6 +38,8 @@ const CrearTurno = ({
         }
     };
 
+    const today = new Date().toISOString().split("T")[0];
+
     const [form, setForm] = useState({
         pacienteNombre: "",
         medicoNombre: "",
@@ -98,6 +100,7 @@ const CrearTurno = ({
                     <Form.Control
                         type="date"
                         value={form.fecha}
+                        min={today}
                         onChange={(e) => setForm({ ...form, fecha: e.target.value })}
                         required
                     />
