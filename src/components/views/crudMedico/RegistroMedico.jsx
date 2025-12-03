@@ -159,11 +159,11 @@ const RegistroMedico = () => {
 
   return (
     <>
-      <div className="container col-12 col-md-8 col-lg-6" id="2">
+      <div className="container col-12 col-md-8 col-lg-6 " id="registroMedico" >
         <div>
         <h1> <FaUserMd /> {estoyEditando ? "Editar Médico" : "Registro Médico"} </h1>
         </div> 
-      <Form   className="mt-5" onSubmit={handleSubmit(crearYEditar)} >
+      <Form   className="mt-5" onSubmit={handleSubmit(crearYEditar)}  >
           <Form.Group className="mb-3">
             <div className="containerLabelControl">
               <Form.Label className="col-5 col-md-4">Nombre y Apellido</Form.Label>
@@ -272,7 +272,7 @@ const RegistroMedico = () => {
           </Form.Group>
 
 
-          <Button variant={estoyEditando? "primary" : "success"}  type="submit" >
+          <Button variant={estoyEditando? "warning" : "success"}  type="submit" >
             {estoyEditando ? "Guardar Cambios" : "Registrar"}
           </Button>
           {estoyEditando && (

@@ -39,11 +39,12 @@ function App() {
             <Route path='' element={<Home />} />
             <Route path='/' element={<Home />} />
             <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
-            <Route path='/guardia-medica' element={<GuardiaMedica />} />
+
+            <Route path='/guardia-medica' element={currentUser?.role === "medico" || currentUser?.role === "admin" ? <GuardiaMedica /> : <Navigate to="/login" />} />
 
             <Route path='/turnos' element={<TurnosList />} />
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
-            <Route path='/historiaClinica' element={<HistoriaClinica />} />
+            <Route path='/historiaClinica' element={currentUser?.role === "medico" ? <HistoriaClinica /> : <Navigate to="/login" />} />
             <Route path='/registroMedico' element={<RegistroMedico />} />
 
             <Route path='*' element={<Error404 />} />

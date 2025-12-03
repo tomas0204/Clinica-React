@@ -14,7 +14,7 @@ const ModalDetallePaciente = ({ show, handleClose, paciente }) => {
                 <Modal.Title>Información Usuario</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h5>{paciente.nombre_y_apellido}</h5>
+                <h5>Paciente: {paciente.nombre_y_apellido}</h5>
                 <hr />
                 <p><strong>Obra Social:</strong> {paciente.obraSocial}</p>
                 <p><strong>Email:</strong> {paciente.email}</p>

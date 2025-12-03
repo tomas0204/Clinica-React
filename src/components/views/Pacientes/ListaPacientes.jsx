@@ -1,16 +1,22 @@
 import ListGroup from 'react-bootstrap/ListGroup';
 import ItemPacientes from './ItemPacientes';
 
-const ListaPacientes = ({pacientes, borrarPaciente, modificarPaciente, verDetallePaciente}) => {
+const ListaPacientes = ({ pacientes, borrarPaciente, modificarPaciente, verDetallePaciente }) => {
   return (
-    <div>
-        <ListGroup className='mt-5 mb-5'>
-        {
-            pacientes.map((paciente, index) => <ItemPacientes key={index} paciente={paciente} borrarPaciente={borrarPaciente} modificarPaciente={modificarPaciente} verDetallePaciente={verDetallePaciente} /> )
-        }
-    </ListGroup>
+    <div className="container mt-4">
+      <div className="row g-3">
+        {pacientes.map(paciente => (
+          <ItemPacientes
+            key={paciente.email}
+            paciente={paciente}
+            borrarPaciente={borrarPaciente}
+            modificarPaciente={modificarPaciente}
+            verDetallePaciente={verDetallePaciente}
+          />
+        ))}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default ListaPacientes
+export default ListaPacientes;
