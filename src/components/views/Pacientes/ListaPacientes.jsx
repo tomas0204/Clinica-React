@@ -4,7 +4,7 @@ import ItemPacientes from './ItemPacientes';
 const ListaPacientes = ({ pacientes, borrarPaciente, modificarPaciente, verDetallePaciente }) => {
   return (
     <div className="container mt-4">
-      <ListGroup className="row g-3">
+      <div className="row g-3">
         {pacientes.map(paciente => (
           <ItemPacientes
             key={paciente.email}
@@ -14,7 +14,7 @@ const ListaPacientes = ({ pacientes, borrarPaciente, modificarPaciente, verDetal
             verDetallePaciente={verDetallePaciente}
           />
         ))}
-      </ListGroup>
+      </div>
     </div>
   );
 };
