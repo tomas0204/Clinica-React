@@ -1,26 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import ListaEvoluciones from "./ListaEvoluciones";
 import FormularioEvolucion from "./FormularioEvolucion.jsx";
 
+
+const STORAGE_KEY = "HistoriaClinicaKey";
+
+const HISTORIA_BASE = {
+    nombre: "Nombre y apellido",
+    obraSocial: "Seleccionar obra social",
+    nroAfiliado: "Nro afiliado",
+    antecedentes: "",
+    alergias: "",
+    mediacionHabitual: "",
+    consultas: [],
+};
+
+const cargarHistoria = () => {
+    try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) return HISTORIA_BASE;
+        return {...HISTORIA_BASE, ...JSON.parse(data) };
+    } catch (error) {
+        console.error("Error leyendo localStorage:", error);
+        return HISTORIA_BASE;
+    }
+};
+
 function HistoriaClinica() {
-    const [historia, setHistoria] = useState({
-        nombre: "Juan Perez",
-        obraSocial: "Sin obra social",
-        nroAfiliado: "456789123",
-        antecedentes: "Ninguno",
-        alergias: "Ninguna",
-        medicacionHabitual: "Ninguna",
-        consultas: [],
-    });
+    const [historia, setHistoria] = useState(cargarHistoria);
 
-const [modoEdicion, setModoEdicion] = useState(false);
+    const [modoEdicion, setModoEdicion] = useState(false);
+    const [formData, setFormData] = useState(() => ({...cargarHistoria() }));
 
-const [formData, setFormData] = useState({...historia });
+    useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(historia));
+}, [historia]);
 
-const handleChange = (e) => {
-    const {name, value } = e.target;
-    setFormData((prev) => ({...prev, [name]: value}));
+const handleChange = (event) => {
+    const {name, value } = event.target;
+    setFormData((prev) => ({...prev, [name]: value }));
 };
 
 const guardarCambios = () => {
@@ -44,17 +63,21 @@ const agregarConsulta = (nuevaConsulta) => {
         <Container className="my-4">
             <Row className="mb-3">
                 <Col>
-                <h2>Historia clínica del paciente</h2>
+                    <h2>Historia clínica del paciente</h2>
                 </Col>
             </Row>
 
             <Row>
                 <Col md={6}>
                 <Card className="mb-3">
-                    <Card.Header>Datos generales
+                    <Card.Header>
+                        Datos generales
                         <div className="float-end">
                             {!modoEdicion && (
-                                <Button variant="outline-primary" size="sm" onClick={() => setModoEdicion(true)}>
+                                <Button variant="outline-primary"
+                                        size="sm"
+                                        onClick={() => setModoEdicion(true)}
+                                    >
                                     Editar
                                 </Button>
                             )}
@@ -102,6 +125,16 @@ const agregarConsulta = (nuevaConsulta) => {
                                 />
                         </Form.Group>
 
+                        <Form.Group className="mb-2">
+                            <Form.Label>Alergias</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="alergias"
+                                value={formData.alergias}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+
                                 <Form.Group className="mb-3">
                                     <Form.Label>Medicación habitual</Form.Label>
                                     <Form.Control
@@ -112,10 +145,19 @@ const agregarConsulta = (nuevaConsulta) => {
                                     />
                                 </Form.Group>
 
-                                <Button variant="success" size="sm" onClick={guardarCambios} className="me-2">
+                                <Button
+                                    variant="success"
+                                    size="sm"
+                                    onClick={guardarCambios}
+                                    className="me-2"
+                                >
                                     Guardar
                                 </Button>
-                                <Button variant="secondary" size="sm" onClick={cancelarEdicion}>
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={cancelarEdicion}
+                                >
                                     Cancelar
                                 </Button>
                             </>
@@ -123,7 +165,7 @@ const agregarConsulta = (nuevaConsulta) => {
                         <>
                             <p><strong>Nombre y apellido:</strong> {historia.nombre}</p>
                             <p><strong>Obra social:</strong> {historia.obraSocial}</p>
-                            <p><strong>Nº de afiliado:</strong> {historia.nroAfiliado}</p>
+                            <p><strong>Nro de afiliado:</strong> {historia.nroAfiliado}</p>
                             <p><strong>Antecedentes:</strong> {historia.antecedentes}</p>
                             <p><strong>Alergias:</strong> {historia.alergias}</p>
                             <p><strong>Medicación habitual:</strong> {historia.medicacionHabitual}</p>
@@ -154,4 +196,3 @@ const agregarConsulta = (nuevaConsulta) => {
 }
 
 export default HistoriaClinica;
-

@@ -4,10 +4,12 @@ import { FaEye } from 'react-icons/fa';
 import { FaPencilAlt } from 'react-icons/fa';
 import { FaTrash } from 'react-icons/fa';
 
-const ItemMedico = ({ medico, index, borrarMedico, modificarMedico }) => {
+
+  const ItemMedico = ({ medico, index, borrarMedico, modificarMedico }) => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"))
   const isAdmin = currentUser?.role === "admin"
   const isMedico = currentUser?.role === "medico"
+
 
 
   return (

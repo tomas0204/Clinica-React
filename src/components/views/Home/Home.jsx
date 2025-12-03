@@ -6,6 +6,7 @@ import  Img  from "../../../assets/clinica.jpg"
 import { Container, Row, Col } from "react-bootstrap";
 
 const Home = () => {
+  const role = JSON.parse(localStorage.getItem("currentUser"))?.role;
   return (
     <>
     <img src={Img} alt="Imagen Clinica" className='clinica-img '/>
