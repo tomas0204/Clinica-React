@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Bienestar360 - Clinica Medica
 Bienvenidos a nuestro proyecto del segundo modulo de programacion 
 Nuestro tema elegido para este proyecto fue Clinica Medica ⚕️
@@ -9,6 +10,7 @@ Nuestro tema elegido para este proyecto fue Clinica Medica ⚕️
 - Nahuel Nuñez
 - Miguel Zambrano
 
+<<<<<<< HEAD
 ## 📌 Descripción del proyecto
 Esta es una aplicación web para una clínica médica, desarrollada con React, que centraliza distintas funciones tanto para pacientes como para profesionales de la salud.
 El sistema busca mejorar la organización interna y ofrecer herramientas accesibles desde cualquier dispositivo.
@@ -50,3 +52,4 @@ En la terminal de Visual Studio Code (preferiblemente git bash) coloque los sigu
 
 1. npm install o npm i <br> 
 2. npm start
+
