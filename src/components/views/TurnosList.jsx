@@ -130,6 +130,47 @@ const TurnosList = () => {
         }
     };
 
+    const handleSuccess = async (turno) => {
+        const result = await Swal.fire({
+            title: " ¿Deseas marcar el turno como atendido?",
+            text: "Si quieres deshacer esta accion, contacta con la clínica.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, marcar como atendido",
+            cancelButtonText: "Volver atrás"
+        });
+
+        if (result.isConfirmed) {
+            const exito = await cancelarTurno(turno, "Atendido");
+            if (exito) {
+
+                const nuevosTurnos = turnos.map(t =>
+                    t.id === turno.id ? { ...t, estado: "Atendido" } : t
+                );
+
+                setTurnos(nuevosTurnos);
+                localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
+
+
+
+                Swal.fire({
+                    title: "Atendido",
+                    text: "El turno ha sido marcado como atendido",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo marcar el turno como atendido",
+                    icon: "error"
+                });
+            }
+        }
+    };
 
     return (
         <div>
@@ -255,9 +296,23 @@ const TurnosList = () => {
                                                 </Button>
                                             </>
                                         )}
+                                        {isMedico && (
+                                            <Button
+                                                variant="success"
+                                                className='me-2'
+                                                disabled={t.estado === "Atendido"}
+                                                onClick={() => {
+                                                    setMode("atendido");
+                                                    setTurnoEdit(t);
+                                                    handleSuccess(t);
+                                                }}
+                                            >
+                                                <i className="bi bi-check-all"></i>
+                                            </Button>
+                                        )}
                                         {(isUser && isMyTurn) || isMedico ? (
                                             <Button
-                                                variant="warning"
+                                                variant="danger"
                                                 disabled={t.estado === getNuevoEstado()}
                                                 onClick={() => {
                                                     setMode(getNuevoEstado());
@@ -265,7 +320,7 @@ const TurnosList = () => {
                                                     handleCancel(t);
                                                 }}
                                             >
-                                                <i className="bi bi-x-circle-fill"></i> Cancelar
+                                                <i className="bi bi-x-circle-fill"></i>
                                             </Button>
                                         ) : null}
 
