@@ -9,20 +9,20 @@ import Swal from 'sweetalert2'
 const TurnosList = () => {
 
     const [turnos, setTurnos] = useState(() => {
-        const turnosGuardados = localStorage.getItem("turnos");
-        return turnosGuardados ? JSON.parse(turnosGuardados) : [];
+        const turnosGuardados = localStorage.getItem("turnos")
+        return turnosGuardados ? JSON.parse(turnosGuardados) : []
     });
     const guardarEnLocalStorage = (turnosActualizados) => {
         localStorage.setItem("turnos", JSON.stringify(turnosActualizados));
     }
-    const [mode, setMode] = useState("crear");
-    const [show, setShow] = useState(false);
-    const [turnoEdit, setTurnoEdit] = useState(null);
+    const [mode, setMode] = useState("crear")
+    const [show, setShow] = useState(false)
+    const [turnoEdit, setTurnoEdit] = useState(null)
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-    const isAdmin = currentUser?.role === "admin";
-    const isUser = currentUser?.role === "user";
-    const isMedico = currentUser?.role === "medico";
-    const isMyTurn = currentUser?.id === turnoEdit?.pacienteId;
+    const isAdmin = currentUser?.role === "admin"
+    const isUser = currentUser?.role === "user"
+    const isMedico = currentUser?.role === "medico"
+    const isMyTurn = currentUser?.id === turnoEdit?.pacienteId
 
 
     const pacientes = [
@@ -37,6 +37,12 @@ const TurnosList = () => {
         { id: 2, nombre: "Dra. Johnson" },
         { id: 3, nombre: "Dr. Brown" }
     ];
+
+    const getNuevoEstado = () => {
+        if (currentUser?.role === "medico") return "Cancelado por el médico";
+        if (currentUser?.role === "user") return "Cancelado por el paciente";
+        return "Cancelado";
+    };
 
 
     const handleDelete = async (turno) => {
@@ -89,19 +95,17 @@ const TurnosList = () => {
         });
 
         if (result.isConfirmed) {
-            const exito = await cancelarTurno(turno);
+            const exito = await cancelarTurno(turno, getNuevoEstado());
             if (exito) {
 
-                let nuevoEstado = "Cancelado"; // valor por defecto
-
-                if (currentUser?.role === "medico") {
-                    nuevoEstado = "Cancelado por el médico";
-                } else if (currentUser?.role === "user") {
-                    nuevoEstado = "Cancelado por el paciente";
-                }
+                const getNuevoEstado = () => {
+                    if (currentUser?.role === "medico") return "Cancelado por el médico";
+                    if (currentUser?.role === "user") return "Cancelado por el paciente";
+                    return "Cancelado";
+                };
 
                 const nuevosTurnos = turnos.map(t =>
-                    t.id === turno.id ? { ...t, estado: nuevoEstado } : t
+                    t.id === turno.id ? { ...t, estado: getNuevoEstado() } : t
                 );
 
                 setTurnos(nuevosTurnos);
@@ -251,19 +255,19 @@ const TurnosList = () => {
                                                 </Button>
                                             </>
                                         )}
-                                        {isUser && isMyTurn && (
+                                        {(isUser && isMyTurn) || isMedico ? (
                                             <Button
                                                 variant="warning"
-                                                disabled={t.estado === "Cancelado por el paciente"}
+                                                disabled={t.estado === getNuevoEstado()}
                                                 onClick={() => {
-                                                    setMode("Cancelado por el paciente");
+                                                    setMode(getNuevoEstado());
                                                     setTurnoEdit(t);
                                                     handleCancel(t);
                                                 }}
                                             >
                                                 <i className="bi bi-x-circle-fill"></i> Cancelar
                                             </Button>
-                                        )}
+                                        ) : null}
 
                                     </td>
 

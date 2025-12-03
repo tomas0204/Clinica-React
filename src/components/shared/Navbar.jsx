@@ -36,7 +36,7 @@ export default function NavbarClinica() {
             </Nav.Link>
 
 
-            {role === "user" || role === "admin" ? (
+            {role === "user" || role === "admin" || role === "medico"? (
               <>
                 <Nav.Link onClick={cerrarSesion}>
                   Cerrar sesión

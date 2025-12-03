@@ -56,23 +56,17 @@ export const borrarTurno = async (turno) => {
   }
 };
 
-export const cancelarTurno = async (turno) => {
+export const cancelarTurno = async (turno, nuevoEstado) => {
   try {
     const respuesta = await fetch(`${turnosBackend}/${turno.id}`, {
-      method: "PUT",
+      method: "PATCH", // mejor que PUT para solo cambiar estado
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        ...turno,
-        estado: "Cancelado por el paciente"
-      })
+      body: JSON.stringify({ estado: nuevoEstado })
     });
 
-    if (!respuesta.ok) {
-      throw new Error("Error al cancelar turno");
-    }
-
+    if (!respuesta.ok) throw new Error("Error al cancelar turno");
     return await respuesta.json();
 
   } catch (error) {
