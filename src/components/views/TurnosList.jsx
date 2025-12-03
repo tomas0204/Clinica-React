@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { crearTurno, editarTurno, borrarTurno } from "../../helpers/apiTurnos.js";
+import { crearTurno, editarTurno, borrarTurno, cancelarTurno } from "../../helpers/apiTurnos.js";
 import { Button } from 'react-bootstrap'
 import CrearTurno from '../turnos/CrearTurno.jsx';
 import Table from 'react-bootstrap/Table'
@@ -9,15 +9,20 @@ import Swal from 'sweetalert2'
 const TurnosList = () => {
 
     const [turnos, setTurnos] = useState(() => {
-        const turnosGuardados = localStorage.getItem("turnos");
-        return turnosGuardados ? JSON.parse(turnosGuardados) : [];
+        const turnosGuardados = localStorage.getItem("turnos")
+        return turnosGuardados ? JSON.parse(turnosGuardados) : []
     });
     const guardarEnLocalStorage = (turnosActualizados) => {
         localStorage.setItem("turnos", JSON.stringify(turnosActualizados));
     }
-    const [mode, setMode] = useState("crear");
-    const [show, setShow] = useState(false);
-    const [turnoEdit, setTurnoEdit] = useState(null);
+    const [mode, setMode] = useState("crear")
+    const [show, setShow] = useState(false)
+    const [turnoEdit, setTurnoEdit] = useState(null)
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    const isAdmin = currentUser?.role === "admin"
+    const isUser = currentUser?.role === "user"
+    const isMedico = currentUser?.role === "medico"
+    const isMyTurn = currentUser?.id === turnoEdit?.pacienteId
 
 
     const pacientes = [
@@ -33,6 +38,12 @@ const TurnosList = () => {
         { id: 3, nombre: "Dr. Brown" }
     ];
 
+    const getNuevoEstado = () => {
+        if (currentUser?.role === "medico") return "Cancelado por el médico";
+        if (currentUser?.role === "user") return "Cancelado por el paciente";
+        return "Cancelado";
+    };
+
 
     const handleDelete = async (turno) => {
         const result = await Swal.fire({
@@ -47,9 +58,9 @@ const TurnosList = () => {
         });
 
         if (result.isConfirmed) {
-            const exito = await borrarTurno(turno); 
+            const exito = await borrarTurno(turno);
             if (exito) {
-                
+
                 const nuevosTurnos = turnos.filter(t => t.id !== turno.id);
                 setTurnos(nuevosTurnos);
                 localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
@@ -71,7 +82,95 @@ const TurnosList = () => {
         }
     };
 
+    const handleCancel = async (turno) => {
+        const result = await Swal.fire({
+            title: " ¿Deseas cancelar el turno?",
+            text: "Si quieres deshacer esta accion, contacta con la clínica.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, cancelar",
+            cancelButtonText: "Volver atrás"
+        });
 
+        if (result.isConfirmed) {
+            const exito = await cancelarTurno(turno, getNuevoEstado());
+            if (exito) {
+
+                const getNuevoEstado = () => {
+                    if (currentUser?.role === "medico") return "Cancelado por el médico";
+                    if (currentUser?.role === "user") return "Cancelado por el paciente";
+                    return "Cancelado";
+                };
+
+                const nuevosTurnos = turnos.map(t =>
+                    t.id === turno.id ? { ...t, estado: getNuevoEstado() } : t
+                );
+
+                setTurnos(nuevosTurnos);
+                localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
+
+
+
+                Swal.fire({
+                    title: "Cancelado",
+                    text: "El turno ha sido cancelado",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo cancelar el turno",
+                    icon: "error"
+                });
+            }
+        }
+    };
+
+    const handleSuccess = async (turno) => {
+        const result = await Swal.fire({
+            title: " ¿Deseas marcar el turno como atendido?",
+            text: "Si quieres deshacer esta accion, contacta con la clínica.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, marcar como atendido",
+            cancelButtonText: "Volver atrás"
+        });
+
+        if (result.isConfirmed) {
+            const exito = await cancelarTurno(turno, "Atendido");
+            if (exito) {
+
+                const nuevosTurnos = turnos.map(t =>
+                    t.id === turno.id ? { ...t, estado: "Atendido" } : t
+                );
+
+                setTurnos(nuevosTurnos);
+                localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
+
+
+
+                Swal.fire({
+                    title: "Atendido",
+                    text: "El turno ha sido marcado como atendido",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "No se pudo marcar el turno como atendido",
+                    icon: "error"
+                });
+            }
+        }
+    };
 
     return (
         <div>
@@ -106,18 +205,41 @@ const TurnosList = () => {
                 pacientesMock={pacientes}
                 medicosMock={medicos}
             />
+            {isUser && (
+                <Button
+                    as="a"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=tomasignacioponce17@gmail.com"
+                    variant="outline-secondary"
+                    target="_blank"
+                >
+                    Contactar soporte
+                </Button>
+            )}
 
-            <Button
-                variant="primary"
-                onClick={() => {
-                    setMode("crear");
-                    setTurnoEdit(null);
-                    setShow(true);
-                }}
-            >
-                Nuevo Turno
-                <i className="bi bi-plus-circle me-2 ms-2"></i>
-            </Button>
+            {isAdmin && (
+                <Button
+                    variant="primary"
+                    onClick={() => {
+                        setMode("crear");
+                        setTurnoEdit(null);
+                        setShow(true);
+                    }}
+                >
+                    Nuevo Turno
+                    <i className="bi bi-plus-circle me-2 ms-2"></i>
+                </Button>
+            )}
+
+            {isMedico && (
+                <Button
+                    as="a"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=tomasignacioponce17@gmail.com"
+                    variant="outline-secondary"
+                    target="_blank"
+                >
+                    Contactar soporte
+                </Button>
+            )}
 
 
             <div className="table-responsive">
@@ -148,27 +270,60 @@ const TurnosList = () => {
                                     <td>{t.motivoConsulta}</td>
                                     <td>{t.estado}</td>
                                     <td>
-                                        <Button
-                                            variant="dark"
-                                            className='me-2'
-                                            onClick={() => {
-                                                setMode("editar");
-                                                setTurnoEdit(t);
-                                                setShow(true);
-                                            }}
-                                        >
-                                            <i className="bi bi-pen-fill"></i>
-                                        </Button>
-                                        <Button
-                                            variant="danger"
-                                            onClick={() => {
-                                                setMode("eliminar");
-                                                setTurnoEdit(t);
-                                                handleDelete(t);
-                                            }}
-                                        >
-                                            <i className="bi bi-person-x"></i>
-                                        </Button>
+                                        {isAdmin && (
+                                            <>
+                                                <Button
+                                                    variant="dark"
+                                                    className="me-2"
+                                                    onClick={() => {
+                                                        setMode("editar");
+                                                        setTurnoEdit(t);
+                                                        setShow(true);
+                                                    }}
+                                                >
+                                                    <i className="bi bi-pen-fill"></i>
+                                                </Button>
+
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={() => {
+                                                        setMode("eliminar");
+                                                        setTurnoEdit(t);
+                                                        handleDelete(t);
+                                                    }}
+                                                >
+                                                    <i className="bi bi-person-x"></i>
+                                                </Button>
+                                            </>
+                                        )}
+                                        {isMedico && (
+                                            <Button
+                                                variant="success"
+                                                className='me-2'
+                                                disabled={t.estado === "Atendido"}
+                                                onClick={() => {
+                                                    setMode("atendido");
+                                                    setTurnoEdit(t);
+                                                    handleSuccess(t);
+                                                }}
+                                            >
+                                                <i className="bi bi-check-all"></i>
+                                            </Button>
+                                        )}
+                                        {(isUser && isMyTurn) || isMedico ? (
+                                            <Button
+                                                variant="danger"
+                                                disabled={t.estado === getNuevoEstado()}
+                                                onClick={() => {
+                                                    setMode(getNuevoEstado());
+                                                    setTurnoEdit(t);
+                                                    handleCancel(t);
+                                                }}
+                                            >
+                                                <i className="bi bi-x-circle-fill"></i>
+                                            </Button>
+                                        ) : null}
+
                                     </td>
 
                                 </tr>

@@ -25,11 +25,6 @@ function FormularioEvolucion({ onAdd }) {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (formData.fecha < todayString) {
-            alert(`La fecha no puede ser anterior a hoy.`);
-            return;
-        }
-
         onAdd(formData);
 
         setFormData({
