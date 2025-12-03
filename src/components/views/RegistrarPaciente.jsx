@@ -4,46 +4,168 @@ import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { FaUserMd } from 'react-icons/fa';
+import ListaPacientes from "./Pacientes/ListaPacientes";
 
 
 
 const RegistrarPaciente = () => {
+  
+  /* EDITAR */
+  
+  const [estoyEditando, setEstoyEditando] = useState(false)
+  const [pacienteEditar, setPacienteEditar] = useState(null)
+
+
+  /* VER */
+
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
+
+  const verDetallePaciente = (paciente) =>{
+    setPacienteSeleccionado(paciente);
+    setMostrarModal(true)
+  };
+
+  const handleCloseModal = () =>{
+    setMostrarModal(false)
+    setPacienteSeleccionado(null)
+  }
+
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-    getValues
+    getValues,
+    setValue  
   } = useForm();
+
+
 
   const pacientesLocalStorage =
     JSON.parse(localStorage.getItem("pacientesKey")) || [];
 
   const [pacientes, setPacientes] = useState(pacientesLocalStorage);
 
-  const registrarPaciente = (data) => {
-
-    const nuevoPaciente = {
-      ...data,
-      role: "user" // el rol
-    };
-    setPacientes([...pacientes, nuevoPaciente]);
 
 
+  
 
-    reset();
+  const crearYEditar = (data) => {
+  
+      if(estoyEditando) {
+        // Lógica de EDICIÓN
+        const listadoActualizado = pacientes.map(paciente => paciente.email === pacienteEditar ?  // Usamos el email como ID
+          {...data, role: "paciente"} // Actualiza los datos, manteniendo el role
+          : paciente
+        );
+  
+        setPacientes(listadoActualizado)
+        
+        setEstoyEditando(false) // Sale del modo edición
+        
+        setPacienteEditar(null) // Limpia el médico a editar
+  
+        Swal.fire({
+                  title: "Paciente Actualizado!",
+                  text: `${data.nombre_y_apellido} ha sido modificado.`,
+                  icon: "success",
+              });
+      } else {
+  
+        const nuevoPaciente = {
+        ...data,
+        role: "paciente" 
+      };  
+  
+      setPacientes([...pacientes, nuevoPaciente])
+  
+      
+  
+      Swal.fire({
+            title: "Creaste un usuario!",
+            text: `${data.nombre_y_apellido} esta habilitado.`,
+            icon: "success",
+          });
+  
+      }
+  
+      reset();   // Limpia el formulario después de cualquier operación
+  
+    }
 
-    Swal.fire({
-      title: "Registro exitoso!",
-      text: "Pronto estaras habilitado!",
-      icon: "success",
-    });
-  };
+    const modificarPaciente = (email) => {
+    const pacienteSeleccionado = pacientes.find((paciente) => paciente.email === email);
+
+    if(pacienteSeleccionado){
+
+      // 1. Establecer el modo edición y el médico a editar
+
+      setEstoyEditando(true);
+      setPacienteEditar(email)
+
+      // 2. Precargar los campos del formulario usando setValue
+            // Nota: El email y la contraseña se precargan solo para referencia,
+            // pero el email NO debería ser editable si es la clave primaria.
+            // Para simplificar, precargamos todos.
+
+      setValue('nombre_y_apellido', pacienteSeleccionado.nombre_y_apellido)
+      setValue('celular', pacienteSeleccionado.celular)
+      setValue('email', pacienteSeleccionado.email)
+      setValue('obraSocial', pacienteSeleccionado.obraSocial)
+      setValue('contraseña', pacienteSeleccionado.contraseña)
+      setValue('contraseña_confirmar', pacienteSeleccionado.contraseña)
+
+    }
+
+  }
+
+
+
+
+
+
 
   useEffect(() => {
     localStorage.setItem("pacientesKey", JSON.stringify(pacientes));
   }, [pacientes]);
 
+
+
+  
+    const borrarPaciente = (emailPaciente) => {
+      Swal.fire({
+    title: "Estas seguro?",
+    text: "Los datos no se podrán recuperar!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Si, continuar"
+  
+  }).then((result) => {
+  
+    if (result.isConfirmed) {
+  
+  
+      const listadoPacienteActual = pacientes.filter((itemPaciente) => itemPaciente.email !== email)
+      
+      setMedicos(listadoPacienteActual)
+  
+      Swal.fire({
+              title: "Paciente Eliminado",
+              text: "El paciente ha sido removido de la cartilla.",
+              icon: "success",
+          });
+      
+    }
+  });
+  
+  
+      
+    }
+  
 
 
 
@@ -53,7 +175,7 @@ const RegistrarPaciente = () => {
         <div>
           <h1> <FaUserMd /> Registro de Pacientes</h1>
         </div>
-        <Form onSubmit={handleSubmit(registrarPaciente)} className="mt-5">
+        <Form onSubmit={handleSubmit(crearYEditar)} className="mt-5">
           <Form.Group className="mb-3">
             <div className="containerLabelControl">
               <Form.Label className="col-5 col-md-4">Nombre y Apellido</Form.Label>
@@ -189,6 +311,7 @@ const RegistrarPaciente = () => {
             Registrar
           </Button>
         </Form>
+        <ListaPacientes pacientes={pacientes} borrarPaciente={borrarPaciente} modificarPaciente={modificarPaciente} verDetallePaciente={verDetallePaciente} />
       </div>
     </>
   );
