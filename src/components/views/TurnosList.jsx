@@ -185,7 +185,6 @@ const TurnosList = () => {
                         const turnoGuardado = await crearTurno(nuevoTurno);
                         setTurnos([...turnos, turnoGuardado]);
                         guardarEnLocalStorage([...turnos, turnoGuardado]);
-                        console.log("Turno creado:", turnoGuardado);
 
                     } else if (mode === "editar" && turnoEdit) {
                         const turnoActualizado = await editarTurno({
@@ -198,7 +197,6 @@ const TurnosList = () => {
                         guardarEnLocalStorage(turnos.map(t =>
                             t.id === turnoEdit.id ? turnoActualizado : t
                         ));
-                        console.log("Turno actualizado:", turnoActualizado);
 
                     }
                 }}

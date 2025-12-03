@@ -2,12 +2,12 @@ import { Modal, Button } from 'react-bootstrap';
 
 const ModalDetalleMedico = ({ show, handleClose, medico }) => {
     
-    // Si medico es null o undefined, no mostramos nada
+
     if (!medico) {
         return null; 
     }
 
-    // Aquí se muestran todos los datos que quieres ver
+   
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>

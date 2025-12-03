@@ -13,12 +13,12 @@ import ModalDetalleMedico from './ModalDetalleMedico';
 
 const RegistroMedico = () => {
 
-  /* EDITAR */
+
   
   const [estoyEditando, setEstoyEditando] = useState(false)
   const [medicoEditar, setMedicoEditar] = useState(null)  
 
-  /* VER */
+ 
 
   const [mostrarModal, setMostrarModal] = useState(false);
   const [medicoSeleccionado, setMedicoSeleccionado] = useState(null);
@@ -47,21 +47,21 @@ const RegistroMedico = () => {
 
   const [medicos, setMedicos] = useState(agendaMedicoLocalStorage);
 
-  // Función principal que ahora maneja CREAR y EDITAR
+ 
   const crearYEditar = (data) => {
 
     if(estoyEditando) {
-      // Lógica de EDICIÓN
-      const listadoActualizado = medicos.map(medico => medico.email_medico === medicoEditar ?  // Usamos el email como ID
-        {...data, role: "medico"} // Actualiza los datos, manteniendo el role
+     
+      const listadoActualizado = medicos.map(medico => medico.email_medico === medicoEditar ?
+        {...data, role: "medico"} 
         : medico
       );
 
       setMedicos(listadoActualizado)
       
-      setEstoyEditando(false) // Sale del modo edición
+      setEstoyEditando(false) 
       
-      setMedicoEditar(null) // Limpia el médico a editar
+      setMedicoEditar(null)
 
       Swal.fire({
                 title: "Médico Actualizado!",
@@ -87,7 +87,7 @@ const RegistroMedico = () => {
 
     }
 
-    reset();   // Limpia el formulario después de cualquier operación
+    reset();  
 
   }
 
@@ -98,15 +98,8 @@ const RegistroMedico = () => {
 
     if(medicoSeleccionado){
 
-      // 1. Establecer el modo edición y el médico a editar
-
       setEstoyEditando(true);
       setMedicoEditar(email)
-
-      // 2. Precargar los campos del formulario usando setValue
-            // Nota: El email y la contraseña se precargan solo para referencia,
-            // pero el email NO debería ser editable si es la clave primaria.
-            // Para simplificar, precargamos todos.
 
       setValue('nombre_y_apellido_medico', medicoSeleccionado.nombre_y_apellido_medico)
       setValue('especialidad', medicoSeleccionado.especialidad)
@@ -213,7 +206,7 @@ const RegistroMedico = () => {
             <Form.Control
               type="email"
               placeholder="Ej: juanperez@gmail.com"
-              // Deshabilito el campo de email si el usuario esta editando (para no cambiar la clave primaria)
+  
               disabled={estoyEditando}
               {...register("email_medico", {
                 required: "Este campo es obligatorio",

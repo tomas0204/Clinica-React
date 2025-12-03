@@ -24,10 +24,9 @@ const Login = ({ onLogin }) => {
       return "/registroMedico";
     }
   }
-  console.log(rol);
 
   const onSubmit = (data) => {
-    
+
 
     if (data.email === adminEmail && data.password === adminPass) {
       localStorage.setItem("currentUser", JSON.stringify({ email: data.email, role: "admin" }));
@@ -39,8 +38,6 @@ const Login = ({ onLogin }) => {
     const pacientes = JSON.parse(localStorage.getItem("pacientesKey")) || [];
     const medicos = JSON.parse(localStorage.getItem("agendaMedicoKey")) || [];
     const users = [...pacientes, ...medicos];
-
-    console.log("Users loaded:", users);
 
     const emailInput = data.email.trim();
     const passInput = data.password.trim();
@@ -75,7 +72,12 @@ const Login = ({ onLogin }) => {
       <Row xs={1} md={2}>
         <Col>
           <Card.Body>
-            <h1 className="text-center mb-4">Login</h1>
+            {rol === "Paciente" && (
+              <h1 className="text-center mb-4">Ingreso de paciente</h1>
+            )}
+            {rol === "Medico" &&(
+              <h1 className="text-center mb-4">Ingreso de profesional</h1>
+            )}
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email:</Form.Label>
