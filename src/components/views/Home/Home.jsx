@@ -2,7 +2,7 @@ import "./Home.css"
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from "react-router";
-import Img from "../../../assets/clinica.jpg"
+import Img from "../../../public/img/clinica.jpg"
 import { Container, Row, Col } from "react-bootstrap";
 
 const Home = () => {
