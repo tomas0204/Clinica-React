@@ -1,13 +1,10 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useState } from 'react'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-
 import Navbar from './components/shared/Navbar.jsx'
 import Footer from './components/shared/Footer.jsx'
-
 import Home from './components/views/Home/Home.jsx'
 import Login from './components/views/Login.jsx'
 import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'
