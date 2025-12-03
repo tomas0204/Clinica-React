@@ -1,6 +1,7 @@
 import { Card, Button, Row, Col, Form } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const { VITE_ADMIN_USER, VITE_ADMIN_PASS } = import.meta.env;
@@ -13,8 +14,20 @@ const Login = ({ onLogin }) => {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const rol = location.state?.tipoDeRegistro;
+
+  const tipoDeRegistro = () => {
+    if (rol === "Paciente") {
+      return "/registrarPaciente";
+    } else if (rol === "Medico") {
+      return "/registroMedico";
+    }
+  }
+  console.log(rol);
+
   const onSubmit = (data) => {
-    console.log("Login attempt:", data);
+    
 
     if (data.email === adminEmail && data.password === adminPass) {
       localStorage.setItem("currentUser", JSON.stringify({ email: data.email, role: "admin" }));
@@ -106,7 +119,7 @@ const Login = ({ onLogin }) => {
                 variant="secondary"
                 className="m-3"
                 as={NavLink}
-                to="/registrarPaciente"
+                to={tipoDeRegistro()}
               >
                 Registrarse
               </Button>

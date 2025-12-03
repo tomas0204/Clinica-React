@@ -1,7 +1,7 @@
 import { Table, Alert } from "react-bootstrap";
 
 function ListaEvoluciones({ consultas }) {
-    if (consultas.length === 0) {
+    if (!consultas || consultas.length === 0) {
         return (
             <Alert variant="info" className="mb-0">
                 No hay consultas registradas.
