@@ -24,7 +24,7 @@ function ListaEvoluciones({ consultas }) {
           <tr key={index}>
             <td>{c.fecha}</td>
             <td>{c.motivo}</td>
-            <td>{c.diagnóstico}</td>
+            <td>{c.diagnostico}</td>
             <td>{c.indicaciones}</td>
           </tr>
         ))}
