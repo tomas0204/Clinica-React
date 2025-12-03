@@ -59,6 +59,14 @@ export default function NavbarClinica() {
                     <NavDropdown.Item as={Link} to="/turnos">
                       Turnos
                     </NavDropdown.Item>
+                    {role === "medico" && 
+                    <NavDropdown.Item as={Link} to="/guardia-medica">
+                      Guardia Médica
+                    </NavDropdown.Item>}  
+                    {role === "medico" && 
+                    <NavDropdown.Item as={Link} to="/historiaClinica">
+                      Historia Clínica
+                    </NavDropdown.Item>}  
                   </NavDropdown>}
               </>
             ) : (
