@@ -63,7 +63,7 @@ export default function NavbarClinica() {
                   Paciente
                 </NavDropdown.Item>
 
-                <NavDropdown.Item as={Link} to="/login-doctor">
+                <NavDropdown.Item as={Link} to="/login">
                   Doctor
                 </NavDropdown.Item>
               </NavDropdown>

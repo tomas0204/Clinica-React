@@ -65,7 +65,7 @@ export const cancelarTurno = async (turno) => {
       },
       body: JSON.stringify({
         ...turno,
-        estado: "cancelado"
+        estado: "Cancelado por el paciente"
       })
     });
 

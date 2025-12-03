@@ -92,8 +92,16 @@ const TurnosList = () => {
             const exito = await cancelarTurno(turno);
             if (exito) {
 
+                let nuevoEstado = "Cancelado"; // valor por defecto
+
+                if (currentUser?.role === "medico") {
+                    nuevoEstado = "Cancelado por el médico";
+                } else if (currentUser?.role === "user") {
+                    nuevoEstado = "Cancelado por el paciente";
+                }
+
                 const nuevosTurnos = turnos.map(t =>
-                    t.id === turno.id ? { ...t, estado: "cancelado" } : t
+                    t.id === turno.id ? { ...t, estado: nuevoEstado } : t
                 );
 
                 setTurnos(nuevosTurnos);
@@ -246,9 +254,9 @@ const TurnosList = () => {
                                         {isUser && isMyTurn && (
                                             <Button
                                                 variant="warning"
-                                                disabled={t.estado === "cancelado"}
+                                                disabled={t.estado === "Cancelado por el paciente"}
                                                 onClick={() => {
-                                                    setMode("cancelar");
+                                                    setMode("Cancelado por el paciente");
                                                     setTurnoEdit(t);
                                                     handleCancel(t);
                                                 }}

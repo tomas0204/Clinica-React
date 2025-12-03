@@ -24,6 +24,8 @@ function App() {
     console.log("El usuario es un admin")
   } else if (currentUser?.role === "user") {
     console.log("El usuario es un paciente")
+  } else if (currentUser?.role === "medico") {
+    console.log("El usuario es un médico")
   }
 
   return (
