@@ -14,14 +14,11 @@ const ModalDetalleMedico = ({ show, handleClose, medico }) => {
                 <Modal.Title>Información Usuario</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h5>{medico.nombre_y_apellido_medico}</h5>
+                <h5>Dr/a {medico.nombre_y_apellido_medico}</h5>
                 <hr />
                 <p><strong>Especialidad:</strong> {medico.especialidad}</p>
                 <p><strong>Email:</strong> {medico.email_medico}</p>
                 <p><strong>Contraseña:</strong> {medico.contraseña}</p>
-                {/* Puedes añadir aquí más propiedades si las tienes: 
-                <p><strong>Matrícula:</strong> {medico.matricula_medico}</p> 
-                */}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>

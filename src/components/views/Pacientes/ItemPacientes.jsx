@@ -5,7 +5,7 @@ import { FaEye, FaPencilAlt, FaTrash } from 'react-icons/fa';
 const ItemPacientes = ({ paciente, borrarPaciente, modificarPaciente, verDetallePaciente }) => {
   return (
     <div className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-      <Card className="shadow-lg patient-card">
+      <Card className="shadow-lg patient-card col-md-12">
         <Card.Img
           variant="top"
           className="patient-card-img"

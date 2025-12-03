@@ -13,8 +13,8 @@ import { FaTrash } from 'react-icons/fa';
 
 
   return (
-    <div className='d-flex flex-row'>
-      <Card  className="shadow-lg patient-card col-md-12">
+    <div className="col-12 col-sm-6 col-md-3 mb-4">
+      <Card  className="shadow-lg patient-card col-md-12 h-100">
       <Card.Img variant="top" src="https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg" />
       <Card.Body>
         <Card.Title> Dr/a {medico.nombre_y_apellido_medico} </Card.Title>
@@ -32,7 +32,7 @@ import { FaTrash } from 'react-icons/fa';
       </Card.Body>
     </Card>
       {isAdmin ? (
-        <Card style={{ width: '18rem' }}>
+        <Card className="shadow-lg patient-card col-md-12">
           <Card.Img variant="top" src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcSuEBa1zuFIvWpp5uaXrimbkTCnDJ2lbzz7tQBdZvFabvT4xLC2ikF9y7qvhdoijiWKdXlqQzVThT6sqxlhJBkxvjFpa3e2qksd_FK1TMu_ONvju_o" />
           <Card.Body>
             <Card.Title> Dr/a {medico.nombre_y_apellido_medico} </Card.Title>

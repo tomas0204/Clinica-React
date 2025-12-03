@@ -2,6 +2,7 @@ import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+
 export default function NavbarClinica() {
   const role = JSON.parse(localStorage.getItem("currentUser"))?.role;
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("currentUser")));
@@ -17,8 +18,8 @@ export default function NavbarClinica() {
     <Navbar bg="light" expand="lg" className="shadow-sm">
       <Container>
 
-        <Navbar.Brand as={Link} to="">
-          Bienestar360 Clínica
+        <Navbar.Brand as={Link} to="/">
+          Clinica - Bienestar 360
         </Navbar.Brand>
 
 
