@@ -6,18 +6,30 @@ function FormularioEvolucion({ onAdd }) {
         fecha: "",
         motivo: "",
         diagnostico: "",
-        indicaciones: ""
+        indicaciones: "",
     });
+
+    const today = new Date()
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    const todayString = `${year}-${month}-${day}`;
 
     const handleChange = (event) => {
         setFormData({
             ...formData,
-            [e.target.name]: event.target.value
+            [event.target.name]: event.target.value,
         });
     };
 
     const handleSubmit = (event) => {
-        e.preventDefault();
+        event.preventDefault();
+
+        if (formData.fecha < todayString) {
+            alert(`La fecha no puede ser anterior a hoy.`);
+            return;
+        }
+
         onAdd(formData);
 
         setFormData({
@@ -39,6 +51,7 @@ function FormularioEvolucion({ onAdd }) {
                         name="fecha"
                         value={formData.fecha}
                         onChange={handleChange}
+                        min={todayString}
                         required
                     />
                     </Form.Group>

@@ -1,25 +1,15 @@
-<<<<<<< HEAD
+
 import './App.css'
-import Footer from "./components/Footer";
-import { Route, Routes, BrowserRouter } from 'react-router-dom'
+import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom'
 import Login from './components/views/Login.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from './components/views/Navbar/Navbar.jsx';
 import RegistrarPaciente from './components/views/RegistrarPaciente.jsx';
 import HistoriaClinica from './components//historiaClinica/HistoriaClinica.jsx';
-function App() {
- 
-=======
-import { Route, Routes, BrowserRouter, Navigate } from 'react-router'
-import RegistrarPaciente from './components/views/RegistrarPaciente.jsx'
-import Login from './components/views/Login.jsx'
 import Home from "./components/views/Home/Home.jsx"
 import TurnosList from './components/views/TurnosList.jsx'
 import Footer from "./components/shared/Footer.jsx"
 import Navbar from './components/shared/Navbar.jsx'
 import { useState } from "react"
-import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import Error404 from './components/views/Error404.jsx'
 import "bootstrap-icons/font/bootstrap-icons.css"
 import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
@@ -38,7 +28,6 @@ function App() {
     console.log("El usuario es un paciente");
   }
   
->>>>>>> origin/dev
   return (
     <>
       <BrowserRouter>
@@ -50,9 +39,8 @@ function App() {
             <Route path='' element={<Home />} />
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
             <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
-<<<<<<< HEAD
             <Route path="/historiaClinica" element={<HistoriaClinica />} />
-=======
+
             <Route path='*' element={<Error404 />} />
             <Route
               path='/turnos'
@@ -64,7 +52,7 @@ function App() {
                 )
               }
             />
->>>>>>> origin/dev
+
           </Routes>
         </main>
         <Footer />
