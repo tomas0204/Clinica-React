@@ -14,36 +14,46 @@ const Login = ({ onLogin }) => {
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
   const onSubmit = (data) => {
+    console.log("Login attempt:", data);
+
     if (data.email === adminEmail && data.password === adminPass) {
-      localStorage.setItem(
-        "currentUser",
-        JSON.stringify({ email: data.email, role: "admin" })
-      );
-      onLogin(true); 
+      localStorage.setItem("currentUser", JSON.stringify({ email: data.email, role: "admin" }));
+      onLogin?.(true);
       navigate("/turnos");
       return;
     }
 
-    
-    console.log("Usuario logueado, admin?", data.email === adminEmail);
+    const pacientes = JSON.parse(localStorage.getItem("pacientesKey")) || [];
+    const medicos = JSON.parse(localStorage.getItem("agendaMedicoKey")) || [];
+    const users = [...pacientes, ...medicos];
 
-    const users = JSON.parse(localStorage.getItem("pacientesKey")) || [];
-    const userFound = users.find(
-      (u) => u.email === data.email && u.contraseña === data.password
-    );
+    console.log("Users loaded:", users);
 
+    const emailInput = data.email.trim();
+    const passInput = data.password.trim();
+
+    let userFound = null;
+    for (const u of users) {
+      // paciente
+      if (u.email && u.email === emailInput && (u.contraseña || u.password) === passInput) {
+        userFound = { ...u, role: "user" };
+        break;
+      }
+      // médico (usa email_medico)
+      if (u.email_medico && u.email_medico === emailInput && (u.contraseña || u.password) === passInput) {
+        userFound = { ...u, role: "medico" };
+        break;
+      }
+    }
 
     if (!userFound) {
-      console.log("Email o contraseña incorrectos");
+      setLoginError("Email o contraseña incorrectos");
       return;
     }
 
-    localStorage.setItem(
-      "currentUser",
-      JSON.stringify({ ...userFound, role: "user" })
-    );
-    onLogin(false); 
-    navigate('/'); 
+    localStorage.setItem("currentUser", JSON.stringify(userFound));
+    onLogin?.(false);
+    navigate("/");
     window.location.reload();
   };
 
