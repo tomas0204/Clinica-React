@@ -21,6 +21,7 @@ const TurnosList = () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
     const isAdmin = currentUser?.role === "admin";
     const isUser = currentUser?.role === "user";
+    const isMedico = currentUser?.role === "medico";
     const isMyTurn = currentUser?.id === turnoEdit?.pacienteId;
 
 
@@ -151,18 +152,41 @@ const TurnosList = () => {
                 pacientesMock={pacientes}
                 medicosMock={medicos}
             />
+            {isUser && (
+                <Button
+                    as="a"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=tomasignacioponce17@gmail.com"
+                    variant="outline-secondary"
+                    target="_blank"
+                >
+                    Contactar soporte
+                </Button>
+            )}
 
-            <Button
-                variant="primary"
-                onClick={() => {
-                    setMode("crear");
-                    setTurnoEdit(null);
-                    setShow(true);
-                }}
-            >
-                Nuevo Turno
-                <i className="bi bi-plus-circle me-2 ms-2"></i>
-            </Button>
+            {isAdmin && (
+                <Button
+                    variant="primary"
+                    onClick={() => {
+                        setMode("crear");
+                        setTurnoEdit(null);
+                        setShow(true);
+                    }}
+                >
+                    Nuevo Turno
+                    <i className="bi bi-plus-circle me-2 ms-2"></i>
+                </Button>
+            )}
+
+            {isMedico && (
+                <Button
+                    as="a"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=tomasignacioponce17@gmail.com"
+                    variant="outline-secondary"
+                    target="_blank"
+                >
+                    Contactar soporte
+                </Button>
+            )}
 
 
             <div className="table-responsive">
@@ -226,7 +250,7 @@ const TurnosList = () => {
                                                 onClick={() => {
                                                     setMode("cancelar");
                                                     setTurnoEdit(t);
-                                                    handleCancel(t); 
+                                                    handleCancel(t);
                                                 }}
                                             >
                                                 <i className="bi bi-x-circle-fill"></i> Cancelar
