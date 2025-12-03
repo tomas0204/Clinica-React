@@ -11,14 +11,8 @@ import ModalDetallePaciente from "./Pacientes/ModalDetallePaciente";
 
 const RegistrarPaciente = () => {
 
-  /* EDITAR */
-
   const [estoyEditando, setEstoyEditando] = useState(false)
   const [pacienteEditar, setPacienteEditar] = useState(null)
-
-
-  /* VER */
-
   const [mostrarModal, setMostrarModal] = useState(false);
   const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
 
@@ -56,17 +50,17 @@ const RegistrarPaciente = () => {
   const crearYEditar = (data) => {
 
     if (estoyEditando) {
-      // Lógica de EDICIÓN
-      const listadoActualizado = pacientes.map(paciente => paciente.email === pacienteEditar ?  // Usamos el email como ID
-        { ...data, role: "paciente" } // Actualiza los datos, manteniendo el role
+     
+      const listadoActualizado = pacientes.map(paciente => paciente.email === pacienteEditar ? 
+        { ...data, role: "paciente" } 
         : paciente
       );
 
       setPacientes(listadoActualizado)
 
-      setEstoyEditando(false) // Sale del modo edición
+      setEstoyEditando(false)
 
-      setPacienteEditar(null) // Limpia el médico a editar
+      setPacienteEditar(null) 
 
       Swal.fire({
         title: "Paciente Actualizado!",
@@ -92,7 +86,7 @@ const RegistrarPaciente = () => {
 
     }
 
-    reset();   // Limpia el formulario después de cualquier operación
+    reset();   
 
   }
 
@@ -101,15 +95,8 @@ const RegistrarPaciente = () => {
 
     if (pacienteSeleccionado) {
 
-      // 1. Establecer el modo edición y el médico a editar
-
       setEstoyEditando(true);
       setPacienteEditar(email)
-
-      // 2. Precargar los campos del formulario usando setValue
-      // Nota: El email y la contraseña se precargan solo para referencia,
-      // pero el email NO debería ser editable si es la clave primaria.
-      // Para simplificar, precargamos todos.
 
       setValue('nombre_y_apellido', pacienteSeleccionado.nombre_y_apellido)
       setValue('celular', pacienteSeleccionado.celular)

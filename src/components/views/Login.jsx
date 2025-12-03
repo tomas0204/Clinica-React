@@ -22,6 +22,8 @@ const Login = ({ onLogin }) => {
       return "/registrarPaciente";
     } else if (rol === "Medico") {
       return "/registroMedico";
+    } else {
+      return "/registrarPaciente"
     }
   }
 
@@ -44,12 +46,10 @@ const Login = ({ onLogin }) => {
 
     let userFound = null;
     for (const u of users) {
-      // paciente
       if (u.email && u.email === emailInput && (u.contraseña || u.password) === passInput) {
         userFound = { ...u, role: "user" };
         break;
       }
-      // médico (usa email_medico)
       if (u.email_medico && u.email_medico === emailInput && (u.contraseña || u.password) === passInput) {
         userFound = { ...u, role: "medico" };
         break;
@@ -77,6 +77,9 @@ const Login = ({ onLogin }) => {
             )}
             {rol === "Medico" &&(
               <h1 className="text-center mb-4">Ingreso de profesional</h1>
+            )}
+            {rol === undefined &&(
+              <h1 className="text-center mb-4">Ingreso</h1>
             )}
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -130,7 +133,7 @@ const Login = ({ onLogin }) => {
         </Col>
         <Col>
           <img
-            src="/public/img/img-login.jpg"
+            src="/img/img-login.jpg"
             alt="Imagen clinica login"
             className="rounded-3 w-100 h-100"
           />
