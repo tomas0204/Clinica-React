@@ -44,119 +44,159 @@ const Home = () => {
         </Col>
 
         <Col md={4}>
-          <Card className="op-card shadow-sm border-0 p-4">
-            <div className="op-icon icon-green">
-              <i className="bi bi-clipboard-check"></i>
-            </div>
-            {role === undefined && (
-              <>
-                <h4 className="mt-3 fw-bold text-success">Acceso Profesionales</h4>
-                <p className="my-4 px-3 fw-bold">Accede como profesional</p>
+          {role === "user" && (
+            <Card className="op-card shadow-sm border-0 p-4">
+              <div className="op-icon icon-gray">
+                <i className="bi bi-person"></i>
+              </div>
+              <h4 className="mt-3 fw-bold text-secondary">Función Próxima</h4>
+              <p className="my-4 px-3 fw-bold">Disponible próximamente</p>
 
-                <Button
-                  variant="success"
-                  className="fw-bold"
-                  as={Link}
-                  to="/login"
-                >
-                  Ingresar
-                </Button>
-              </>
-            )}
+              <Button
+                variant="secondary"
+                className="fw-bold"
+                disabled
+              >
+                Próximamente
+              </Button>
+            </Card>
+          )}
 
-            {(role === "admin" || role === "medico") && (
-              <>
-                <h4 className="mt-3 fw-bold text-success">Guardia Médica</h4>
-                <p className="my-4 px-3 fw-bold">Accede a la guardia médica</p>
+          {role === undefined && (
+            <Card className="op-card shadow-sm border-0 p-4">
+              <div className="op-icon icon-green">
+                <i className="bi bi-clipboard-check"></i>
+              </div>
+              <h4 className="mt-3 fw-bold text-success">Acceso Profesionales</h4>
+              <p className="my-4 px-3 fw-bold">Accede como profesional</p>
 
-                <Button
-                  variant="success"
-                  className="fw-bold"
-                  as={Link}
-                  to="/guardia-medica"
-                >
-                  Ingresar
-                </Button>
-              </>
-            )}
+              <Button
+                variant="success"
+                className="fw-bold"
+                as={Link}
+                to="/login"
+              >
+                Ingresar
+              </Button>
+            </Card>
+          )}
+
+          {(role === "admin" || role === "medico") && (
+            <Card className="op-card shadow-sm border-0 p-4">
+              <div className="op-icon icon-gray">
+                <i className="bi bi-person"></i>
+              </div>
+              <h4 className="mt-3 fw-bold text-success">Guardia Médica</h4>
+              <p className="my-4 px-3 fw-bold">Accede a la guardia médica</p>
+
+              <Button
+                variant="success"
+                className="fw-bold"
+                as={Link}
+                to="/guardia-medica"
+              >
+                Ingresar
+              </Button>
+            </Card>
+          )}
 
 
-          </Card>
         </Col>
 
         <Col md={4}>
-          <Card className="op-card shadow-sm border-0 p-4">
-            <div className="op-icon icon-orange">
-              <i className="bi bi-hospital"></i>
-            </div>
 
-            {role === undefined && (
-              <>
-                <h4 className="mt-3 fw-bold text-warning"> ¿Usuario o Profesional?</h4>
-                <p className="my-4 px-3 fw-bold">Accede a nuestro servicio</p>
-                <Row className="g-3">
-                  <Col>
-                    <Button
-                      variant="warning"
-                      className="fw-bold w-100"
-                      as={Link}
-                      to="/registroMedico"
-                    >
-                      Profesional
-                    </Button>
-                  </Col>
+          {role === "user" && (
+            <Card className="op-card shadow-sm border-0 p-4">
+              <div className="op-icon icon-gray">
+                <i className="bi bi-person"></i>
+              </div>
+              <h4 className="mt-3 fw-bold text-secondary">Función Próxima</h4>
+              <p className="my-4 px-3 fw-bold">Disponible próximamente</p>
 
-                  <Col>
-                    <Button
-                      variant="warning"
-                      className="fw-bold w-100"
-                      as={Link}
-                      to="/registrarPaciente"
-                    >
-                      Paciente
-                    </Button>
-                  </Col>
-                </Row>
+              <Button
+                variant="secondary"
+                className="fw-bold"
+                disabled
+              >
+                Próximamente
+              </Button>
+            </Card>
+          )}
 
-              </>
-            )}
+          {role === undefined && (
+            <Card className="op-card shadow-sm border-0 p-4">
+              <div className="op-icon icon-orange">
+                <i className="bi bi-hospital"></i>
+              </div>
+              <h4 className="mt-3 fw-bold text-warning"> ¿Usuario o Profesional?</h4>
+              <p className="my-4 px-3 fw-bold">Accede a nuestro servicio</p>
+              <Row className="g-3">
+                <Col>
+                  <Button
+                    variant="warning"
+                    className="fw-bold w-100"
+                    as={Link}
+                    to="/registroMedico"
+                  >
+                    Profesional
+                  </Button>
+                </Col>
 
-            {role === "admin" && (
-              <>
-                <h4 className="mt-3 fw-bold text-warning">Gestión de Profesionales</h4>
-                <p className="my-4 px-3 fw-bold">Accede a el registro de los profesionales</p>
+                <Col>
+                  <Button
+                    variant="warning"
+                    className="fw-bold w-100"
+                    as={Link}
+                    to="/registrarPaciente"
+                  >
+                    Paciente
+                  </Button>
+                </Col>
+              </Row>
+            </Card>
+          )}
 
-                <Button
-                  variant="warning"
-                  className="fw-bold"
-                  as={Link}
-                  to="/registroMedico"
-                >
-                  Ingresar
-                </Button>
-              </>
-            )}
+          {role === "admin" && (
+            <Card className="op-card shadow-sm border-0 p-4">
+              <div className="op-icon icon-gray">
+                <i className="bi bi-person"></i>
+              </div>
+              <h4 className="mt-3 fw-bold text-warning">Gestión de Profesionales</h4>
+              <p className="my-4 px-3 fw-bold">Accede a el registro de los profesionales</p>
 
-            {role === "medico" && (
-              <>
-                <h4 className="mt-3 fw-bold text-warning">Historia Clínica</h4>
-                <p className="my-4 px-3 fw-bold">Gestiona los historiales clínicos</p>
+              <Button
+                variant="warning"
+                className="fw-bold"
+                as={Link}
+                to="/registroMedico"
+              >
+                Ingresar
+              </Button>
+            </Card>
+          )}
 
-                <Button
-                  variant="warning"
-                  className="fw-bold"
-                  as={Link}
-                  to="/historiaClinica"
-                >
-                  Ingresar
-                </Button>
-              </>
-            )}
+          {role === "medico" && (
+            <Card className="op-card shadow-sm border-0 p-4">
+              <div className="op-icon icon-gray">
+                <i className="bi bi-person"></i>
+              </div>
+              <h4 className="mt-3 fw-bold text-warning">Historia Clínica</h4>
+              <p className="my-4 px-3 fw-bold">Gestiona los historiales clínicos</p>
 
-          </Card>
+              <Button
+                variant="warning"
+                className="fw-bold"
+                as={Link}
+                to="/historiaClinica"
+              >
+                Ingresar
+              </Button>
+            </Card>
+          )}
+
         </Col>
 
-      </Row>
+      </Row >
 
       <div className="bg-light py-5 my-5">
         <Container className="text-center">
