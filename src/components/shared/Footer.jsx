@@ -1,5 +1,6 @@
 import { Container, Row, Col} from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
+import image from "../../../public/img/Bienestar360.png"
 import "./Footer.css";
 
 function Footer() {
@@ -8,7 +9,7 @@ function Footer() {
             <Container className= "footer-container">
                 <Row>
                     <Col className="footer-logo">
-                    <img src="" alt="Logo" />
+                    <img src={image} alt="Logo" />
                     <p>Salud que te envuelve</p>
                     </Col>
                 
