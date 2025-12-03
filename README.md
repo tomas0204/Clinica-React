@@ -44,7 +44,7 @@ El módulo de guardia médica permite:
 
 ## Link del deploy
 
-...
+https://clinica-git-main-tomas-projects-affede4a.vercel.app/
 
 ## 🔧 Instalación y ejecución
 
