@@ -5,12 +5,33 @@ import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import Swal from "sweetalert2";
 import { FaUserMd } from 'react-icons/fa';
+import ModalDetalleMedico from './ModalDetalleMedico';
+
+
+
 
 
 const RegistroMedico = () => {
 
+  /* EDITAR */
+  
   const [estoyEditando, setEstoyEditando] = useState(false)
-  const [medicoEditar, setMedicoEditar] = useState(null)
+  const [medicoEditar, setMedicoEditar] = useState(null)  
+
+  /* VER */
+
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [medicoSeleccionado, setMedicoSeleccionado] = useState(null);
+
+  const verDetalleMedico = (medico) =>{
+    setMedicoSeleccionado(medico);
+    setMostrarModal(true)
+  };
+
+  const handleCloseModal = () =>{
+    setMostrarModal(false)
+    setMedicoSeleccionado(null)
+  }
 
   const {
     register,
@@ -105,6 +126,20 @@ const RegistroMedico = () => {
   }, [medicos])
 
   const borrarMedico = (emailMedico) => {
+    Swal.fire({
+  title: "Estas seguro?",
+  text: "Los datos no se podrán recuperar!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Si, continuar"
+
+}).then((result) => {
+
+  if (result.isConfirmed) {
+
+
     const listadoMedicoActual = medicos.filter((itemMedico) => itemMedico.email_medico !== emailMedico)
     
     setMedicos(listadoMedicoActual)
@@ -112,8 +147,14 @@ const RegistroMedico = () => {
     Swal.fire({
             title: "Médico Eliminado",
             text: "El médico ha sido removido de la cartilla.",
-            icon: "warning",
+            icon: "success",
         });
+    
+  }
+});
+
+
+    
   }
 
   return (
@@ -245,7 +286,8 @@ const RegistroMedico = () => {
           )}
       </Form>
        </div>
-       <ListadoMedico medicos={medicos} borrarMedico={borrarMedico} modificarMedico={modificarMedico} ></ListadoMedico>
+       <ListadoMedico medicos={medicos} borrarMedico={borrarMedico} modificarMedico={modificarMedico} verDetalleMedico={verDetalleMedico} ></ListadoMedico>
+       <ModalDetalleMedico show={mostrarModal} handleClose={handleCloseModal} medico={medicoSeleccionado} />
    </>
   )
 }
