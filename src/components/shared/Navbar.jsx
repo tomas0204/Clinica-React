@@ -11,6 +11,7 @@ export default function NavbarClinica() {
     setUser(null);
     window.location.reload();
   };
+  
 
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm">
@@ -50,6 +51,9 @@ export default function NavbarClinica() {
                     <NavDropdown.Item as={Link} to="/guardia-medica">
                       Guardia Médica
                     </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/registroMedico">
+                      Gestion de Medicos
+                    </NavDropdown.Item>
                   </NavDropdown>
                 ) : <NavDropdown title="Perfil" id="login-dropdown">
                     <NavDropdown.Item as={Link} to="/turnos">
@@ -59,11 +63,11 @@ export default function NavbarClinica() {
               </>
             ) : (
               <NavDropdown title="Iniciar Sesión" id="login-dropdown">
-                <NavDropdown.Item as={Link} to="/login">
+                <NavDropdown.Item as={Link} to="/login" state={{ tipoDeRegistro: "Paciente" }}>
                   Paciente
                 </NavDropdown.Item>
 
-                <NavDropdown.Item as={Link} to="/login">
+                <NavDropdown.Item as={Link} to="/login" state={{ tipoDeRegistro: "Medico" }}>
                   Doctor
                 </NavDropdown.Item>
               </NavDropdown>

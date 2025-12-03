@@ -15,7 +15,9 @@ import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
 import TurnosList from './components/views/TurnosList.jsx'
 import GuardiaMedica from './components/views/Guardia/GuardiaMedica.jsx'
 import HistoriaClinica from './components/historiaClinica/HistoriaClinica.jsx'
+import ItemMedico from './components/views/crudMedico/ItemMedico.jsx'
 import Error404 from './components/views/Error404.jsx'
+
 
 
 function App() {
@@ -37,15 +39,16 @@ function App() {
 
         <main className='my-5'>
           <Routes>
-            <Route path='/inicio' element={<Home />} />
             <Route path='' element={<Home />} />
+            <Route path='/' element={<Home />} />
             <Route path='/registrarPaciente' element={<RegistrarPaciente />} />
             <Route path='/guardia-medica' element={<GuardiaMedica />} />
-            <Route path='/' element={<Home />} />
+
+            <Route path='/turnos' element={<TurnosList />} />
             <Route path='/login' element={<Login onLogin={setIsAdmin} />} />
             <Route path='/historiaClinica' element={<HistoriaClinica />} />
             <Route path='/registroMedico' element={<RegistroMedico />} />
-            <Route path='/turnos' element={<TurnosList />} />
+
             <Route path='*' element={<Error404 />} />
           </Routes>
         </main>
