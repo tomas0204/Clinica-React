@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { crearTurno, editarTurno, borrarTurno, cancelarTurno } from "../../helpers/apiTurnos.js";
 import { Button } from 'react-bootstrap'
 import CrearTurno from '../turnos/CrearTurno.jsx';
+import PaginacionTurnos from '../turnos/Paginacion.jsx';
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
 import { useEffect } from "react";
-import { obtenerTurnos } from "../../helpers/apiTurnos.js";
-
+import { obtenerTurnosPaginados } from "../../helpers/apiTurnos.js";
 
 const TurnosList = () => {
     const [turnos, setTurnos] = useState([]);
@@ -14,6 +14,8 @@ const TurnosList = () => {
     const [show, setShow] = useState(false)
     const [turnoEdit, setTurnoEdit] = useState(null)
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    const [paginaActual, setPaginaActual] = useState(1);
+    const [cantPaginas, setCantPaginas] = useState(1);
     const isAdmin = currentUser?.role === "admin"
     const isUser = currentUser?.role === "user"
     const isMedico = currentUser?.role === "medico"
@@ -39,15 +41,26 @@ const TurnosList = () => {
         return "Cancelado";
     };
 
+    const cambiarPagina = async (page) => {
+        const data = await obtenerTurnosPaginados(page);
+
+        setTurnos(data.turnos);
+        setPaginaActual(data.paginaActual);
+        setCantPaginas(data.cantPaginas);
+    };
+
+
     useEffect(() => {
         const fetchTurnos = async () => {
-            const data = await obtenerTurnos();
-            setTurnos(data);
+            const data = await obtenerTurnosPaginados(1);
+
+            setTurnos(data.turnos);
+            setPaginaActual(data.paginaActual);
+            setCantPaginas(data.cantPaginas);
         };
 
         fetchTurnos();
     }, []);
-
 
 
     const handleDelete = async (turno) => {
@@ -340,6 +353,11 @@ const TurnosList = () => {
                     </tbody>
                 </Table>
             </div>
+            <PaginacionTurnos
+                paginaActual={paginaActual}
+                cantPaginas={cantPaginas}
+                onPageChange={cambiarPagina}
+            />
         </div>
     )
 }
