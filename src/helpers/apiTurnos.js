@@ -90,3 +90,25 @@ export const obtenerTurnos = async () => {
     return [];
   }
 };
+
+export const obtenerTurnosPaginados = async (page = 1, limit = 10) => {
+  try {
+    const respuesta = await fetch(
+      `${turnosBackend}/paginacion?page=${page}&limit=${limit}`
+    );
+
+    if (!respuesta.ok) {
+      throw new Error("Error al obtener turnos paginados");
+    }
+
+    return await respuesta.json();
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      turnos: [],
+      paginaActual: 1,
+      cantPaginas: 1,
+      cantidadTurnos: 0,
+    };
+  }
+};

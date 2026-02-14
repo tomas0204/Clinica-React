@@ -25,9 +25,22 @@ export const validarLimiteTiempo = (fecha, diasLimite = 30) => {
   return fechaSeleccionada > limite;
 }
 
-export const horarioLaboral = (hora, horaInicio = "08:00", horaFinal = "18:00") => {
-  return hora < horaInicio || hora > horaFinal
-}
+export const horarioLaboral = (
+  fecha,
+  hora,
+  horaInicio = "08:00",
+  horaFinal = "18:00",
+  duracionMinutos = 30
+) => {
+
+  const inicioTurno = new Date(`${fecha}T${hora}`);
+  const finTurno = new Date(inicioTurno.getTime() + duracionMinutos * 60000);
+
+  const inicioLaboral = new Date(`${fecha}T${horaInicio}`);
+  const finLaboral = new Date(`${fecha}T${horaFinal}`);
+
+  return inicioTurno < inicioLaboral || finTurno > finLaboral;
+};
 
 export const validarSuperposicion = (
   turnos,
@@ -80,6 +93,15 @@ export const validarTurnoCompleto = (
   // ❌ Fin de semana
   if (validarFinDeSemana(nuevoTurno.fecha)) {
     return "La clínica no atiende fines de semana.";
+  }
+
+  if (
+    horarioLaboral(
+      nuevoTurno.fecha,
+      nuevoTurno.hora
+    )
+  ) {
+    return "El turno está fuera del horario laboral (08:00 - 18:00).";
   }
 
   // ❌ Duplicado exacto
