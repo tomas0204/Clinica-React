@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { validarTurnoCompleto } from '../../helpers/ValidacionesTurnos';
 
 const CrearTurno = ({
     show,
@@ -10,9 +11,12 @@ const CrearTurno = ({
     mode,
     turnoEdit,
     pacientesMock,
-    medicosMock
+    medicosMock,
+    turnos,
+    nuevoTurno
 }) => {
 
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (mode === "editar" && turnoEdit) {
@@ -22,10 +26,26 @@ const CrearTurno = ({
         }
     }, [mode, turnoEdit]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSave(form);
-        onClose();
+
+        const mensajeError = validarTurnoCompleto(turnos, form, turnoEdit);
+
+        if (mensajeError) {
+            setError(mensajeError);
+            return;
+        }
+
+        setError("");
+
+        const success = await onSave(form);
+
+        console.log(form.fecha);
+
+
+        if (success) {
+            onClose();
+        }
         if (mode === "crear") reset();
     };
 
@@ -118,9 +138,20 @@ const CrearTurno = ({
                         as="textarea"
                         rows={3}
                         value={form.motivoConsulta}
-                        onChange={(e) => setForm({ ...form, motivoConsulta: e.target.value })}
+                        onChange={(e) =>
+                            setForm({ ...form, motivoConsulta: e.target.value })
+                        }
+                        isInvalid={
+                            form.motivoConsulta?.length > 0 &&
+                            (form.motivoConsulta.length < 3 ||
+                                form.motivoConsulta.length > 150)
+                        }
                         required
                     />
+                    <Form.Control.Feedback type="invalid">
+                        El motivo debe tener entre 3 y 150 caracteres.
+                    </Form.Control.Feedback>
+
 
                     <h5>Estado</h5>
                     <select
@@ -135,7 +166,11 @@ const CrearTurno = ({
                         <option value="Atendido">Atendido</option>
                         <option value="Reprogramado">Reprogramado</option>
                     </select>
-
+                    {error && (
+                        <div className="alert alert-danger py-2 my-2">
+                            {error}
+                        </div>
+                    )}
                 </Modal.Body>
 
                 <Modal.Footer>
