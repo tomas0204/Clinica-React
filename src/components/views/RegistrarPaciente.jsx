@@ -328,5 +328,3 @@ return (
 
 
 export default RegistrarPaciente;
-
-
