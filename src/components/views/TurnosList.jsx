@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { crearTurno, editarTurno, borrarTurno, cancelarTurno } from "../../helpers/apiTurnos.js";
+import { crearTurno, editarTurno, borrarTurno, cancelarTurno, obtenerTurnosPaginados } from "../../helpers/turnos/apiTurnos.js";
 import { Button } from 'react-bootstrap'
 import CrearTurno from '../turnos/CrearTurno.jsx';
 import PaginacionTurnos from '../turnos/Paginacion.jsx';
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
 import { useEffect } from "react";
-import { obtenerTurnosPaginados } from "../../helpers/apiTurnos.js";
 
 const TurnosList = () => {
     const [turnos, setTurnos] = useState([]);
@@ -227,14 +226,27 @@ const TurnosList = () => {
                 turnos={turnos}
             />
             {isUser && (
-                <Button
-                    as="a"
-                    href="https://mail.google.com/mail/?view=cm&fs=1&to=tomasignacioponce17@gmail.com"
-                    variant="outline-secondary"
-                    target="_blank"
-                >
-                    Contactar soporte
-                </Button>
+                <>
+                    <Button
+                        variant="success"
+                        onClick={() => {
+                            setMode("crear");
+                            setTurnoEdit(null);
+                            setShow(true);
+                        }}
+                    >
+                        Pedir Turno
+                        <i className="bi bi-calendar-plus me-2 ms-2"></i>
+                    </Button>
+                    <Button
+                        as="a"
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=tomasignacioponce17@gmail.com"
+                        variant="outline-secondary ms-2"
+                        target="_blank"
+                    >
+                        Contactar soporte
+                    </Button>
+                </>
             )}
 
             {isAdmin && (
@@ -273,6 +285,7 @@ const TurnosList = () => {
                             <th>Hora</th>
                             <th>Motivo de Consulta</th>
                             <th>Estado</th>
+                            <th>Estado de Pago</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -290,6 +303,7 @@ const TurnosList = () => {
                                     <td>{t.hora}</td>
                                     <td>{t.motivoConsulta}</td>
                                     <td>{t.estado}</td>
+                                    <td>{t.estadoPago}</td>
                                     <td>
                                         {isAdmin && (
                                             <>

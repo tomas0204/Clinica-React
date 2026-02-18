@@ -42,8 +42,7 @@ export const editarTurno = async (turno) => {
 
 export const borrarTurno = async (turno) => {
   try {
-    console.log(turno);
-    
+  
     const respuesta = await fetch(`${turnosBackend}/${turno._id}`, {
       method: "DELETE",
     });
@@ -60,7 +59,7 @@ export const borrarTurno = async (turno) => {
 
 export const cancelarTurno = async (turno, nuevoEstado) => {
   try {
-    const respuesta = await fetch(`${turnosBackend}/${turno.id}`, {
+    const respuesta = await fetch(`${turnosBackend}/${turno._id}`, {
       method: "PATCH", // mejor que PUT para solo cambiar estado
       headers: {
         "Content-Type": "application/json"
