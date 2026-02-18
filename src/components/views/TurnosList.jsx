@@ -3,7 +3,6 @@ import { crearTurno, editarTurno, borrarTurno, cancelarTurno, obtenerTurnosPagin
 import { Button } from 'react-bootstrap'
 import CrearTurno from '../turnos/CrearTurno.jsx';
 import PaginacionTurnos from '../turnos/Paginacion.jsx';
-import Pagos from '../turnos/Pagos.jsx';
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
 import { useEffect } from "react";
@@ -286,6 +285,7 @@ const TurnosList = () => {
                             <th>Hora</th>
                             <th>Motivo de Consulta</th>
                             <th>Estado</th>
+                            <th>Estado de Pago</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -303,6 +303,7 @@ const TurnosList = () => {
                                     <td>{t.hora}</td>
                                     <td>{t.motivoConsulta}</td>
                                     <td>{t.estado}</td>
+                                    <td>{t.estadoPago}</td>
                                     <td>
                                         {isAdmin && (
                                             <>
