@@ -130,7 +130,7 @@ const Login = ({ onLogin }) => {
           <img
             src="/public/img/img-login.jpg"
             alt="Imagen clinica login"
-            className="img-login rounded-3 w-100"
+            className="rounded-3 w-100 h-100"
           />
         </Col>
       </Row>

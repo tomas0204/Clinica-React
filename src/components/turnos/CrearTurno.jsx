@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { validarTurnoCompleto } from '../../helpers/turnos/ValidacionesTurnos';
+import { useNavigate } from "react-router-dom";
 
 const CrearTurno = ({
     show,
@@ -10,9 +12,18 @@ const CrearTurno = ({
     mode,
     turnoEdit,
     pacientesMock,
-    medicosMock
+    medicosMock,
+    turnos,
+    nuevoTurno
 }) => {
 
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    const isAdmin = currentUser?.role === "admin"
+    const isUser = currentUser?.role === "user"
+    const isMedico = currentUser?.role === "medico"
+    const isMyTurn = currentUser?.id === turnoEdit?.pacienteId
 
     useEffect(() => {
         if (mode === "editar" && turnoEdit) {
@@ -22,10 +33,33 @@ const CrearTurno = ({
         }
     }, [mode, turnoEdit]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSave(form);
-        onClose();
+
+        const mensajeError = validarTurnoCompleto(turnos, form, turnoEdit);
+
+        if (mensajeError) {
+            setError(mensajeError);
+            return;
+        }
+
+        setError("");
+
+        // 👤 SI ES USUARIO → ir a pantalla de pago
+        if (isUser && form.metodoPago === "tarjeta") {
+            navigate("/pago", {
+                state: form
+            });
+            return;
+        }
+
+        // 👨‍⚕️ ADMIN / MÉDICO → flujo original
+        const success = await onSave(form);
+
+        if (success) {
+            onClose();
+        }
+
         if (mode === "crear") reset();
     };
 
@@ -46,6 +80,8 @@ const CrearTurno = ({
         fecha: "",
         hora: "",
         motivoConsulta: "",
+        metodoPago: "",
+        precio: 5000,
         estado: estado()
     });
     const reset = () => {
@@ -55,6 +91,8 @@ const CrearTurno = ({
             fecha: "",
             hora: "",
             motivoConsulta: "",
+            metodoPago: "",
+            precio: 5000,
             estado: estado()
         });
     };
@@ -69,19 +107,31 @@ const CrearTurno = ({
 
             <form onSubmit={handleSubmit}>
                 <Modal.Body>
-
                     <h5>Paciente</h5>
-                    <select
-                        value={form.pacienteNombre}
-                        onChange={e => setForm({ ...form, pacienteNombre: e.target.value })}
-                        className='form-select'
-                        required
-                    >
-                        <option value="">Seleccionar paciente</option>
-                        {pacientesMock.map(p => (
-                            <option key={p.id} value={p.nombre}>{p.nombre}</option>
-                        ))}
-                    </select>
+                    {!isUser ? (
+                        <select
+                            value={form.pacienteNombre}
+                            onChange={e => setForm({ ...form, pacienteNombre: e.target.value })}
+                            className="form-select"
+                            required
+                        >
+                            <option value="">Seleccionar paciente</option>
+                            {pacientesMock.map(p => (
+                                <option key={p.id} value={p.nombre}>
+                                    {p.nombre}
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <input
+                            type="text"
+                            placeholder="Escriba su nombre completo"
+                            value={form.pacienteNombre}
+                            onChange={e => setForm({ ...form, pacienteNombre: e.target.value })}
+                            className="form-control"
+                            required
+                        />
+                    )}
 
                     <h5>Médico</h5>
                     <select
@@ -118,24 +168,56 @@ const CrearTurno = ({
                         as="textarea"
                         rows={3}
                         value={form.motivoConsulta}
-                        onChange={(e) => setForm({ ...form, motivoConsulta: e.target.value })}
+                        onChange={(e) =>
+                            setForm({ ...form, motivoConsulta: e.target.value })
+                        }
+                        isInvalid={
+                            form.motivoConsulta?.length > 0 &&
+                            (form.motivoConsulta.length < 3 ||
+                                form.motivoConsulta.length > 150)
+                        }
                         required
                     />
+                    <Form.Control.Feedback type="invalid">
+                        El motivo debe tener entre 3 y 150 caracteres.
+                    </Form.Control.Feedback>
 
-                    <h5>Estado</h5>
-                    <select
-                        value={form.estado}
-                        onChange={e => setForm({ ...form, estado: e.target.value })}
-                        className="form-select"
-                        required
-                    >
-                        <option value="Pendiente">Pendiente</option>
-                        <option value="Confirmado">Confirmado</option>
-                        <option value="Cancelado">Cancelado</option>
-                        <option value="Atendido">Atendido</option>
-                        <option value="Reprogramado">Reprogramado</option>
-                    </select>
-
+                    {!isUser ? (
+                        <>
+                            <h5>Estado</h5>
+                            <select
+                                value={form.estado}
+                                onChange={e => setForm({ ...form, estado: e.target.value })}
+                                className="form-select"
+                                required
+                            >
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Confirmado">Confirmado</option>
+                                <option value="Cancelado">Cancelado</option>
+                                <option value="Atendido">Atendido</option>
+                                <option value="Reprogramado">Reprogramado</option>
+                            </select>
+                        </>
+                    ) : (
+                        <>
+                            <h5>Método de Pago</h5>
+                            <select
+                                className="form-select"
+                                value={form.metodoPago}
+                                onChange={(e) => setForm({ ...form, metodoPago: e.target.value })}
+                                required
+                            >
+                                <option value="">Seleccionar método de pago</option>
+                                <option value="tarjeta">Tarjeta de crédito/débito</option>
+                                <option value="efectivo">Efectivo (Pagar en la clínica)</option>
+                            </select>
+                        </>
+                    )}
+                    {error && (
+                        <div className="alert alert-danger py-2 my-2">
+                            {error}
+                        </div>
+                    )}
                 </Modal.Body>
 
                 <Modal.Footer>
@@ -143,7 +225,7 @@ const CrearTurno = ({
                         Cancelar
                     </Button>
                     <Button variant="primary" type="submit">
-                        {mode === "crear" ? "Crear" : "Guardar cambios"}
+                        {isUser ? "Solicitar turno" : mode === "crear" ? "Crear" : "Guardar cambios"}
                     </Button>
                 </Modal.Footer>
             </form>

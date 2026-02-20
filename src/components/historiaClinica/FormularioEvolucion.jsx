@@ -85,6 +85,22 @@ function FormularioEvolucion({ onAdd }) {
         </Col>
     </Row>
 
+    <Row className="mb-3">
+        <Col>
+        <Form.Group controlId="motivo">
+            <Form.Label>Motivo</Form.Label>
+            <Form.Control
+            as="textarea"
+            rows={3}
+            name="motivo"
+            placeholder="Motivo de consulta"
+            value={formData.motivo}
+            onChange={handleChange}
+            />
+        </Form.Group>
+        </Col>
+    </Row>
+
     <Button type="submit" variant="primary">
         Agregar consulta
     </Button>

@@ -1,24 +1,20 @@
 import { useState } from 'react'
-import { useEffect } from 'react'
-import { crearTurno, editarTurno, borrarTurno, cancelarTurno } from "../../helpers/apiTurnos.js";
+import { crearTurno, editarTurno, borrarTurno, cancelarTurno, obtenerTurnosPaginados } from "../../helpers/turnos/apiTurnos.js";
 import { Button } from 'react-bootstrap'
 import CrearTurno from '../turnos/CrearTurno.jsx';
+import PaginacionTurnos from '../turnos/Paginacion.jsx';
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
+import { useEffect } from "react";
 
 const TurnosList = () => {
-
-    const [turnos, setTurnos] = useState(() => {
-        const turnosGuardados = localStorage.getItem("turnos")
-        return turnosGuardados ? JSON.parse(turnosGuardados) : []
-    });
-    const guardarEnLocalStorage = (turnosActualizados) => {
-        localStorage.setItem("turnos", JSON.stringify(turnosActualizados));
-    }
+    const [turnos, setTurnos] = useState([]);
     const [mode, setMode] = useState("crear")
     const [show, setShow] = useState(false)
     const [turnoEdit, setTurnoEdit] = useState(null)
     const currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    const [paginaActual, setPaginaActual] = useState(1);
+    const [cantPaginas, setCantPaginas] = useState(1);
     const isAdmin = currentUser?.role === "admin"
     const isUser = currentUser?.role === "user"
     const isMedico = currentUser?.role === "medico"
@@ -44,8 +40,31 @@ const TurnosList = () => {
         return "Cancelado";
     };
 
+    const cambiarPagina = async (page) => {
+        const data = await obtenerTurnosPaginados(page);
+
+        setTurnos(data.turnos);
+        setPaginaActual(data.paginaActual);
+        setCantPaginas(data.cantPaginas);
+    };
+
+
+    useEffect(() => {
+        const fetchTurnos = async () => {
+            const data = await obtenerTurnosPaginados(1);
+
+            setTurnos(data.turnos);
+            setPaginaActual(data.paginaActual);
+            setCantPaginas(data.cantPaginas);
+        };
+
+        fetchTurnos();
+    }, []);
+
 
     const handleDelete = async (turno) => {
+        console.log("Turno a borrar:", turno);
+
         const result = await Swal.fire({
             title: "¿Eliminar turno?",
             text: "Esta acción no se puede deshacer",
@@ -61,7 +80,7 @@ const TurnosList = () => {
             const exito = await borrarTurno(turno);
             if (exito) {
 
-                const nuevosTurnos = turnos.filter(t => t.id !== turno.id);
+                const nuevosTurnos = turnos.filter(t => t._id !== turno._id);
                 setTurnos(nuevosTurnos);
                 localStorage.setItem("turnos", JSON.stringify(nuevosTurnos));
 
@@ -181,39 +200,53 @@ const TurnosList = () => {
                 mode={mode}
                 turnoEdit={turnoEdit}
                 onSave={async (nuevoTurno) => {
+
                     if (mode === "crear") {
                         const turnoGuardado = await crearTurno(nuevoTurno);
                         setTurnos([...turnos, turnoGuardado]);
-                        guardarEnLocalStorage([...turnos, turnoGuardado]);
-                        console.log("Turno creado:", turnoGuardado);
+                        console.log("Turno creado:", turnoGuardado)
+                        return true;
 
                     } else if (mode === "editar" && turnoEdit) {
                         const turnoActualizado = await editarTurno({
                             ...nuevoTurno,
-                            id: turnoEdit.id
+                            _id: turnoEdit._id
                         });
-                        setTurnos(turnos.map(t =>
-                            t.id === turnoEdit.id ? turnoActualizado : t
-                        ));
-                        guardarEnLocalStorage(turnos.map(t =>
-                            t.id === turnoEdit.id ? turnoActualizado : t
-                        ));
+                        setTurnos(prev =>
+                            prev.map(t =>
+                                t._id === turnoEdit._id ? turnoActualizado : t
+                            )
+                        );
                         console.log("Turno actualizado:", turnoActualizado);
-
+                        return true
                     }
                 }}
                 pacientesMock={pacientes}
                 medicosMock={medicos}
+                turnos={turnos}
             />
             {isUser && (
-                <Button
-                    as="a"
-                    href="https://mail.google.com/mail/?view=cm&fs=1&to=tomasignacioponce17@gmail.com"
-                    variant="outline-secondary"
-                    target="_blank"
-                >
-                    Contactar soporte
-                </Button>
+                <>
+                    <Button
+                        variant="success"
+                        onClick={() => {
+                            setMode("crear");
+                            setTurnoEdit(null);
+                            setShow(true);
+                        }}
+                    >
+                        Pedir Turno
+                        <i className="bi bi-calendar-plus me-2 ms-2"></i>
+                    </Button>
+                    <Button
+                        as="a"
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=tomasignacioponce17@gmail.com"
+                        variant="outline-secondary ms-2"
+                        target="_blank"
+                    >
+                        Contactar soporte
+                    </Button>
+                </>
             )}
 
             {isAdmin && (
@@ -252,6 +285,7 @@ const TurnosList = () => {
                             <th>Hora</th>
                             <th>Motivo de Consulta</th>
                             <th>Estado</th>
+                            <th>Estado de Pago</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -269,6 +303,7 @@ const TurnosList = () => {
                                     <td>{t.hora}</td>
                                     <td>{t.motivoConsulta}</td>
                                     <td>{t.estado}</td>
+                                    <td>{t.estadoPago}</td>
                                     <td>
                                         {isAdmin && (
                                             <>
@@ -332,6 +367,11 @@ const TurnosList = () => {
                     </tbody>
                 </Table>
             </div>
+            <PaginacionTurnos
+                paginaActual={paginaActual}
+                cantPaginas={cantPaginas}
+                onPageChange={cambiarPagina}
+            />
         </div>
     )
 }
