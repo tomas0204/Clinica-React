@@ -1,4 +1,3 @@
-
 const doctoresBackend = import.meta.env.VITE_API_DOCTORES;
 
 // Crear
@@ -41,5 +40,3 @@ export const borrarDoctor = async (doctor) => {
   if (!respuesta.ok) throw new Error("Error al eliminar doctor");
   return true;
 };
-
-
