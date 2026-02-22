@@ -32,4 +32,3 @@ export const getRoleFromToken = () => {
     return null;
   }
 };
->>>>>>> 29daf24ca2686dadbbac1b1290505196c931fd20
