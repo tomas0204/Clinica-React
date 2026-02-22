@@ -65,6 +65,11 @@ const CrearTurno = ({
             return;
         }
 
+        if (!form.hora) {
+            setError("Debe seleccionar una hora para el turno.");
+            return;
+        }
+
         setError("");
 
         // 👤 SI ES USUARIO → ir a pantalla de pago

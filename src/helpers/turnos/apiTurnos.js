@@ -16,7 +16,8 @@ export const crearTurno = async (turno) => {
 
     return await respuesta.json();
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error en crearTurno:", error.message);
+    throw error;
   }
 };
 

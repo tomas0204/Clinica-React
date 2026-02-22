@@ -83,6 +83,14 @@ export const validarSuperposicion = (
   };
 };
 
+export const validarFechaAtrasada = (fecha, hora) => {
+
+  const fechaHoraTurno = new Date(`${fecha}T${hora}:00`);
+  const ahora = new Date();
+
+  return fechaHoraTurno <= ahora;
+};
+
 
 export const validarTurnoCompleto = (
   turnos,
@@ -90,11 +98,18 @@ export const validarTurnoCompleto = (
   turnoEdit = null
 ) => {
 
-  // ❌ Fin de semana
+  // 3️⃣ Fin de semana
   if (validarFinDeSemana(nuevoTurno.fecha)) {
     return "La clínica no atiende fines de semana.";
   }
 
+  // 2️⃣ Fecha y hora ya pasada (más específico que fecha sola)
+  if (validarFechaAtrasada(nuevoTurno.fecha, nuevoTurno.hora)) {
+    return "No se pueden crear turnos en horarios que ya pasaron.";
+  }
+
+
+  // 4️⃣ Horario laboral
   if (
     horarioLaboral(
       nuevoTurno.fecha,
@@ -104,12 +119,12 @@ export const validarTurnoCompleto = (
     return "El turno está fuera del horario laboral (08:00 - 18:00).";
   }
 
-  // ❌ Duplicado exacto
+  // 5️⃣ Duplicado exacto
   if (validarTurnoDuplicado(turnos, nuevoTurno, turnoEdit)) {
     return "Ese médico ya tiene un turno en ese mismo horario.";
   }
 
-  // ❌ Superposición
+  // 6️⃣ Superposición (la más costosa)
   const conflicto = validarSuperposicion(turnos, nuevoTurno, turnoEdit);
 
   if (conflicto) {
