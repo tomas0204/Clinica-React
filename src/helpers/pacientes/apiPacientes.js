@@ -1,97 +1,45 @@
 const pacientesBackend = import.meta.env.VITE_API_PACIENTES;
 
-// =============================
-// OBTENER TODOS
-// =============================
 export const obtenerPacientes = async () => {
-  try {
-    const respuesta = await fetch(pacientesBackend);
-
-    if (!respuesta.ok) {
-      throw new Error("Error al obtener pacientes");
-    }
-
-    const data = await respuesta.json();
-    return data;
-
-  } catch (error) {
-    console.error("Error en obtenerPacientes:", error);
-    return [];
-  }
+  const res = await fetch(pacientesBackend);
+  return await res.json();
 };
 
-// =============================
-// CREAR
-// =============================
 export const crearPaciente = async (paciente) => {
-  try {
-    const respuesta = await fetch(pacientesBackend, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(paciente),
-    });
 
-    if (!respuesta.ok) {
-      throw new Error("Error al crear paciente");
-    }
+  const pacienteEnviar = {
+    ...paciente,
+    confirmarContraseña: paciente.contraseña_confirmar
+  };
 
-    const data = await respuesta.json();
-    return data;
+  const res = await fetch(pacientesBackend, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(pacienteEnviar)
+  });
 
-  } catch (error) {
-    console.error("Error en crearPaciente:", error);
-    return null;
-  }
+  return res.ok;
 };
 
-// =============================
-// EDITAR
-// =============================
 export const editarPaciente = async (paciente) => {
-  try {
-    const respuesta = await fetch(
-      `${pacientesBackend}/${paciente._id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(paciente),
-      }
-    );
 
-    if (!respuesta.ok) {
-      throw new Error("Error al editar paciente");
-    }
+  const pacienteEnviar = {
+    ...paciente,
+    confirmarContraseña: paciente.contraseña_confirmar
+  };
 
-    const data = await respuesta.json();
-    return data;
+  const res = await fetch(`${pacientesBackend}/${paciente._id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(pacienteEnviar)
+  });
 
-  } catch (error) {
-    console.error("Error en editarPaciente:", error);
-    return null;
-  }
+  return res.ok;
 };
 
-// =============================
-// BORRAR
-// =============================
 export const borrarPaciente = async (id) => {
-  try {
-    const respuesta = await fetch(`${pacientesBackend}/${id}`, {
-      method: "DELETE",
-    });
-
-    if (!respuesta.ok) {
-      throw new Error("Error al borrar paciente");
-    }
-
-    return true;
-
-  } catch (error) {
-    console.error("Error en borrarPaciente:", error);
-    return false;
-  }
+  const res = await fetch(`${pacientesBackend}/${id}`, {
+    method: "DELETE"
+  });
+  return res.ok;
 };

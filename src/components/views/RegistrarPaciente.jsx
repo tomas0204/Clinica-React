@@ -7,32 +7,23 @@ import { FaUserMd } from 'react-icons/fa';
 import ListaPacientes from "./Pacientes/ListaPacientes";
 import ModalDetallePaciente from "./Pacientes/ModalDetallePaciente";
 
-/* --- IMPORTS PARA BACKEND --- */
 import {
   obtenerPacientes,
   crearPaciente,
   editarPaciente,
-  borrarPaciente as borrarPacienteBackend
-} from "../../helpers/pacientes/apiPacientes";
+  borrarPaciente as borrarPacienteApi
+} from "../../helpers/pacientes/apiPacientes.js";
 
 const RegistrarPaciente = () => {
 
-  /* REFERENCIA PARA SCROLL */
-  const formRef = useRef(null);
 
-  const scrollAlFormulario = () => {
-    if (formRef.current) {
-      formRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }
-
-  /* EDITAR */
   const [estoyEditando, setEstoyEditando] = useState(false)
   const [pacienteEditar, setPacienteEditar] = useState(null)
 
-  /* VER */
   const [mostrarModal, setMostrarModal] = useState(false);
   const [pacienteSeleccionado, setPacienteSeleccionado] = useState(null);
+
+  const formRef = useRef(null);
 
   const verDetallePaciente = (paciente) => {
     setPacienteSeleccionado(paciente);
@@ -53,90 +44,67 @@ const RegistrarPaciente = () => {
     setValue
   } = useForm();
 
-  /* --- ESTADO INICIAL VACÍO PARA CARGAR DESDE BACKEND --- */
   const [pacientes, setPacientes] = useState([]);
 
-  /* --- FUNCION PARA CREAR Y EDITAR CON BACKEND --- */
-  const crearYEditar = async (data) => {
-
-    if (estoyEditando) {
-      // Lógica de EDICIÓN con backend
-      await editarPaciente({
-        ...data,
-        _id: pacienteEditar,
-        role: "paciente"
-      });
-
-      const listaActualizada = await obtenerPacientes();
-      setPacientes(listaActualizada);
-
-      setEstoyEditando(false) // Sale del modo edición
-      setPacienteEditar(null) // Limpia el paciente a editar
-
-      Swal.fire({
-        title: "Paciente Actualizado!",
-        text: `${data.nombre_y_apellido} ha sido modificado.`,
-        icon: "success",
-      });
-
-    } else {
-
-      // Lógica de CREAR con backend
-      const nuevoPaciente = {
-        ...data,
-        role: "paciente"
-      };
-
-      await crearPaciente(nuevoPaciente);
-
-      const listaActualizada = await obtenerPacientes();
-      setPacientes(listaActualizada);
-
-      Swal.fire({
-        title: "Creaste un usuario!",
-        text: `${data.nombre_y_apellido} esta habilitado.`,
-        icon: "success",
-      });
-
-    }
-
-    reset();   // Limpia el formulario después de cualquier operación
-
-  }
-
-  /* --- MODIFICAR PACIENTE --- */
-  const modificarPaciente = (id) => {
-    const pacienteSeleccionado = pacientes.find(
-      (paciente) => paciente._id === id
-    );
-
-    if (pacienteSeleccionado) {
-      setEstoyEditando(true);
-      setPacienteEditar(pacienteSeleccionado._id);
-
-      setValue('nombre_y_apellido', pacienteSeleccionado.nombre_y_apellido);
-      setValue('celular', pacienteSeleccionado.celular);
-      setValue('email', pacienteSeleccionado.email);
-      setValue('obraSocial', pacienteSeleccionado.obraSocial);
-      setValue('contraseña', pacienteSeleccionado.contraseña);
-      setValue('contraseña_confirmar', pacienteSeleccionado.contraseña);
-
-      scrollAlFormulario(); // <-- SCROLL SOLO PARA EDITAR
-    }
-  };
-
-  /* --- CARGAR PACIENTES DESDE BACKEND AL MONTAR --- */
   useEffect(() => {
     const cargarPacientes = async () => {
       const data = await obtenerPacientes();
       setPacientes(data);
     };
-
     cargarPacientes();
   }, []);
+  const crearYEditar = async (data) => {
+    if (estoyEditando) {
+      const pacienteActualizado = {
+        ...data,
+        _id: pacienteEditar
+      };
+      const ok = await editarPaciente(pacienteActualizado);
+      if (ok) {
+        Swal.fire({
+          title: "Paciente Actualizado!",
+          text: `${data.nombre_y_apellido} ha sido modificado.`,
+          icon: "success",
+        });
+        const listaActualizada = await obtenerPacientes();
+        setPacientes(listaActualizada);
+      }
+      setEstoyEditando(false)
+      setPacienteEditar(null)
+    } else {
+      const ok = await crearPaciente(data);
+      if (ok) {
+        Swal.fire({
+          title: "Creaste un usuario!",
+          text: `${data.nombre_y_apellido} esta habilitado.`,
+          icon: "success",
+        });
+        const listaActualizada = await obtenerPacientes();
+        setPacientes(listaActualizada);
+      }
+    }
+    reset();
+  }
+  const modificarPaciente = (id) => {
+    const pacienteSeleccionado = pacientes.find(
+      (paciente) => paciente._id === id
+    );
+    if (pacienteSeleccionado) {
+      setEstoyEditando(true);
+      setPacienteEditar(id)
+      setValue('nombre_y_apellido', pacienteSeleccionado.nombre_y_apellido)
+      setValue('celular', pacienteSeleccionado.celular)
+      setValue('email', pacienteSeleccionado.email)
+      setValue('obraSocial', pacienteSeleccionado.obraSocial)
+      setValue('contraseña', "")
+      setValue('contraseña_confirmar', "")
 
-  /* --- BORRAR PACIENTE CON BACKEND --- */
-  const borrarPaciente = (emailPaciente) => {
+      setTimeout(() => {
+        formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }
+  }
+  const borrarPaciente = (id) => {
     Swal.fire({
       title: "Estas seguro?",
       text: "Los datos no se podrán recuperar!",
@@ -147,20 +115,19 @@ const RegistrarPaciente = () => {
       confirmButtonText: "Si, continuar"
     }).then(async (result) => {
       if (result.isConfirmed) {
-
-        await borrarPacienteBackend(emailPaciente);
-        const listaActualizada = await obtenerPacientes();
-        setPacientes(listaActualizada);
-
-        Swal.fire({
-          title: "Paciente Eliminado",
-          text: "El paciente ha sido removido de la cartilla.",
-          icon: "success",
-        });
+        const ok = await borrarPacienteApi(id);
+        if (ok) {
+          Swal.fire({
+            title: "Paciente Eliminado",
+            text: "El paciente ha sido removido de la cartilla.",
+            icon: "success",
+          });
+          const listaActualizada = await obtenerPacientes();
+          setPacientes(listaActualizada);
+        }
       }
     });
   };
-
   return (
     <>
       <div
@@ -172,7 +139,6 @@ const RegistrarPaciente = () => {
           <h1> <FaUserMd /> {estoyEditando ? "Editar Paciente" : "Registro Paciente"}</h1>
         </div>
         <Form onSubmit={handleSubmit(crearYEditar)} className="mt-5">
-          {/* --- TODOS LOS FORM GROUPS IGUAL QUE TU CÓDIGO ORIGINAL --- */}
           <Form.Group className="mb-3">
             <div className="containerLabelControl">
               <Form.Label className="col-5 col-md-4">Nombre y Apellido</Form.Label>
@@ -181,14 +147,8 @@ const RegistrarPaciente = () => {
                 placeholder="Ej: Juan Perez"
                 {...register("nombre_y_apellido", {
                   required: "Este campo es obligatorio",
-                  minLength: {
-                    value: 5,
-                    message: "Tienes que ingresar al menos cinco caracteres",
-                  },
-                  maxLength: {
-                    value: 40,
-                    message: "No debes superar los treinta caracteres",
-                  },
+                  minLength: { value: 5, message: "Tienes que ingresar al menos cinco caracteres" },
+                  maxLength: { value: 40, message: "No debes superar los treinta caracteres" },
                 })}
               />
             </div>
@@ -196,7 +156,6 @@ const RegistrarPaciente = () => {
               {errors.nombre_y_apellido?.message}
             </Form.Text>
           </Form.Group>
-
           <Form.Group className="mb-3">
             <div className="containerLabelControl">
               <Form.Label className="col-5 col-md-4">Celular</Form.Label>
@@ -205,14 +164,8 @@ const RegistrarPaciente = () => {
                 placeholder="Ej: 03816001122"
                 {...register("celular", {
                   required: "Este es un campo obligatorio",
-                  minLength: {
-                    value: 9,
-                    message: "Debes ingresar al menos nueve digitos",
-                  },
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: "Solo se permiten números",
-                  },
+                  minLength: { value: 9, message: "Debes ingresar al menos nueve digitos" },
+                  pattern: { value: /^[0-9]+$/, message: "Solo se permiten números" },
                 })}
               />
             </div>
@@ -220,7 +173,6 @@ const RegistrarPaciente = () => {
               {errors.celular?.message}
             </Form.Text>
           </Form.Group>
-
           <Form.Group className="mb-3">
             <div className="containerLabelControl">
               <Form.Label className="col-5 col-md-4">E-mail</Form.Label>
@@ -230,10 +182,8 @@ const RegistrarPaciente = () => {
                 {...register("email", {
                   required: "Este campo es obligatorio",
                   pattern: {
-                    value:
-                      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
-                    message:
-                      "El email debe ser un correo valido por ej: juanperez@gmail.com",
+                    value: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
+                    message: "El email debe ser un correo valido por ej: juanperez@gmail.com",
                   },
                 })}
               />
@@ -241,28 +191,21 @@ const RegistrarPaciente = () => {
             <Form.Text className="text-danger">
               {errors.email?.message}
             </Form.Text>
-
           </Form.Group>
-
           <Form.Group className="mb-3">
             <div className="containerLabelControl">
               <Form.Label className="col-5 col-md-4">Obra Social</Form.Label>
-              <Form.Select {...register("obraSocial", {
-                required: "Tienes que ingresar una opción"
-              })}>
+              <Form.Select {...register("obraSocial", { required: "Tienes que ingresar una opción" })}>
                 <option value="">Seleccione una opción</option>
                 <option value="Prensa">Prensa</option>
                 <option value="Red de Seguro Medico">Red de Seguro Medico</option>
                 <option value="Pami">Pami</option>
-                <option value="Prensa">Osecac</option>
-                <option value="Prensa">Particular</option>
+                <option value="Osecac">Osecac</option>
+                <option value="Particular">Particular</option>
               </Form.Select>
             </div>
-            <Form.Text className="text-danger">
-              {errors.obraSocial?.message}
-            </Form.Text>
+            <Form.Text className="text-danger">{errors.obraSocial?.message}</Form.Text>
           </Form.Group>
-
           <Form.Group className="mb-3">
             <div className="containerLabelControl">
               <Form.Label className="col-5 col-md-4">Contraseña</Form.Label>
@@ -272,19 +215,14 @@ const RegistrarPaciente = () => {
                 {...register("contraseña", {
                   required: "Tienes que ingresar una contraseña",
                   pattern: {
-                    value:
-                      /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{6,12}$/,
-                    message:
-                      "La contrasenia debe tener entre 6 y 16 caracteres, al menos un número, al menos una minuscula, al menos una mayuscula y al menos un caracter especial",
+                    value: /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{6,12}$/,
+                    message: "La contrasenia debe tener entre 6 y 12 caracteres, al menos un número, al menos una minuscula, al menos una mayuscula y al menos un caracter especial",
                   },
                 })}
               />
             </div>
-            <Form.Text className="text-danger">
-              {errors.contraseña?.message}
-            </Form.Text>
+            <Form.Text className="text-danger">{errors.contraseña?.message}</Form.Text>
           </Form.Group>
-
           <Form.Group className="mb-3">
             <div className="containerLabelControl">
               <Form.Label className="col-5 col-md-4">Confirmar Contraseña</Form.Label>
@@ -293,30 +231,27 @@ const RegistrarPaciente = () => {
                 placeholder="Repetir contraseña"
                 {...register("contraseña_confirmar", {
                   required: "Tienes que repetir la contraseña",
-                  validate: (value) => value === getValues('contraseña') || `❌ Las contraseñas no coinciden`
+                  validate: (value) =>
+                    value === getValues('contraseña') || `❌ Las contraseñas no coinciden`
                 })}
               />
             </div>
-            <Form.Text className="text-danger">
-              {errors.contraseña_confirmar?.message}
-            </Form.Text>
+            <Form.Text className="text-danger">{errors.contraseña_confirmar?.message}</Form.Text>
           </Form.Group>
-
-          <Button variant="success" type="submit" >
+          <Button variant="success" type="submit">
             {estoyEditando ? "Guardar Cambios" : "Registrar"}
           </Button>
           {estoyEditando && (
-            <Button variant="secondary" className="ms-2" onClick={() => {
-              setEstoyEditando(false)
-              setPacienteEditar(null)
-              reset()
-            }} >
+            <Button
+              variant="secondary"
+              className="ms-2"
+              onClick={() => { setEstoyEditando(false); setPacienteEditar(null); reset(); }}
+            >
               Cancelar
             </Button>
           )}
         </Form>
       </div>
-
       <ListaPacientes
         pacientes={pacientes}
         borrarPaciente={borrarPaciente}
@@ -330,7 +265,6 @@ const RegistrarPaciente = () => {
       />
     </>
   );
-
 };
 
 export default RegistrarPaciente;
