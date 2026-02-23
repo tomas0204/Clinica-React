@@ -5,6 +5,7 @@ const ModalDetallePaciente = ({ show, handleClose, paciente }) => {
     if (!paciente) {
         return null; 
     }
+
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
@@ -16,9 +17,6 @@ const ModalDetallePaciente = ({ show, handleClose, paciente }) => {
                 <p><strong>Obra Social:</strong> {paciente.obraSocial}</p>
                 <p><strong>Email:</strong> {paciente.email}</p>
                 <p><strong>Contraseña:</strong> {paciente.contraseña}</p>
-                {/* Puedes añadir aquí más propiedades si las tienes: 
-                <p><strong>Matrícula:</strong> {paciente.matricula}</p> 
-                */}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>

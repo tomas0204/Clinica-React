@@ -3,12 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
-const { VITE_ADMIN_USER, VITE_ADMIN_PASS } = import.meta.env;
-
-const adminEmail = VITE_ADMIN_USER;
-const adminPass = VITE_ADMIN_PASS;
-
+import { login, getRoleFromToken } from "../../helpers/login/apiLogin.js";
 
 const Login = ({ onLogin }) => {
   const { register, handleSubmit, formState: { errors } } = useForm()
@@ -27,45 +22,32 @@ const Login = ({ onLogin }) => {
     }
   }
 
-  const onSubmit = (data) => {
+ const onSubmit = async (data) => {
+  try {
+    const result = await login(data.email, data.contraseña);
 
+    if (result.error) {
+      setLoginError(result.error);
+      return;
+    }
 
-    if (data.email === adminEmail && data.password === adminPass) {
-      localStorage.setItem("currentUser", JSON.stringify({ email: data.email, role: "admin" }));
-      onLogin?.(true);
+    const role = getRoleFromToken();
+
+    localStorage.setItem("token", result.token);
+    
+    onLogin?.(role === "admin");
+
+    if (role === "admin") {
       navigate("/turnos");
-      return;
+    } else {
+      navigate("/");
     }
 
-    const pacientes = JSON.parse(localStorage.getItem("pacientesKey")) || [];
-    const medicos = JSON.parse(localStorage.getItem("agendaMedicoKey")) || [];
-    const users = [...pacientes, ...medicos];
-
-    const emailInput = data.email.trim();
-    const passInput = data.password.trim();
-
-    let userFound = null;
-    for (const u of users) {
-      if (u.email && u.email === emailInput && (u.contraseña || u.password) === passInput) {
-        userFound = { ...u, role: "user" };
-        break;
-      }
-      if (u.email_medico && u.email_medico === emailInput && (u.contraseña || u.password) === passInput) {
-        userFound = { ...u, role: "medico" };
-        break;
-      }
-    }
-
-    if (!userFound) {
-      setLoginError("Email o contraseña incorrectos");
-      return;
-    }
-
-    localStorage.setItem("currentUser", JSON.stringify(userFound));
-    onLogin?.(false);
-    navigate("/");
-    window.location.reload();
-  };
+  } catch (error) {
+    console.error(error);
+    setLoginError("Error al iniciar sesión");
+  }
+};
 
   return (
     <Card className="shadow p-3 mb-5 bg-body rounded card-login">
@@ -75,10 +57,10 @@ const Login = ({ onLogin }) => {
             {rol === "Paciente" && (
               <h1 className="text-center mb-4">Ingreso de paciente</h1>
             )}
-            {rol === "Medico" &&(
+            {rol === "Medico" && (
               <h1 className="text-center mb-4">Ingreso de profesional</h1>
             )}
-            {rol === undefined &&(
+            {rol === undefined && (
               <h1 className="text-center mb-4">Ingreso</h1>
             )}
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -103,7 +85,7 @@ const Login = ({ onLogin }) => {
                 <Form.Control
                   type="password"
                   placeholder="Ingresa una contraseña"
-                  {...register("password", {
+                  {...register("contraseña", {
                     required: "La contraseña es obligatoria",
                     minLength: {
                       value: 6,

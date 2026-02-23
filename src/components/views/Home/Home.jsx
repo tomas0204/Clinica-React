@@ -4,9 +4,12 @@ import Button from 'react-bootstrap/Button';
 import { Link } from "react-router";
 import Img from "../../../../public/img/clinica.jpg"
 import { Container, Row, Col } from "react-bootstrap";
+import { getRoleFromToken } from "../../../helpers/login/apiLogin";
 
 const Home = () => {
-  const role = JSON.parse(localStorage.getItem("currentUser"))?.role;
+  const role = getRoleFromToken()
+  console.log("Role:", role);
+  
   return (
     <>
       <img src={Img} alt="Imagen Clinica" className='clinica-img ' />
@@ -44,7 +47,7 @@ const Home = () => {
         </Col>
 
         <Col md={4}>
-          {role === "user" && (
+          {role === "paciente" && (
             <Card className="op-card shadow-sm border-0 p-4">
               <div className="op-icon icon-gray">
                 <i className="bi bi-person"></i>
@@ -62,7 +65,7 @@ const Home = () => {
             </Card>
           )}
 
-          {role === undefined && (
+          {role === null && (
             <Card className="op-card shadow-sm border-0 p-4">
               <div className="op-icon icon-green">
                 <i className="bi bi-clipboard-check"></i>
@@ -105,7 +108,7 @@ const Home = () => {
 
         <Col md={4}>
 
-          {role === "user" && (
+          {role === "paciente" && (
             <Card className="op-card shadow-sm border-0 p-4">
               <div className="op-icon icon-gray">
                 <i className="bi bi-person"></i>
@@ -123,7 +126,7 @@ const Home = () => {
             </Card>
           )}
 
-          {role === undefined && (
+          {role === null && (
             <Card className="op-card shadow-sm border-0 p-4">
               <div className="op-icon icon-orange">
                 <i className="bi bi-hospital"></i>
