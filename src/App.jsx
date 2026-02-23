@@ -1,4 +1,4 @@
-import Footer from "./components/Footer";
+import Footer from "./components/shared/Footer.jsx";
 import { Route, Routes, BrowserRouter, Navigate } from 'react-router-dom'; // react-router-dom es correcto
 import Login from './components/views/Login.jsx';
 import RegistrarPaciente from './components/views/RegistrarPaciente.jsx';
