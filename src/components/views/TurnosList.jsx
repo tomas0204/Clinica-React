@@ -7,6 +7,8 @@ import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
 import { useEffect } from "react";
 import { getRoleFromToken } from '../../helpers/login/apiLogin.js';
+import { obtenerNombreDesdeToken } from '../../helpers/login/apiLogin.js';
+import Dropdown from 'react-bootstrap/Dropdown'
 
 const TurnosList = () => {
     const [turnos, setTurnos] = useState([]);
@@ -15,25 +17,17 @@ const TurnosList = () => {
     const [turnoEdit, setTurnoEdit] = useState(null)
     const [paginaActual, setPaginaActual] = useState(1);
     const [cantPaginas, setCantPaginas] = useState(1);
-
     const role = getRoleFromToken();
-
+    const nombreUsuario = obtenerNombreDesdeToken();
     const isAdmin = role === "admin"
     const isUser = role === "paciente"
     const isMedico = role === "medico"
-
-
-    const pacientes = [
-        { id: 1, nombre: "Juan Perez" },
-        { id: 2, nombre: "Maria Gomez" },
-        { id: 3, nombre: "Carlos Lopez" }
-    ];
 
     const getNuevoEstado = () => {
         const role = getRoleFromToken();
 
         if (role === "medico") return "Cancelado por el médico";
-        if (role === "user") return "Cancelado por el paciente";
+        if (role === "paciente") return "Cancelado por el paciente";
         return "Cancelado";
     };
 
@@ -43,6 +37,27 @@ const TurnosList = () => {
         setTurnos(data.turnos);
         setPaginaActual(data.paginaActual);
         setCantPaginas(data.cantPaginas);
+    };
+
+    const ordenarTurnos = (criterio) => {
+        const ordenados = [...turnos].sort((a, b) => {
+            switch (criterio) {
+                case "fechaHora":
+                    return new Date(`${a.fecha} ${a.hora}`) -
+                        new Date(`${b.fecha} ${b.hora}`);
+
+                case "nombre":
+                    return a.pacienteNombre.localeCompare(b.pacienteNombre);
+
+                case "estado":
+                    return a.estado.localeCompare(b.estado);
+
+                default:
+                    return 0;
+            }
+        });
+
+        setTurnos(ordenados);
     };
 
 
@@ -220,9 +235,10 @@ const TurnosList = () => {
                         return true
                     }
                 }}
-                pacientesMock={pacientes}
                 turnos={turnos}
             />
+
+
             {isUser && (
                 <>
                     <Button
@@ -274,6 +290,7 @@ const TurnosList = () => {
 
 
             <div className="table-responsive">
+                
                 <Table striped bordered hover size="sm" className='mt-3' responsive>
                     <thead>
                         <tr>
@@ -343,20 +360,22 @@ const TurnosList = () => {
                                                 <i className="bi bi-check-all"></i>
                                             </Button>
                                         )}
-                                        {(isUser) || isMedico ? (
-                                            <Button
-                                                variant="danger"
-                                                disabled={t.estado.toLowerCase().includes("cancelado")}
-                                                onClick={() => {
-                                                    setMode(getNuevoEstado());
-                                                    setTurnoEdit(t);
-                                                    handleCancel(t);
-                                                    
-                                                }}
-                                            >
-                                                <i className="bi bi-x-circle-fill"></i>
-                                            </Button>
-                                        ) : null}
+                                        {(
+                                            (isUser && t.pacienteNombre === nombreUsuario) ||
+                                            (isMedico && t.medicoNombre === nombreUsuario)
+                                        ) && (
+                                                <Button
+                                                    variant="danger"
+                                                    disabled={t.estado.toLowerCase().includes("cancelado")}
+                                                    onClick={() => {
+                                                        setMode(getNuevoEstado());
+                                                        setTurnoEdit(t);
+                                                        handleCancel(t);
+                                                    }}
+                                                >
+                                                    <i className="bi bi-x-circle-fill"></i>
+                                                </Button>
+                                            )}
 
                                     </td>
 

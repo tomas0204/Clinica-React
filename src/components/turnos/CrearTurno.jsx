@@ -62,10 +62,6 @@ const CrearTurno = ({
 
         cargarPacientes();
 
-        console.log(cargarPacientes);
-        
-
-
         if (mode === "editar" && turnoEdit) {
             setForm(turnoEdit);
         } else if (mode === "crear") {

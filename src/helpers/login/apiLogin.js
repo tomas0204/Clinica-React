@@ -34,3 +34,15 @@ export const getRoleFromToken = () => {
     return null;
   }
 };
+
+export const obtenerNombreDesdeToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.nombre_y_apellido || null; 
+  } catch (error) {
+    return null;
+  }
+};
