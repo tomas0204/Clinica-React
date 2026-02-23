@@ -290,7 +290,17 @@ const TurnosList = () => {
 
 
             <div className="table-responsive">
-                
+                <Dropdown className='mt-3'>
+                    <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                        Ordenar
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => ordenarTurnos("fechaHora")}>Ordenar por Fecha y Hora</Dropdown.Item>
+                        <Dropdown.Item onClick={() => ordenarTurnos("nombre")}>Ordenar por Nombre</Dropdown.Item>
+                        <Dropdown.Item onClick={() => ordenarTurnos("estado")}>Ordenar por Estado</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
                 <Table striped bordered hover size="sm" className='mt-3' responsive>
                     <thead>
                         <tr>
