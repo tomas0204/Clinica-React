@@ -19,31 +19,24 @@ const ItemPacientes = ({ paciente, borrarPaciente, modificarPaciente, verDetalle
           <Card.Text><strong>Email:</strong> {paciente.email}</Card.Text>
 
           <div className="d-flex justify-content-center align-items-center gap-2 mt-3">
-
-            {/* VER DETALLE */}
             <Button
               variant="info"
               onClick={() => verDetallePaciente(paciente)}
             >
               <FaEye />
             </Button>
-
-            {/* EDITAR - ahora pasa _id */}
             <Button
               variant="warning"
               onClick={() => modificarPaciente(paciente._id)}
             >
               <FaPencilAlt />
             </Button>
-
-            {/* ELIMINAR - ahora pasa _id */}
             <Button
               variant="danger"
               onClick={() => borrarPaciente(paciente._id)}
             >
               <FaTrash />
             </Button>
-
           </div>
         </Card.Body>
       </Card>

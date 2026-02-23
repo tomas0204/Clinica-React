@@ -12,9 +12,7 @@ import RegistroMedico from './components/views/crudMedico/RegistroMedico.jsx'
 import TurnosList from './components/views/TurnosList.jsx'
 import GuardiaMedica from './components/views/Guardia/GuardiaMedica.jsx'
 import HistoriaClinica from './components/historiaClinica/HistoriaClinica.jsx'
-import ItemMedico from './components/views/crudMedico/ItemMedico.jsx'
 import Error404 from './components/views/Error404.jsx'
-import ItemPacientes from './components/views/Pacientes/ItemPacientes.jsx'
 import Pago from './components/turnos/Pagos.jsx'
 import { getRoleFromToken } from './helpers/login/apiLogin.js';
 
@@ -22,12 +20,8 @@ import { getRoleFromToken } from './helpers/login/apiLogin.js';
 
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false)
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
 
   const role = getRoleFromToken();
-
-
 
   return (
     <div className='div-principal'>

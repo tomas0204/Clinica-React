@@ -37,10 +37,8 @@ const RegistroMedico = () => {
     setValue
   } = useForm()
 
-  // 🔥 Ahora viene del backend
   const [medicos, setMedicos] = useState([]);
 
-  // 🔥 Cargar doctores al iniciar
   useEffect(() => {
     const cargarDoctores = async () => {
       try {
@@ -53,7 +51,6 @@ const RegistroMedico = () => {
     cargarDoctores();
   }, []);
 
-  // Función principal que maneja CREAR y EDITAR
   const crearYEditar = async (data) => {
 
     try {
@@ -89,7 +86,6 @@ const RegistroMedico = () => {
         });
       }
 
-      // 🔥 Refrescar lista desde backend
       const listaActualizada = await listarDoctores();
       setMedicos(listaActualizada);
 

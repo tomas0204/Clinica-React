@@ -1,7 +1,6 @@
 
 const doctoresBackend = import.meta.env.VITE_API_DOCTORES;
 
-// Crear
 export const crearDoctor = async (doctor) => {
   const respuesta = await fetch(doctoresBackend, {
     method: "POST",
@@ -13,14 +12,12 @@ export const crearDoctor = async (doctor) => {
   return await respuesta.json();
 };
 
-// Listar
 export const listarDoctores = async () => {
   const respuesta = await fetch(doctoresBackend);
   if (!respuesta.ok) throw new Error("Error al listar doctores");
   return await respuesta.json();
 };
 
-// Editar
 export const editarDoctor = async (doctor) => {
   const respuesta = await fetch(`${doctoresBackend}/${doctor._id}`, {
     method: "PUT",
@@ -32,7 +29,6 @@ export const editarDoctor = async (doctor) => {
   return await respuesta.json();
 };
 
-// Borrar
 export const borrarDoctor = async (doctor) => {
   const respuesta = await fetch(`${doctoresBackend}/${doctor._id}`, {
     method: "DELETE",

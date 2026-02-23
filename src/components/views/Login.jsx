@@ -5,8 +5,6 @@ import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { login, getRoleFromToken } from "../../helpers/login/apiLogin.js";
 
-const { VITE_ADMIN_USER, VITE_ADMIN_PASS } = import.meta.env;
-
 const Login = ({ onLogin }) => {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const [loginError, setLoginError] = useState("");
@@ -24,34 +22,32 @@ const Login = ({ onLogin }) => {
     }
   }
 
-  const onSubmit = async (data) => {
-    try {
-      const result = await login(data.email, data.contraseña);
+ const onSubmit = async (data) => {
+  try {
+    const result = await login(data.email, data.contraseña);
 
-      if (result.error) {
-        setLoginError(result.error);
-        return;
-      }
-
-      // Obtener rol desde el token
-      const role = getRoleFromToken();
-
-      localStorage.setItem("token", result.token);
-
-      onLogin?.(role === "admin");
-
-      // Redirigir según rol REAL del token
-      if (role === "admin") {
-        navigate("/turnos");
-      } else {
-        navigate("/");
-      }
-
-    } catch (error) {
-      console.error(error);
-      setLoginError("Error al iniciar sesión");
+    if (result.error) {
+      setLoginError(result.error);
+      return;
     }
-  };
+
+    const role = getRoleFromToken();
+
+    localStorage.setItem("token", result.token);
+    
+    onLogin?.(role === "admin");
+
+    if (role === "admin") {
+      navigate("/turnos");
+    } else {
+      navigate("/");
+    }
+
+  } catch (error) {
+    console.error(error);
+    setLoginError("Error al iniciar sesión");
+  }
+};
 
   return (
     <Card className="shadow p-3 mb-5 bg-body rounded card-login">
