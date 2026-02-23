@@ -23,12 +23,26 @@ export const login = async (email, contraseña) => {
 
 export const getRoleFromToken = () => {
   const token = localStorage.getItem("token");
+  
   if (!token) return null;
 
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
     return payload.role;
-  } catch {
+  } catch (error) {
+    console.error("Error al decodificar el token:", error);
+    return null;
+  }
+};
+
+export const obtenerNombreDesdeToken = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.nombre_y_apellido || null; 
+  } catch (error) {
     return null;
   }
 };
