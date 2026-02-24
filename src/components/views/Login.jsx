@@ -5,18 +5,24 @@ import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { login, getRoleFromToken } from "../../helpers/login/apiLogin.js";
 
-const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+const { VITE_ADMIN_USER, VITE_ADMIN_PASS } = import.meta.env;
+
+const Login = ({ onLogin }) => {
+  const { register, handleSubmit, formState: { errors } } = useForm()
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const rol = location.state?.tipoDeRegistro;
 
   const tipoDeRegistro = () => {
-    if (rol === "Paciente") return "/registrarPaciente";
-    if (rol === "Medico") return "/registroMedico";
-    return "/registrarPaciente";
-  };
+    if (rol === "Paciente") {
+      return "/registrarPaciente";
+    } else if (rol === "Medico") {
+      return "/registroMedico";
+    } else {
+      return "/registrarPaciente"
+    }
+  }
 
   const onSubmit = async (data) => {
     try {
@@ -27,16 +33,20 @@ const Login = () => {
         return;
       }
 
-      localStorage.setItem("token", result.token);
+      // Obtener rol desde el token
       const role = getRoleFromToken();
 
+      localStorage.setItem("token", result.token);
+
+      onLogin?.(role === "admin");
+
+      // Redirigir según rol REAL del token
       if (role === "admin") {
         navigate("/turnos");
-      } else if (role === "medico") {
-        navigate("/historiaClinica");
       } else {
         navigate("/");
       }
+
     } catch (error) {
       console.error(error);
       setLoginError("Error al iniciar sesión");
@@ -57,7 +67,6 @@ const Login = () => {
             {rol === undefined && (
               <h1 className="text-center mb-4">Ingreso</h1>
             )}
-
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email:</Form.Label>
@@ -68,8 +77,8 @@ const Login = () => {
                     required: "El email es obligatorio",
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                      message: "Formato de email inválido",
-                    },
+                      message: "Formato de email inválido"
+                    }
                   })}
                 />
                 <Form.Text className="text-danger">{errors.email?.message}</Form.Text>
@@ -84,15 +93,17 @@ const Login = () => {
                     required: "La contraseña es obligatoria",
                     minLength: {
                       value: 6,
-                      message: "Debe tener al menos 6 caracteres",
-                    },
+                      message: "Debe tener al menos 6 caracteres"
+                    }
                   })}
                 />
                 <Form.Text className="text-danger">{errors.password?.message}</Form.Text>
                 <Form.Text className="text-danger">{loginError}</Form.Text>
               </Form.Group>
 
-              <Button variant="warning" type="submit">
+              <Button
+                variant="warning"
+                type="submit">
                 Iniciar sesión
               </Button>
               <Button
@@ -106,7 +117,6 @@ const Login = () => {
             </Form>
           </Card.Body>
         </Col>
-
         <Col>
           <img
             src="/img/img-login.jpg"
@@ -116,7 +126,6 @@ const Login = () => {
         </Col>
       </Row>
     </Card>
-  );
-};
-
+  )
+}
 export default Login;
