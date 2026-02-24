@@ -34,6 +34,7 @@ function App() {
             <Route path='/turnos' element={<TurnosList />} />
             <Route path='/login' element={<Login />} />
             <Route path='/historiaClinica' element={role === "medico" || role === "admin" ? <HistoriaClinica /> : <Navigate to="/login" />} />
+            <Route path='/historiaClinica' element={role === "medico" ? <HistoriaClinica /> : <Navigate to="/login" />} />
             <Route path='/registroMedico' element={<RegistroMedico />} />
             <Route path="pago" element={role === "paciente" ? <Pago /> : <Navigate to="/login" />} />
 
