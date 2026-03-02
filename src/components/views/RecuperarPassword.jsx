@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
-import { Form, Button, Card, Container, Alert } from "react-bootstrap";
+import { Form, Button, Card, Container, Alert, InputGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { recuperarPassword } from "../../helpers/login/apiRecuperarPassword";
 
-export default function RecuperarPassword() {
+export default function RecuperarPassword({ type }) {
   const {
     register,
     handleSubmit,
@@ -13,18 +14,32 @@ export default function RecuperarPassword() {
   const [mensaje, setMensaje] = useState("");
   const [errorServidor, setErrorServidor] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
       setMensaje("");
       setErrorServidor("");
+      if (type === "forgot") {
 
-      // Aquí después va tu fetch/axios real
+        const mandarEmailResponse = await recuperarPassword(data.email);
 
-      setMensaje(
-        "Si el email existe, se envió un enlace para recuperar la contraseña."
-      );
+        if (mandarEmailResponse.error) {
+          setErrorServidor(mandarEmailResponse.error);
+        } else {
+          setMensaje(
+            "Si el email existe, se envió un enlace para recuperar la contraseña."
+          );
+        }
+
+      } else if (type === "reset") {
+        // Aquí iría la lógica para resetear la contraseña usando un token
+        setMensaje("Funcionalidad de reset de contraseña aún no implementada.");
+      }
+
     } catch (error) {
       setErrorServidor("Ocurrió un error. Intente nuevamente.");
     } finally {
@@ -42,37 +57,109 @@ export default function RecuperarPassword() {
         style={{ width: "100%", maxWidth: "500px" }}
       >
         <Card.Body>
-          <h2 className="text-center mb-4">Recuperar contraseña</h2>
+
+          {type === "forgot" ? (
+            <h3 className="mb-4 text-center">Recuperar Contraseña</h3>
+          ) : (
+            <h3 className="mb-4 text-center">Resetear Contraseña</h3>
+          )}
 
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Ingrese su email"
-                {...register("email", {
-                  required: "El email es obligatorio",
-                  pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Email inválido",
-                  },
-                })}
-              />
-              {errors.email && (
-                <small className="text-danger">
-                  {errors.email.message}
-                </small>
-              )}
-            </Form.Group>
+            {type === "forgot" ? (
+              <>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Ingrese su email"
+                    {...register("email", {
+                      required: "El email es obligatorio",
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Email inválido",
+                      },
+                    })}
+                  />
+                  {errors.email && (
+                    <small className="text-danger">
+                      {errors.email.message}
+                    </small>
+                  )}
+                </Form.Group>
+                <p className="text-center text-muted mb-4" style={{ fontSize: "0.9rem" }}>
+                  Ingresa tu email para recibir un enlace de recuperación.
+                </p>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  className="w-100 mt-2"
+                  disabled={loading}
+                >
+                  {loading ? "Enviando..." : "Enviar enlace"}
+                </Button>
+              </>
+            ) : (
+              <Form.Group className="mb-3">
+                <Form.Label>Contraseña:</Form.Label>
 
-            <Button
-              variant="primary"
-              type="submit"
-              className="w-100"
-              disabled={loading}
-            >
-              {loading ? "Enviando..." : "Enviar enlace"}
-            </Button>
+                <InputGroup>
+                  <Form.Control
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Ingresa una contraseña"
+                    {...register("contraseña", {
+                      required: "La contraseña es obligatoria",
+                      minLength: {
+                        value: 6,
+                        message: "Debe tener al menos 6 caracteres"
+                      }
+                    })}
+                  />
+                  <Button
+                    variant="secondary"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <i className="bi bi-eye"></i> : <i className="bi bi-eye-slash"></i>}
+                  </Button>
+                </InputGroup>
+
+                <Form.Label className="p-2">Confirmar Contraseña:</Form.Label>
+
+                <InputGroup>
+                  <Form.Control
+                    type={showPasswordConfirm ? "text" : "password"}
+                    placeholder="Confirma tu contraseña"
+                    {...register("confirmarContraseña", {
+                      required: "La contraseña es obligatoria",
+                      minLength: {
+                        value: 6,
+                        message: "Debe tener al menos 6 caracteres"
+                      }
+                    })}
+                  />
+                  <Button
+                    variant="secondary"
+                    onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
+                  >
+                    {showPasswordConfirm ? <i className="bi bi-eye"></i> : <i className="bi bi-eye-slash"></i>}
+                  </Button>
+                </InputGroup>
+
+                {errors.confirmarContraseña && (
+                  <small className="text-danger">
+                    {errors.confirmarContraseña.message}
+                  </small>
+                )}
+                <Button
+                  variant="primary"
+                  type="submit"
+                  className="w-100 mt-2"
+                  disabled={loading}
+                >
+                  {loading ? "Reestableciendo contraseña..." : "Reestablecer contraseña"}
+                </Button>
+              </Form.Group>
+            )}
+
           </Form>
           {mensaje && <Alert className="mt-3" variant="success">{mensaje}</Alert>}
           {errorServidor && <Alert variant="danger">{errorServidor}</Alert>}
