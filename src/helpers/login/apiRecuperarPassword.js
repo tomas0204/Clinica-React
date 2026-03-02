@@ -28,9 +28,14 @@ export const resetPassword = async (token, contraseña) => {
             body: JSON.stringify({ token, contraseña })
         });
         const data = await response.json();
+        if (!response.ok) {
+            // Si el backend devuelve un error (status >= 400)
+            return { error: data.message || "Error desconocido" };
+        }
+
         return data;
     } catch (error) {
-        console.error(error);
-        return { error: error.message };
+        console.error("Error de conexión:", error);
+        return { error: "No se pudo conectar con el servidor" };
     }
 }

@@ -37,15 +37,21 @@ export default function RecuperarPassword({ type }) {
         }
 
       } else if (type === "reset") {
+
         if (data.contraseña !== data.confirmarContraseña) {
           setErrorServidor("Las contraseñas no coinciden.");
           return;
+
         } else {
+
           const reestablecerContraseñaResponse = await resetPassword(token, data.contraseña);
+
           if (reestablecerContraseñaResponse.error) {
             setErrorServidor(reestablecerContraseñaResponse.error);
           } else {
-            setMensaje("Contraseña reestablecida exitosamente.");
+            // Mensaje de éxito
+            setMensaje(reestablecerContraseñaResponse.message);
+            setErrorServidor(""); // limpiar errores anteriores
           }
         }
       }
@@ -118,9 +124,9 @@ export default function RecuperarPassword({ type }) {
                     placeholder="Ingresa una contraseña"
                     {...register("contraseña", {
                       required: "La contraseña es obligatoria",
-                      minLength: {
-                        value: 6,
-                        message: "Debe tener al menos 6 caracteres"
+                      pattern: {
+                        value: /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{6,12}$/,
+                        message: "La contrasenia debe tener entre 6 y 12 caracteres, al menos un número, al menos una minuscula, al menos una mayuscula y al menos un caracter especial",
                       }
                     })}
                   />
@@ -140,9 +146,9 @@ export default function RecuperarPassword({ type }) {
                     placeholder="Confirma tu contraseña"
                     {...register("confirmarContraseña", {
                       required: "La contraseña es obligatoria",
-                      minLength: {
-                        value: 6,
-                        message: "Debe tener al menos 6 caracteres"
+                      pattern: {
+                        value: /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{6,12}$/,
+                        message: "La contrasenia debe tener entre 6 y 12 caracteres, al menos un número, al menos una minuscula, al menos una mayuscula y al menos un caracter especial",
                       }
                     })}
                   />
