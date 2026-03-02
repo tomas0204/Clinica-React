@@ -3,8 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { validarTurnoCompleto } from '../../helpers/turnos/ValidacionesTurnos';
-import { useNavigate } from "react-router-dom";
-import { getRoleFromToken } from '../../helpers/login/apiLogin.js';
+import { data, useNavigate } from "react-router-dom";
+import { getRoleFromToken, obtenerNombreDesdeToken } from '../../helpers/login/apiLogin.js';
 import { listarDoctores } from '../../helpers/registroDoctores/apiDoctores.js';
 import { listarPacientes } from '../../helpers/pacientes/apiPacientes.js';
 
@@ -21,6 +21,7 @@ const CrearTurno = ({
     const navigate = useNavigate();
     const [medicos, setMedicos] = useState([]);
     const [pacientes, setPacientes] = useState([]);
+    const nombreDelPaciente = obtenerNombreDesdeToken();
     const role = getRoleFromToken();
     const isUser = role === "paciente"
 
@@ -179,8 +180,8 @@ const CrearTurno = ({
                     ) : (
                         <input
                             type="text"
-                            placeholder="Escriba su nombre completo"
-                            value={form.pacienteNombre}
+                            disabled
+                            value={nombreDelPaciente}
                             onChange={e => setForm({ ...form, pacienteNombre: e.target.value })}
                             className="form-control"
                             required
