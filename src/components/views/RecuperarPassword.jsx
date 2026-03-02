@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { Form, Button, Card, Container, Alert, InputGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
-import { recuperarPassword } from "../../helpers/login/apiRecuperarPassword";
+import { recuperarPassword, resetPassword } from "../../helpers/login/apiRecuperarPassword";
 
 export default function RecuperarPassword({ type }) {
   const {
@@ -16,6 +16,7 @@ export default function RecuperarPassword({ type }) {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const { token } = useParams();
 
 
   const onSubmit = async (data) => {
@@ -40,8 +41,12 @@ export default function RecuperarPassword({ type }) {
           setErrorServidor("Las contraseñas no coinciden.");
           return;
         } else {
-          // Aquí iría la lógica para enviar la nueva contraseña al backend, probablemente con un token de recuperación
-          setMensaje("Contraseña reestablecida exitosamente.");
+          const reestablecerContraseñaResponse = await resetPassword(token, data.contraseña);
+          if (reestablecerContraseñaResponse.error) {
+            setErrorServidor(reestablecerContraseñaResponse.error);
+          } else {
+            setMensaje("Contraseña reestablecida exitosamente.");
+          }
         }
       }
 
