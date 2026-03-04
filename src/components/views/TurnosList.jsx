@@ -18,6 +18,7 @@ const TurnosList = () => {
     const [paginaActual, setPaginaActual] = useState(1);
     const [cantPaginas, setCantPaginas] = useState(1);
     const role = getRoleFromToken();
+    const [vista, setVista] = useState("global");
     const nombreUsuario = obtenerNombreDesdeToken();
     const isAdmin = role === "admin"
     const isUser = role === "paciente"
@@ -206,31 +207,58 @@ const TurnosList = () => {
     };
 
     const handleSave = async (nuevoTurno) => {
-        if (mode === "crear") {
-            const turnoGuardado = await crearTurno(nuevoTurno);
-            setTurnos(prev => [...prev, turnoGuardado]);
-            return turnoGuardado;
-        }
+        try {
+            if (mode === "crear") {
+                const turnoGuardado = await crearTurno(nuevoTurno);
 
-        if (mode === "editar" && turnoEdit) {
-            const turnoActualizado = await editarTurno({
-                ...nuevoTurno,
-                _id: turnoEdit._id
+                setTurnos(prev => [...prev, turnoGuardado]);
+
+                await Swal.fire({
+                    icon: "success",
+                    title: "Turno creado",
+                    text: "El turno se creó correctamente",
+                    confirmButtonColor: "#3085d6"
+                });
+
+                return turnoGuardado;
+            }
+
+            if (mode === "editar" && turnoEdit) {
+                const turnoActualizado = await editarTurno({
+                    ...nuevoTurno,
+                    _id: turnoEdit._id
+                });
+
+                setTurnos(prev =>
+                    prev.map(t =>
+                        t._id === turnoEdit._id ? turnoActualizado : t
+                    )
+                );
+
+                await Swal.fire({
+                    icon: "success",
+                    title: "Turno actualizado",
+                    text: "Los cambios se guardaron correctamente",
+                    confirmButtonColor: "#3085d6"
+                });
+
+                return turnoActualizado;
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Ocurrió un problema al guardar el turno"
             });
 
-            setTurnos(prev =>
-                prev.map(t =>
-                    t._id === turnoEdit._id ? turnoActualizado : t
-                )
-            );
-
-            return turnoActualizado;
+            console.error(error);
         }
     };
 
     return (
         <div>
             <h1>Turnos</h1>
+           
             <CrearTurno
                 show={show}
                 onClose={() => setShow(false)}
@@ -289,7 +317,6 @@ const TurnosList = () => {
                     Contactar soporte
                 </Button>
             )}
-
 
             <div className="table-responsive">
                 <Dropdown className='mt-3'>
@@ -358,7 +385,7 @@ const TurnosList = () => {
                                                 </Button>
                                             </>
                                         )}
-                                        {isMedico && (
+                                        {(isMedico && t.medicoNombre === nombreUsuario) && (
                                             <Button
                                                 variant="success"
                                                 className='me-2'
@@ -372,6 +399,7 @@ const TurnosList = () => {
                                                 <i className="bi bi-check-all"></i>
                                             </Button>
                                         )}
+
                                         {(
                                             (isUser && t.pacienteNombre === nombreUsuario) ||
                                             (isMedico && t.medicoNombre === nombreUsuario)
@@ -388,7 +416,6 @@ const TurnosList = () => {
                                                     <i className="bi bi-x-circle-fill"></i>
                                                 </Button>
                                             )}
-
                                     </td>
 
                                 </tr>
