@@ -3,8 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { validarTurnoCompleto } from '../../helpers/turnos/ValidacionesTurnos';
-import { useNavigate } from "react-router-dom";
-import { getRoleFromToken } from '../../helpers/login/apiLogin.js';
+import { data, useNavigate } from "react-router-dom";
+import { getRoleFromToken, obtenerNombreDesdeToken } from '../../helpers/login/apiLogin.js';
 import { listarDoctores } from '../../helpers/registroDoctores/apiDoctores.js';
 import { listarPacientes } from '../../helpers/pacientes/apiPacientes.js';
 
@@ -21,6 +21,8 @@ const CrearTurno = ({
     const navigate = useNavigate();
     const [medicos, setMedicos] = useState([]);
     const [pacientes, setPacientes] = useState([]);
+    const nombreDelPaciente = obtenerNombreDesdeToken();
+    const [erroresBackend, setErroresBackend] = useState({});
     const role = getRoleFromToken();
     const isUser = role === "paciente"
 
@@ -67,12 +69,23 @@ const CrearTurno = ({
         } else if (mode === "crear") {
             reset();
         }
-    }, [mode, turnoEdit]);
+
+        if (mode === "editar" && turnoEdit) {
+            setForm(turnoEdit);
+        } else if (mode === "crear") {
+            setForm(prev => ({
+                ...prev,
+                pacienteNombre: nombreDelPaciente
+            }));
+        }
+    }, [mode, turnoEdit, nombreDelPaciente]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const mensajeError = validarTurnoCompleto(turnos, form, turnoEdit);
+        console.log(mensajeError);
+
 
         if (mensajeError) {
             setError(mensajeError);
@@ -86,20 +99,27 @@ const CrearTurno = ({
 
         setError("");
 
-        if (isUser && form.metodoPago === "tarjeta") {
-            navigate("/pago", {
-                state: form
-            });
-            return;
-        }
+        try {
+            await onSave(form);
 
-        const success = await onSave(form);
+            if (isUser && form.metodoPago === "tarjeta") {
+                navigate("/pago", { state: form });
+                return;
+            }
 
-        if (success) {
             onClose();
-        }
 
-        if (mode === "crear") reset();
+            setErroresBackend([]);
+            if (mode === "crear") reset();
+
+        } catch (err) {
+            if (Array.isArray(err)) {
+                const mensajes = err.map(e => e.msg);
+                setErroresBackend(mensajes);
+            } else {
+                setErroresBackend(["Ocurrió un error inesperado."]);
+            }
+        }
     };
 
     const estado = () => {
@@ -129,7 +149,7 @@ const CrearTurno = ({
     const today = new Date().toISOString().split("T")[0];
 
     const [form, setForm] = useState({
-        pacienteNombre: "",
+        pacienteNombre: isUser ? nombreDelPaciente : "",
         medicoNombre: "",
         fecha: "",
         hora: "",
@@ -140,7 +160,7 @@ const CrearTurno = ({
     });
     const reset = () => {
         setForm({
-            pacienteNombre: "",
+            pacienteNombre: isUser ? nombreDelPaciente : "",
             medicoNombre: "",
             fecha: "",
             hora: "",
@@ -179,10 +199,10 @@ const CrearTurno = ({
                     ) : (
                         <input
                             type="text"
-                            placeholder="Escriba su nombre completo"
-                            value={form.pacienteNombre}
+                            value={nombreDelPaciente}
                             onChange={e => setForm({ ...form, pacienteNombre: e.target.value })}
                             className="form-control"
+                            readOnly
                             required
                         />
                     )}
@@ -277,8 +297,19 @@ const CrearTurno = ({
                         </>
                     )}
                     {error && (
-                        <div className="alert alert-danger py-2 my-2">
-                            {error}
+                        <div className="alert alert-danger mt-3">
+                            <ul className='mb-0'>
+                                <li>{error}</li>
+                            </ul>
+                        </div>
+                    )}
+                    {erroresBackend.length > 0 && (
+                        <div className="alert alert-danger mt-3">
+                            <ul className="mb-0">
+                                {erroresBackend.map((mensaje, index) => (
+                                    <li key={index}>{mensaje}</li>
+                                ))}
+                            </ul>
                         </div>
                     )}
                 </Modal.Body>

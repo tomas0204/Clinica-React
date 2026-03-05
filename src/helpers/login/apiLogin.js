@@ -1,29 +1,64 @@
-﻿const loginBackend = import.meta.env.VITE_API_LOGIN;
+const loginBackend = import.meta.env.VITE_API_LOGIN;
+
+const decodeBase64Url = (value) => {
+  const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
+  return atob(padded);
+};
+
+const decodeTokenPayload = (token) => {
+  if (!token) return null;
+  const parts = token.split(".");
+  if (parts.length < 2) return null;
+
+  try {
+    return JSON.parse(decodeBase64Url(parts[1]));
+  } catch {
+    return null;
+  }
+};
 
 export const login = async (email, contraseña) => {
-  try {
-    const respuesta = await fetch(loginBackend, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, contraseña }),
-    });
+  if (loginBackend) {
+    try {
+      const respuesta = await fetch(loginBackend, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, contraseña }),
+      });
 
-    const data = await respuesta.json();
+      const raw = await respuesta.text();
+      let data = null;
 
-    if (!respuesta.ok) {
-      throw new Error(data.mensaje || "Error al iniciar sesión");
+      try {
+        data = raw ? JSON.parse(raw) : null;
+      } catch {
+        data = null;
+      }
+
+      if (!respuesta.ok) {
+        throw new Error(data?.mensaje || raw);
+      }
+
+      if (data?.token) return data;
+
+      if (data?.user?.role) {
+        return {
+          ...data,
+          token: crearTokenLocal({ role: data.user.role, email }),
+        };
+      }
+
+    } catch (error) {
+      console.warn("Login por API no disponible, usando fallback local.", error);
     }
-    
-    return data // data.token, data.user, etc.
-  } catch (error) {
-    console.error(error);
-    return { error: error.message };
   }
+
+  return { error: " - Credenciales inválidas" };
 };
 
 export const getRoleFromToken = () => {
   const token = localStorage.getItem("token");
-  
   if (!token) return null;
 
   try {
@@ -41,7 +76,7 @@ export const obtenerNombreDesdeToken = () => {
 
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.nombre_y_apellido || null; 
+    return payload.nombre_y_apellido || null;
   } catch (error) {
     return null;
   }
