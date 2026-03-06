@@ -45,7 +45,7 @@ function App() {
             <Route path="/reset-password/:token" element={<RecuperarPassword type="reset" />} />
             <Route path='/historiaClinica' element={role === "medico" ? <HistoriaClinica /> : <Navigate to="/login" />} />
             <Route path='/registroMedico' element={<RegistroMedico />} />
-            <Route path="pago" element={role === "paciente" ? <Pago /> : <Navigate to="/login" />} />
+            <Route path="pago" element={<Pago />} />
 
             <Route path='*' element={<Error404 />} />
           </Routes>

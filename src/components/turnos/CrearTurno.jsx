@@ -100,12 +100,13 @@ const CrearTurno = ({
         setError("");
 
         try {
-            await onSave(form);
 
             if (isUser && form.metodoPago === "tarjeta") {
                 navigate("/pago", { state: form });
                 return;
             }
+
+            await onSave(form);
 
             onClose();
 

@@ -39,7 +39,7 @@ const Pago = () => {
 
         if (response?.init_point) {
           window.open(response.init_point, "_blank");
-          navigate("/"); 
+          navigate("/turnos"); 
         } else {
           throw new Error("Error al iniciar pago");
         }
